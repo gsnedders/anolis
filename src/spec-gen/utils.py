@@ -39,8 +39,10 @@ def generateID(Element):
 		return Element.getAttribute(u"id")
 	elif Element.getAttribute(u"title"):
 		source = Element.getAttribute(u"title")
-	#else Element.textContent:
-	#	source = Element.textContent
+	elif Element.textContent:
+		source = Element.textContent
+	else:
+		source = u""
 	
 	source = source.strip(spaceCharacters)
 	if source == u"":

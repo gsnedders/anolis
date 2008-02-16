@@ -28,6 +28,7 @@ import pxdom
 
 #import processes.index, processes.num, processes.substitutions, processes.toc, processes.xref
 import processes.num
+import utils
 
 class generator(object):
 	""" This oversees all the actual work done """
