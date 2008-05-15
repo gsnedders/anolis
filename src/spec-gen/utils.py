@@ -22,6 +22,7 @@
 import re
 
 from html5lib.constants import spaceCharacters
+
 spaceCharacters = u"".join(spaceCharacters)
 spacesRegex = re.compile(u"[%s]+" % spaceCharacters)
 
@@ -29,33 +30,42 @@ def splitOnSpaces(string):
 	return spacesRegex.split(string)
 
 def elementHasClass(Element, class_name):
-	if Element.getAttribute(u"class"):
-		if class_name in splitOnSpaces(Element.getAttribute(u"class")):
-			return True
-	return False
+	if Element.get("class") and class_name in splitOnSpaces(Element.get("class")):
+		return True
+	else:
+		return False
 
 def generateID(Element):
-	if Element.getAttribute(u"id"):
-		return Element.getAttribute(u"id")
-	elif Element.getAttribute(u"title"):
-		source = Element.getAttribute(u"title")
-	elif Element.textContent:
-		source = Element.textContent
+	if Element.get(u"id"):
+		return Element.get(u"id")
+	elif Element.get(u"title"):
+		source = Element.get(u"title")
+	elif textContent(Element):
+		source = textContent(Element)
 	else:
 		source = u""
 	
 	source = source.strip(spaceCharacters)
 	if source == u"":
-		source = "generatedID"
+		source = u"generatedID"
 	else:
 		source = spacesRegex.sub(u"-", source)
 	
 	# Initally set the id to the source
 	id = source
 	
-	if Element.ownerDocument:
-		i = 0
-		while Element.ownerDocument.getElementById(id):
-			id = source + u"-" + repr(i)
+	i = 0
+	while getElementById(Element, id):
+		id = source + u"-" + repr(i)
 	
 	return id
+
+def textContent(Element):
+	return u"".join(Element.xpath("child::text()"))
+
+def getElementById(Document, id):
+	xpath_string = u"concat('" + u"', \"'\", '".join(id.split("'")) + u"')"
+	try:
+		return Document.xpath("//*[@id = " + xpath_string + "]")[0]
+	except IndexError:
+		return None

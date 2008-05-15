@@ -24,48 +24,30 @@ from collections import deque
 
 import html5lib
 from html5lib import treebuilders, treewalkers, serializer
-import pxdom
+from lxml import etree
 
 #import processes.index, processes.num, processes.substitutions, processes.toc, processes.xref
-import processes.num
-import utils
 
 class generator(object):
 	""" This oversees all the actual work done """
 	
-	def process(self, input, output=StringIO.StringIO(), **kwargs):
+	def process(self, input, output=StringIO.StringIO(), processes = [], **kwargs):
 		""" Process the given "input" (a file-like object) writing to "output".
 		Preconditions for each process are here to avoid expensive function
 		calls. """
 		
 		# Parse the HTML
-		parser = html5lib.HTMLParser(tree=treebuilders.getTreeBuilder("dom", pxdom))
-		Document = parser.parse(input)
+		parser = html5lib.HTMLParser(tree=treebuilders.getTreeBuilder("lxml", etree))
+		tree = parser.parse(input)
 		
-		# Create processes
-		num = processes.num.num(**kwargs)
-		
-		# Pass 1
-		for Node in descendants(Document):
-			if Node.NodeType == 1 and Node.tagName in (u"h2", u"h3", u"h4", u"h5", u"h6"):
-				if num.enabled and not utils.elementHasClass(Node, u"no-num"):
-					num.pass1(Node)
+		# Find number of passes to do
+		for process in processes:
+			tree = process(tree)
 		
 		# Convert back to HTML
-		walker = treewalkers.getTreeWalker("dom")
+		walker = treewalkers.getTreeWalker("lxml")
 		s = serializer.htmlserializer.HTMLSerializer(**kwargs)
-		rendered = s.render(walker(Document))
+		rendered = s.render(walker(tree))
 		
 		# Write to the output
-		output.write(rendered)
-
-	def descendants(self, Node):
-		""" This gets a list of all descendants of a Node, no matter how deep. """
-		
-		results = [];
-		child = deque([Node]);
-		while child:
-			working = child.popleft()
-			child.extend(working.childNodes);
-			results.append(working)
-		return results
+	output.write(rendered)
