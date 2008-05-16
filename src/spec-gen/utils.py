@@ -64,8 +64,10 @@ def textContent(Element):
 	return u"".join(Element.xpath("child::text()"))
 
 def getElementById(Document, id):
-	xpath_string = u"concat('" + u"', \"'\", '".join(id.split("'")) + u"')"
 	try:
-		return Document.xpath("//*[@id = " + xpath_string + "]")[0]
+		return Document.xpath("//*[@id = " + escapeXPathString(id) + "]")[0]
 	except IndexError:
 		return None
+
+def escapeXPathString(string):
+	return u"concat('" + u"', \"'\", '".join(string.split("'")) + u"')"
