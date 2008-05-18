@@ -19,6 +19,9 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+from lxml import etree
+from copy import deepcopy
+
 from specGen import utils
 
 class xref(object):
@@ -26,7 +29,7 @@ class xref(object):
 	
 	dfns = {}
 	refs = ("span", "abbr", "code", "var", "samp", "i")
-	not_within = ("a", "dfn")
+	not_within = ("a", "dfn", "datagrid")
 	
 	def __init__(self, ElementTree, **kwargs):
 		self.buildReferences(ElementTree, **kwargs)
@@ -70,5 +73,8 @@ class xref(object):
 							element.tag = "a"
 							element.set("href", "#" + self.dfns[name])
 						else:
-							#element.
-							pass
+							link = etree.Element("a", {"href": "#" + self.dfns[name]})
+							link.append(deepcopy(element))
+							link[0].tail = None
+							element.addnext(link)
+							element.getparent().remove(element)
