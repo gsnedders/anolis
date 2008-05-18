@@ -38,16 +38,16 @@ class xref(object):
 	def buildReferences(self, ElementTree):
 		for dfn in ElementTree.iter("dfn"):
 			if dfn.get(u"title"):
-				name = dfn.get(u"title")
+				term = dfn.get(u"title")
 			else:
-				name = utils.textContent(dfn)
+				term = utils.textContent(dfn)
 			
-			name = name.strip(utils.spaceCharacters).lower()
+			term = term.strip(utils.spaceCharacters).lower()
 			id = utils.generateID(dfn)
 			
 			dfn.set(u"id", id)
 			
-			self.dfns[name] = id
+			self.dfns[term] = id
 	
 	def addReferences(self, ElementTree):
 		for tag in self.refs:
@@ -62,18 +62,18 @@ class xref(object):
 				
 				if goodParenting:
 					if element.get(u"title"):
-						name = element.get(u"title")
+						term = element.get(u"title")
 					else:
-						name = utils.textContent(element)
+						term = utils.textContent(element)
 					
-					name = name.strip(utils.spaceCharacters).lower()
+					term = term.strip(utils.spaceCharacters).lower()
 					
-					if name in self.dfns:
+					if term in self.dfns:
 						if element.tag == "span":
 							element.tag = "a"
-							element.set("href", "#" + self.dfns[name])
+							element.set("href", "#" + self.dfns[term])
 						else:
-							link = etree.Element("a", {"href": "#" + self.dfns[name]})
+							link = etree.Element("a", {"href": "#" + self.dfns[term]})
 							link.append(deepcopy(element))
 							link[0].tail = None
 							element.addnext(link)
