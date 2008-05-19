@@ -52,15 +52,23 @@ class xref(object):
 	def addReferences(self, ElementTree):
 		for tag in self.refs:
 			for element in ElementTree.iter(tag):
-				goodParenting = True
+				goodParentingAndChildren = True
+				
 				current = element
 				while (current.getparent()):
 					current = current.getparent()
 					if current.tag in self.not_within:
-						goodParenting = False
+						goodParentingAndChildren = False
 						break
 				
-				if goodParenting:
+				if goodParentingAndChildren:
+					textContent = utils.textContent(element)
+					for tag in self.not_within:
+						if not element.find(".//" + tag):
+							goodParentingAndChildren = False
+							break
+				
+				if goodParentingAndChildren:
 					if element.get(u"title"):
 						term = element.get(u"title")
 					else:
