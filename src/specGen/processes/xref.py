@@ -75,6 +75,7 @@ class xref(object):
 						else:
 							link = etree.Element("a", {"href": "#" + self.dfns[term]})
 							link.append(deepcopy(element))
+							link.tail = link[0].tail
 							link[0].tail = None
 							element.addnext(link)
 							element.getparent().remove(element)
