@@ -43,11 +43,13 @@ class xref(object):
 				term = utils.textContent(dfn)
 			
 			term = term.strip(utils.spaceCharacters).lower()
-			id = utils.generateID(dfn)
 			
-			dfn.set(u"id", id)
-			
-			self.dfns[term] = id
+			if len(term) > 0:
+				id = utils.generateID(dfn)
+				
+				dfn.set(u"id", id)
+				
+				self.dfns[term] = id
 	
 	def addReferences(self, ElementTree):
 		for element in ElementTree.iter(tag=etree.Element):
