@@ -50,8 +50,8 @@ class xref(object):
 			self.dfns[term] = id
 	
 	def addReferences(self, ElementTree):
-		for tag in self.refs:
-			for element in ElementTree.iter(tag):
+		for element in ElementTree.iter(tag=etree.Element):
+			if element.tag in self.refs:
 				goodParentingAndChildren = True
 				
 				current = element
