@@ -28,7 +28,7 @@ class xref(object):
 	"""Add cross-references."""
 	
 	dfns = {}
-	refs = ("span", "abbr", "code", "var", "samp", "i")
+	refs = ("span", "abbr", "code", "var", "i")
 	not_within = ("a", "dfn", "datagrid")
 	
 	def __init__(self, ElementTree, **kwargs):
