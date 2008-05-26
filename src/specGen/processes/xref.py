@@ -62,7 +62,6 @@ class xref(object):
 						break
 				
 				if goodParentingAndChildren:
-					textContent = utils.textContent(element)
 					for tag in self.not_within:
 						if not element.find(".//" + tag):
 							goodParentingAndChildren = False
