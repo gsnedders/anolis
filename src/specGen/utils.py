@@ -70,4 +70,4 @@ def getElementById(Document, id):
 		return None
 
 def escapeXPathString(string):
-	return u"concat('', '" + string.replace("'", "', \"'\", '") + u"')"
+	return u"concat('', '%s')" % string.replace("'", "', \"'\", '")
