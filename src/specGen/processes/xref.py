@@ -64,8 +64,8 @@ class xref(object):
 						break
 				
 				if goodParentingAndChildren:
-					for tag in self.not_within:
-						if not element.find(".//" + tag):
+					for child_element in element.iter(tag=etree.Element):
+						if child_element.tag in self.not_within:
 							goodParentingAndChildren = False
 							break
 				
