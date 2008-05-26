@@ -24,12 +24,13 @@ from copy import deepcopy
 
 from specGen import utils
 
+term_elements = ("span", "abbr", "code", "var", "i")
+term_not_in_stack_with = ("a", "dfn", "datagrid")
+
 class xref(object):
 	"""Add cross-references."""
 	
 	dfns = {}
-	refs = ("span", "abbr", "code", "var", "i")
-	not_within = ("a", "dfn", "datagrid")
 	
 	def __init__(self, ElementTree, **kwargs):
 		self.buildReferences(ElementTree, **kwargs)
@@ -53,19 +54,19 @@ class xref(object):
 	
 	def addReferences(self, ElementTree):
 		for element in ElementTree.iter(tag=etree.Element):
-			if element.tag in self.refs:
+			if element.tag in term_elements:
 				goodParentingAndChildren = True
 				
 				current = element
 				while (current.getparent()):
 					current = current.getparent()
-					if current.tag in self.not_within:
+					if current.tag in term_not_in_stack_with:
 						goodParentingAndChildren = False
 						break
 				
 				if goodParentingAndChildren:
 					for child_element in element.iter(tag=etree.Element):
-						if child_element.tag in self.not_within:
+						if child_element.tag in term_not_in_stack_with:
 							goodParentingAndChildren = False
 							break
 				
