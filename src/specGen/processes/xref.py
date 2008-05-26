@@ -86,5 +86,5 @@ class xref(object):
 							link.append(deepcopy(element))
 							link.tail = link[0].tail
 							link[0].tail = None
-							element.addnext(link)
+							element.addprevious(link)
 							element.getparent().remove(element)
