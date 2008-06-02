@@ -54,9 +54,10 @@ def generateID(Element):
 	# Initally set the id to the source
 	id = source
 	
-	i = 0
-	while getElementById(Element, id):
+	print i
+	while getElementById(Element, id) is not None:
 		id = source + u"-" + repr(i)
+		i += 1
 	
 	return id
 

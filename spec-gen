@@ -21,7 +21,7 @@ def main():
 			assert False, "Unhandled option"
 	
 	if len(args) >= 2:
-		gen = generator()
+		gen = generator.generator()
 		input = file(args[0], "r")
 		output = file(args[1], "w")
 		gen.process(input, output)
@@ -34,6 +34,10 @@ def usage():
 	print """Umm, yeah. You use this."""
 
 if __name__ == "__main__":
-	#import cProfile
-	#cProfile.run('main()')
-	main()
+	import cProfile, pstats, os
+	cProfile.run('main()', "spec-gen.foobar.stat")
+	stat = pstats.Stats("spec-gen.foobar.stat")
+	stat.sort_stats("time")
+	stat.print_stats()
+	os.remove("spec-gen.foobar.stat")
+	#main()

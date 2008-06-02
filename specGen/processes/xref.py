@@ -58,7 +58,7 @@ class xref(object):
 				goodParentingAndChildren = True
 				
 				current = element
-				while (current.getparent()):
+				while current.getparent() is not None:
 					current = current.getparent()
 					if current.tag in term_not_in_stack_with:
 						goodParentingAndChildren = False

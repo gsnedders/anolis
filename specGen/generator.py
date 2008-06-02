@@ -49,7 +49,7 @@ class generator(object):
 		# Convert back to HTML
 		walker = treewalkers.getTreeWalker("lxml")
 		s = serializer.htmlserializer.HTMLSerializer(**kwargs)
-		rendered = s.render(walker(tree))
+		rendered = s.render(walker(tree), encoding="utf-8")
 		
 		# Write to the output
 		output.write(rendered)
