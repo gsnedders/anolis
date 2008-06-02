@@ -28,10 +28,12 @@ from lxml import etree
 
 #import processes.index, processes.num, processes.substitutions, processes.toc, processes.xref
 
+from processes import xref
+
 class generator(object):
 	""" This oversees all the actual work done """
 	
-	def process(self, input, output=StringIO.StringIO(), processes = [], **kwargs):
+	def process(self, input, output=StringIO.StringIO(), processes = [xref.xref], **kwargs):
 		""" Process the given "input" (a file-like object) writing to "output".
 		Preconditions for each process are here to avoid expensive function
 		calls. """
@@ -42,7 +44,7 @@ class generator(object):
 		
 		# Find number of passes to do
 		for process in processes:
-			tree = process(tree)
+			process(tree)
 		
 		# Convert back to HTML
 		walker = treewalkers.getTreeWalker("lxml")
