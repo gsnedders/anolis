@@ -16,7 +16,7 @@ def main():
 	for option, value in opts:
 		if option in ("-h", "--help"):
 			usage()
-			sys.exist
+			sys.exit()
 		else:
 			assert False, "Unhandled option"
 	
@@ -29,6 +29,9 @@ def main():
 		print "spec-gen expects two arguments"
 		usage()
 		sys.exit(2)
+
+def usage():
+	print """Umm, yeah. You use this."""
 
 if __name__ == "__main__":
 	#import cProfile

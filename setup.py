@@ -5,7 +5,6 @@ setup(name = "specGen",
 	version = "0.0",
 	author = "Geoffrey Sneddon",
 	author_email = "geoffers@gmail.com",
-	packages = ["specGen"],
-	package_dir = {"": "src"},
+	packages = ["specGen", "specGen/processes"],
 	scripts = ["spec-gen"],
 	)

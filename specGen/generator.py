@@ -52,4 +52,4 @@ class generator(object):
 		rendered = s.render(walker(tree))
 		
 		# Write to the output
-	output.write(rendered)
+		output.write(rendered)
