@@ -20,8 +20,11 @@
 # THE SOFTWARE.
 
 import re
+from lxml import etree
 
 from html5lib.constants import spaceCharacters
+
+ids = {}
 
 spaceCharacters = u"".join(spaceCharacters)
 spacesRegex = re.compile(u"[%s]+" % spaceCharacters)
@@ -45,7 +48,7 @@ def generateID(Element):
 	else:
 		source = u""
 	
-	source = source.strip(spaceCharacters)
+	source = source.strip(spaceCharacters).lower()
 	if source == u"":
 		source = u"generatedID"
 	else:
@@ -54,21 +57,29 @@ def generateID(Element):
 	# Initally set the id to the source
 	id = source
 	
-	print i
-	while getElementById(Element, id) is not None:
+	i = 0
+	while getElementById(Element.getroottree(), id) is not None:
 		id = source + u"-" + repr(i)
 		i += 1
+	
+	ids[repr(Element.getroottree())][id] = Element
 	
 	return id
 
 def textContent(Element):
 	return u"".join(Element.xpath("child::text()"))
 
-def getElementById(Document, id):
-	try:
-		return Document.xpath("//*[@id = " + escapeXPathString(id) + "]")[0]
-	except IndexError:
-		return None
+def getElementById(base, id):
+	if repr(base) in ids:
+		try:
+			return ids[repr(base)][id]
+		except KeyError:
+			return None
+	else:
+		ids[repr(base)] = {}
+		for element in base.iter(tag=etree.Element):
+			if element.get("id"):
+				ids[repr(base)][element.get("id")] = element
 
 def escapeXPathString(string):
 	return u"concat('', '%s')" % string.replace("'", "', \"'\", '")
