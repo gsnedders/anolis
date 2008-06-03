@@ -36,7 +36,7 @@ class xref(object):
 		self.buildReferences(ElementTree, **kwargs)
 		self.addReferences(ElementTree, **kwargs)
 	
-	def buildReferences(self, ElementTree):
+	def buildReferences(self, ElementTree, **kwargs):
 		for dfn in ElementTree.iter("dfn"):
 			if dfn.get(u"title"):
 				term = dfn.get(u"title")
@@ -52,7 +52,7 @@ class xref(object):
 				
 				self.dfns[term] = id
 	
-	def addReferences(self, ElementTree):
+	def addReferences(self, ElementTree, **kwargs):
 		for element in ElementTree.iter(tag=etree.Element):
 			if element.tag in term_elements:
 				if element.get(u"title"):

@@ -33,23 +33,31 @@ from processes import xref
 class generator(object):
 	""" This oversees all the actual work done """
 	
-	def process(self, input, output=StringIO.StringIO(), processes = [xref.xref], **kwargs):
+	def process(self, input, output=StringIO.StringIO(), processes = [xref.xref], xml_input = False, xml_output = False, **kwargs):
 		""" Process the given "input" (a file-like object) writing to "output".
 		Preconditions for each process are here to avoid expensive function
 		calls. """
 		
-		# Parse the HTML
-		parser = html5lib.HTMLParser(tree=treebuilders.getTreeBuilder("lxml", etree))
-		tree = parser.parse(input)
+		if xml_input:
+			# Parse the XML
+			tree = etree.parse(input)
+		else:
+			# Parse the HTML
+			parser = html5lib.HTMLParser(tree=treebuilders.getTreeBuilder("lxml", etree))
+			tree = parser.parse(input)
 		
 		# Find number of passes to do
 		for process in processes:
-			process(tree)
+			process(tree, **kwargs)
 		
-		# Convert back to HTML
-		walker = treewalkers.getTreeWalker("lxml")
-		s = serializer.htmlserializer.HTMLSerializer(**kwargs)
-		rendered = s.render(walker(tree), encoding="utf-8")
+		if xml_output:
+			# Serialize to XML
+			rendered = etree.tostring(tree, encoding="utf-8")
+		else:
+			# Serialize to HTML
+			walker = treewalkers.getTreeWalker("lxml")
+			s = serializer.htmlserializer.HTMLSerializer(**kwargs)
+			rendered = s.render(walker(tree), encoding="utf-8")
 		
 		# Write to the output
 		output.write(rendered)
