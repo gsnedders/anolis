@@ -67,7 +67,7 @@ def generateID(Element):
 	return id
 
 def textContent(Element):
-	return u"".join(Element.xpath("child::text()"))
+	return u"".join(Element.xpath("descendant::text()"))
 
 def getElementById(base, id):
 	if repr(base) in ids:
