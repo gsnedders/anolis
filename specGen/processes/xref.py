@@ -55,30 +55,30 @@ class xref(object):
 	def addReferences(self, ElementTree):
 		for element in ElementTree.iter(tag=etree.Element):
 			if element.tag in term_elements:
-				goodParentingAndChildren = True
+				if element.get(u"title"):
+					term = element.get(u"title")
+				else:
+					term = utils.textContent(element)
 				
-				current = element
-				while current.getparent() is not None:
-					current = current.getparent()
-					if current.tag in term_not_in_stack_with:
-						goodParentingAndChildren = False
-						break
+				term = term.strip(utils.spaceCharacters).lower()
 				
-				if goodParentingAndChildren:
-					for child_element in element.iter(tag=etree.Element):
-						if child_element.tag in term_not_in_stack_with:
+				if term in self.dfns:
+					goodParentingAndChildren = True
+					
+					current = element
+					while current.getparent() is not None:
+						current = current.getparent()
+						if current.tag in term_not_in_stack_with:
 							goodParentingAndChildren = False
 							break
-				
-				if goodParentingAndChildren:
-					if element.get(u"title"):
-						term = element.get(u"title")
-					else:
-						term = utils.textContent(element)
 					
-					term = term.strip(utils.spaceCharacters).lower()
+					if goodParentingAndChildren:
+						for child_element in element.iter(tag=etree.Element):
+							if child_element.tag in term_not_in_stack_with:
+								goodParentingAndChildren = False
+								break
 					
-					if term in self.dfns:
+					if goodParentingAndChildren:
 						if element.tag == "span":
 							element.tag = "a"
 							element.set("href", "#" + self.dfns[term])
