@@ -67,7 +67,10 @@ def generateID(Element):
 	return id
 
 def textContent(Element):
-	return etree.tostring(Element, encoding=unicode, method='text')
+	content = etree.tostring(Element, encoding=unicode, method='text')
+	if Element.tail:
+		content = content[:-len(Element.tail)]
+	return content
 
 def getElementById(base, id):
 	if repr(base) in ids:
