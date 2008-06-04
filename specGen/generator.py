@@ -19,7 +19,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-import StringIO
 from collections import deque
 
 import html5lib
@@ -33,7 +32,7 @@ from processes import xref
 class generator(object):
 	""" This oversees all the actual work done """
 	
-	def process(self, input, output=StringIO.StringIO(), processes = [xref.xref], xml_input = False, xml_output = False, **kwargs):
+	def process(self, input, output, processes = [xref.xref], xml_input = False, xml_output = False, **kwargs):
 		""" Process the given "input" (a file-like object) writing to "output".
 		Preconditions for each process are here to avoid expensive function
 		calls. """

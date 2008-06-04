@@ -20,9 +20,46 @@
 # THE SOFTWARE.
 
 import glob
+import re
+import StringIO
 import os
+import unittest
 
 from specGen import generator
 
+src_remove = re.compile(r"\.src\.html$")
+
 def get_files(*args):
 	return glob.glob(os.path.join(*args))
+
+class BasicTests(unittest.TestCase):
+	def tests(self):
+		for file_name in get_files("tests", "basic", "*.src.html"):
+			try:
+				# Get the input
+				input = open(file_name, "r")
+				
+				# Prepare the output
+				output = StringIO.StringIO()
+				
+				# Get the expected result
+				expected = open(src_remove.sub(".html", file_name), "r")
+				
+				# Run the spec-gen
+				gen = generator.generator()
+				gen.process(input, output)
+				
+				# Run the test
+				self.assertEquals(output.getvalue(), expected.read())
+				
+				# Close the files
+				input.close()
+				expected.close()
+			except IOError, err:
+				self.fail(err)
+
+def main():
+	unittest.main()
+
+if __name__ == "__main__":
+	main()
