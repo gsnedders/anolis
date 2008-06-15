@@ -42,19 +42,15 @@ class toc(object):
 	"""Build and add a TOC to the document."""
 	
 	# These need to be created in the constructor
-	toc = None
 	stack = None
 	
 	# These don't
-	level = 0
-	num = []
 	current_outlinee = None
 	current_section = None
 	outlines = {}
 	sections = {}
 	
 	def __init__(self, ElementTree, **kwargs):
-		self.toc = etree.Element("ol", {"class": "toc"})
 		self.stack = deque()
 		context = etree.iterwalk(ElementTree, events=("start", "end"))
 		for action, element in context:
@@ -106,6 +102,7 @@ class toc(object):
 					# If the element being entered has a rank lower than the rank of the heading of the candidate section, then create a new section, and append it to candidate section. (This does not change which section is the last section in the outline.) Let current section be this new section. Let the element being entered be the new heading for the current section. Abort these substeps.
 					if rank[element.tag] > rank[candidate_section.header.tag]:
 						self.current_section = section()
+						assert self.current_section != candidate_section
 						candidate_section.subsections.append(self.current_section)
 						self.current_section.header = element
 						break
@@ -122,7 +119,7 @@ class toc(object):
 	
 	def end(self, element, **kwargs):
 		# If the top of the stack is an element, and you are exiting that element
-		if len(self.stack):
+		if len(self.stack) and self.stack[-1] == element:
 			self.stack.pop()
 			
 		# If the top of the stack is a heading content element
@@ -137,6 +134,7 @@ class toc(object):
 			# Let current section be the last section in the outline of the current outlinee element.
 			self.current_section = self.outlines[self.current_outlinee][-1]
 			# Append the outline of the sectioning content element being exited to the current section. (This does not change which section is the last section in the outline.)
+			assert self.current_section not in self.outlines[element]
 			self.current_section.subsections += self.outlines[element]
 			
 		# When exiting a sectioning root element, if the stack is not empty
@@ -148,6 +146,7 @@ class toc(object):
 			# Loop: If current section has no child sections, stop these steps.
 			while len(self.current_section.subsections) > 0:
 				# Let current section be the last child section of the current current section.
+				assert self.current_section != self.current_section.subsections[-1]
 				self.current_section = self.current_section.subsections[-1]
 				# Go back to the substep labeled Loop.
 				
