@@ -21,7 +21,6 @@
 
 from lxml import etree
 from copy import deepcopy
-from collections import deque
 
 from specGen import utils
 
@@ -36,22 +35,24 @@ class section(object):
 	
 	header = None
 	subsections = []
-	associated_nodes = []
+	
+	def __init__(self):
+		self.subsections = []
 
 class toc(object):
 	"""Build and add a TOC to the document."""
 	
 	# These need to be created in the constructor
 	stack = None
+	outlines = None
 	
 	# These don't
 	current_outlinee = None
 	current_section = None
-	outlines = {}
-	sections = {}
 	
 	def __init__(self, ElementTree, **kwargs):
-		self.stack = deque()
+		self.stack = []
+		self.outlines = {}
 		context = etree.iterwalk(ElementTree, events=("start", "end"))
 		for action, element in context:
 			if action == "start":
@@ -61,7 +62,7 @@ class toc(object):
 	
 	def start(self, element, **kwargs):
 		# If the top of the stack is a heading content element
-		if len(self.stack) and self.stack[-1].tag in heading_content:
+		if self.stack and self.stack[-1].tag in heading_content:
 			# Do nothing.
 			return
 		
@@ -73,9 +74,9 @@ class toc(object):
 			# Let current outlinee be the element that is being entered.
 			self.current_outlinee = element
 			# Let current section be a newly created section for the current outlinee element.
-			self.sections[element] = self.current_section = section()
+			self.current_section = section()
 			# Let there be a new outline for the new current outlinee, initialized with just the new current section as the only section in the outline.
-			self.outlines[element] = [self.current_section]
+			self.outlines[self.current_outlinee] = [self.current_section]
 			
 		# If the current outlinee is null.
 		elif self.current_outlinee is None:
@@ -102,7 +103,6 @@ class toc(object):
 					# If the element being entered has a rank lower than the rank of the heading of the candidate section, then create a new section, and append it to candidate section. (This does not change which section is the last section in the outline.) Let current section be this new section. Let the element being entered be the new heading for the current section. Abort these substeps.
 					if rank[element.tag] > rank[candidate_section.header.tag]:
 						self.current_section = section()
-						assert self.current_section != candidate_section
 						candidate_section.subsections.append(self.current_section)
 						self.current_section.header = element
 						break
@@ -119,32 +119,34 @@ class toc(object):
 	
 	def end(self, element, **kwargs):
 		# If the top of the stack is an element, and you are exiting that element
-		if len(self.stack) and self.stack[-1] == element:
+		if self.stack and self.stack[-1] == element:
+			# Note: The element being exited is a heading content element.
+			assert element.tag in heading_content
+			# Pop that element from the stack.
 			self.stack.pop()
 			
 		# If the top of the stack is a heading content element
-		elif len(self.stack) and self.stack[-1].tag in heading_content:
+		elif self.stack and self.stack[-1].tag in heading_content:
 			# Do nothing.
 			return
 			
 		# When exiting a sectioning content element, if the stack is not empty
-		elif element.tag in sectioning_content and len(self.stack) > 0:
+		elif element.tag in sectioning_content and self.stack:
 			# Pop the top element from the stack, and let the current outlinee be that element.
 			self.current_outlinee = self.stack.pop()
 			# Let current section be the last section in the outline of the current outlinee element.
 			self.current_section = self.outlines[self.current_outlinee][-1]
 			# Append the outline of the sectioning content element being exited to the current section. (This does not change which section is the last section in the outline.)
-			assert self.current_section not in self.outlines[element]
 			self.current_section.subsections += self.outlines[element]
 			
 		# When exiting a sectioning root element, if the stack is not empty
-		elif element.tag in sectioning_root and len(self.stack) > 0:
+		elif element.tag in sectioning_root and self.stack:
 			# Pop the top element from the stack, and let the current outlinee be that element.
 			self.current_outlinee = self.stack.pop()
 			# Let current section be the last section in the outline of the current outlinee element.
 			self.current_section = self.outlines[self.current_outlinee][-1]
 			# Loop: If current section has no child sections, stop these steps.
-			while len(self.current_section.subsections) > 0:
+			while self.current_section.subsections:
 				# Let current section be the last child section of the current current section.
 				assert self.current_section != self.current_section.subsections[-1]
 				self.current_section = self.current_section.subsections[-1]
@@ -152,11 +154,10 @@ class toc(object):
 				
 		# When exiting a sectioning content element or a sectioning root element
 		elif element.tag in sectioning_content or element.tag in sectioning_root:
+			# Note: The current outlinee is the element being exited.
+			assert self.current_outlinee == element
 			# Let current section be the first section in the outline of the current outlinee element.
 			self.current_section = self.outlines[self.current_outlinee][0]
 			# Skip to the next step in the overall set of steps. (The walk is over.)
 			# TODO: Implement this somehow.
-		
-		# In addition, whenever you exit a node, after doing the steps above, if current section is not null, associate the node with the section current section.
-		if self.current_section is not None:
-			self.current_section.associated_nodes.append(element)
+			assert False and "This is yet to be implemented"
