@@ -121,8 +121,8 @@ class toc(object):
 				if self.current_section.header is None:
 					self.current_section.header = element
 				
-				# Otherwise, if the element being entered has a rank equal to or greater than the heading of the current section, then create a new section and append it to the outline of the current outlinee element, so that this new section is the new last section of that outline. Let current section be that new section. Let the element being entered be the new heading for the current section.
-				elif rank[element.tag] <= rank[self.current_section.header.tag]:
+				# Otherwise, if the element being entered has a rank equal to or greater than the heading of the last section of the outline of the current outlinee, then create a new section and append it to the outline of the current outlinee element, so that this new section is the new last section of that outline. Let current section be that new section. Let the element being entered be the new heading for the current section.
+				elif rank[element.tag] <= rank[self.outlines[self.current_outlinee][-1].header.tag]:
 					self.current_section = section()
 					self.outlines[self.current_outlinee].append(self.current_section)
 					self.current_section.header = element
