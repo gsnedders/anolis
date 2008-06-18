@@ -30,14 +30,22 @@ sectioning_root = ("blockquote", "figure", "td", "datagrid")
 
 rank = {"h1": 1, "h2": 2, "h3": 3, "h4": 4, "h5": 5, "h6": 6, "header": 1}
 
-class section(object):
+class section(list):
 	"""Represents the section of a document."""
 	
 	header = None
-	subsections = []
 	
-	def __init__(self):
-		self.subsections = []
+	def __repr__(self):
+		return "<section %s>" % (repr(self.header))
+
+	def append(self, child):
+		list.append(self, child)
+		child.parent = self
+	
+	def extend(self, children):
+		list.extend(self, children)
+		for child in children:
+			child.parent = self
 
 class toc(object):
 	"""Build and add a TOC to the document."""
@@ -86,7 +94,7 @@ class toc(object):
 				# Let current section be the last section in the outline of the current outlinee element.
 				self.current_section = self.outlines[self.current_outlinee][-1]
 				# Append the outline of the sectioning content element being exited to the current section. (This does not change which section is the last section in the outline.)
-				self.current_section.subsections += self.outlines[element]
+				self.current_section += self.outlines[element]
 				
 			# When exiting a sectioning root element, if the stack is not empty
 			elif action == "end" and element.tag in sectioning_root and self.stack:
@@ -95,10 +103,10 @@ class toc(object):
 				# Let current section be the last section in the outline of the current outlinee element.
 				self.current_section = self.outlines[self.current_outlinee][-1]
 				# Loop: If current section has no child sections, stop these steps.
-				while self.current_section.subsections:
+				while self.current_section:
 					# Let current section be the last child section of the current current section.
-					assert self.current_section != self.current_section.subsections[-1]
-					self.current_section = self.current_section.subsections[-1]
+					assert self.current_section != self.current_section[-1]
+					self.current_section = self.current_section[-1]
 					# Go back to the substep labeled Loop.
 					
 			# When exiting a sectioning content element or a sectioning root element
@@ -135,16 +143,12 @@ class toc(object):
 						# If the element being entered has a rank lower than the rank of the heading of the candidate section, then create a new section, and append it to candidate section. (This does not change which section is the last section in the outline.) Let current section be this new section. Let the element being entered be the new heading for the current section. Abort these substeps.
 						if rank[element.tag] > rank[candidate_section.header.tag]:
 							self.current_section = section()
-							candidate_section.subsections.append(self.current_section)
+							candidate_section.append(self.current_section)
 							self.current_section.header = element
 							break
 						# Let new candidate section be the section that contains candidate section in the outline of current outlinee.
-						for each_section in self.outlines[self.current_outlinee]:
-							if candidate_section in each_section.subsections:
-								new_candidate_section = each_section
-								break
 						# Let candidate section be new candidate section.
-						candidate_section = new_candidate_section
+						candidate_section = candidate_section.parent
 						# Return to step 2.
 				# Push the element being entered onto the stack. (This causes the algorithm to skip any descendants of the element.)
 				self.stack.append(element)
