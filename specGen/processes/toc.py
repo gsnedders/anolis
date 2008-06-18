@@ -28,7 +28,8 @@ heading_content = ("h1", "h2", "h3", "h4", "h5", "h6", "header")
 sectioning_content = ("body", "section", "nav", "article", "aside")
 sectioning_root = ("blockquote", "figure", "td", "datagrid")
 
-rank = {"h1": 1, "h2": 2, "h3": 3, "h4": 4, "h5": 5, "h6": 6, "header": 1}
+# Rank of heading elements (these are negative so h1 > h6)
+rank = {"h1": -1, "h2": -2, "h3": -3, "h4": -4, "h5": -5, "h6": -6, "header": -1}
 
 class section(list):
 	"""Represents the section of a document."""
@@ -130,7 +131,7 @@ class toc(object):
 					self.current_section.header = element
 				
 				# Otherwise, if the element being entered has a rank equal to or greater than the heading of the last section of the outline of the current outlinee, then create a new section and append it to the outline of the current outlinee element, so that this new section is the new last section of that outline. Let current section be that new section. Let the element being entered be the new heading for the current section.
-				elif rank[element.tag] <= rank[self.outlines[self.current_outlinee][-1].header.tag]:
+				elif rank[element.tag] >= rank[self.outlines[self.current_outlinee][-1].header.tag]:
 					self.current_section = section()
 					self.outlines[self.current_outlinee].append(self.current_section)
 					self.current_section.header = element
@@ -141,7 +142,7 @@ class toc(object):
 					candidate_section = self.current_section
 					while True:
 						# If the element being entered has a rank lower than the rank of the heading of the candidate section, then create a new section, and append it to candidate section. (This does not change which section is the last section in the outline.) Let current section be this new section. Let the element being entered be the new heading for the current section. Abort these substeps.
-						if rank[element.tag] > rank[candidate_section.header.tag]:
+						if rank[element.tag] < rank[candidate_section.header.tag]:
 							self.current_section = section()
 							candidate_section.append(self.current_section)
 							self.current_section.header = element
