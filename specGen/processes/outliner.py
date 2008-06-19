@@ -48,7 +48,7 @@ class section(list):
 class Outliner:
 	"""Build the outline of an HTML document."""
 	
-	def build(ElementTree, **kwargs):
+	def build(self, ElementTree, **kwargs):
 		stack = []
 		outlines = {}
 		current_outlinee = None
