@@ -46,6 +46,8 @@ class xref(object):
 			term = term.strip(utils.spaceCharacters).lower()
 			
 			if len(term) > 0:
+				term = utils.spacesRegex.sub(" ", term)
+				
 				id = utils.generateID(dfn)
 				
 				dfn.set(u"id", id)
@@ -61,6 +63,8 @@ class xref(object):
 					term = utils.textContent(element)
 				
 				term = term.strip(utils.spaceCharacters).lower()
+				
+				term = utils.spacesRegex.sub(" ", term)
 				
 				if term in self.dfns:
 					goodParentingAndChildren = True
