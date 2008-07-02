@@ -75,8 +75,7 @@ class xref(object):
 						if current.tag in term_not_in_stack_with:
 							goodParentingAndChildren = False
 							break
-					
-					if goodParentingAndChildren:
+					else:
 						for child_element in element.iter(tag=etree.Element):
 							if child_element.tag in term_not_in_stack_with:
 								goodParentingAndChildren = False
