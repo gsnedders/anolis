@@ -27,14 +27,15 @@ import unittest
 
 from specGen import generator
 
-src_remove = re.compile(r"\.src\.html$")
-
 def get_files(*args):
 	return glob.glob(os.path.join(*args))
 
-class BasicTests(unittest.TestCase):
-	def tests(self):
-		for file_name in get_files("tests", "basic", "*.src.html"):
+class TestCase(unittest.TestCase):
+	pass
+
+def buildTestSuite():
+	for file_name in get_files("tests", "basic", "*.src.html"):
+		def testFunc(self, file_name=file_name):
 			try:
 				# Get the input
 				input = open(file_name, "r")
@@ -43,7 +44,7 @@ class BasicTests(unittest.TestCase):
 				output = StringIO.StringIO()
 				
 				# Get the expected result
-				expected = open(src_remove.sub(".html", file_name), "r")
+				expected = open(file_name[:-9] + ".html", "r")
 				
 				# Run the spec-gen
 				gen = generator.generator()
@@ -57,8 +58,10 @@ class BasicTests(unittest.TestCase):
 				expected.close()
 			except IOError, err:
 				self.fail(err)
+		setattr(TestCase, "test_%s" % (file_name), testFunc)
 
 def main():
+	buildTestSuite()
 	unittest.main()
 
 if __name__ == "__main__":
