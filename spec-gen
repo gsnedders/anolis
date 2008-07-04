@@ -4,6 +4,7 @@
 Post-process a document, adding cross-references, table of contents, etc.
 """
 
+import cProfile
 from optparse import OptionParser
 import sys
 
@@ -18,7 +19,10 @@ def main():
 		input = file(args[0], "r")
 		output = file(args[1], "w")
 		kwargs = vars(opts)
-		gen.process(input, output, **kwargs)
+		if kwargs["profile"]:
+			cProfile.runctx("gen.process(input, output, **kwargs)", {}, {"gen": gen, "input": input, "output": output, "kwargs": kwargs})
+		else:
+			gen.process(input, output, **kwargs)
 	else:
 		sys.stderr.write("spec-gen expects two arguments. Use -h for help\n")
 		sys.exit(1)
@@ -26,11 +30,14 @@ def main():
 def getOptParser():
 	parser = OptionParser(usage = __doc__)
 	
-	parser.add_option("-x", "--xml-input", action = "store_true",
+	parser.add_option("", "--xml-input", action = "store_true",
 		default = False, dest = "xml_input", help = "Use an XML parser to parse the input.")
 	
 	parser.add_option("", "--xml-output", action = "store_true",
 		default = False, dest = "xml_output", help = "Serialize the output to XML.")
+	
+	parser.add_option("", "--profile", action = "store_true",
+		default = False, dest = "profile", help = "Profile the execution of %prog.")
 
 	parser.add_option("", "--strip-whitespace", action = "store_true",
 		default = False, dest = "strip_whitespace", help = "strip whitespace")
@@ -67,10 +74,4 @@ def getOptParser():
 	return parser
 
 if __name__ == "__main__":
-	import cProfile, pstats, os
-	cProfile.run('main()', "spec-gen.foobar.stat")
-	stat = pstats.Stats("spec-gen.foobar.stat")
-	stat.sort_stats("time")
-	stat.print_stats()
-	os.remove("spec-gen.foobar.stat")
-	#main()
+	main()
