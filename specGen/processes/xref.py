@@ -38,7 +38,7 @@ class xref(object):
 	
 	def buildReferences(self, ElementTree, **kwargs):
 		for dfn in ElementTree.iter("dfn"):
-			if dfn.get(u"title"):
+			if dfn.get(u"title") is not None:
 				term = dfn.get(u"title")
 			else:
 				term = utils.textContent(dfn)
@@ -57,7 +57,7 @@ class xref(object):
 	def addReferences(self, ElementTree, **kwargs):
 		for element in ElementTree.iter(tag=etree.Element):
 			if element.tag in term_elements:
-				if element.get(u"title"):
+				if element.get(u"title") is not None:
 					term = element.get(u"title")
 				else:
 					term = utils.textContent(element)
