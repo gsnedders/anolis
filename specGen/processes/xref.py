@@ -55,6 +55,7 @@ class xref(object):
 				self.dfns[term] = id
 	
 	def addReferences(self, ElementTree, **kwargs):
+		to_remove = []
 		for element in ElementTree.iter(tag=etree.Element):
 			if element.tag in term_elements:
 				if element.get(u"title") is not None:
@@ -69,14 +70,12 @@ class xref(object):
 				if term in self.dfns:
 					goodParentingAndChildren = True
 					
-					current = element
-					while current.getparent() is not None:
-						current = current.getparent()
-						if current.tag in term_not_in_stack_with:
+					for parent_element in element.iterancestors(tag=etree.Element):
+						if parent_element.tag in term_not_in_stack_with:
 							goodParentingAndChildren = False
 							break
 					else:
-						for child_element in element.iter(tag=etree.Element):
+						for child_element in element.iterdescendants(tag=etree.Element):
 							if child_element.tag in term_not_in_stack_with:
 								goodParentingAndChildren = False
 								break
@@ -91,4 +90,6 @@ class xref(object):
 							link.tail = link[0].tail
 							link[0].tail = None
 							element.addprevious(link)
-							element.getparent().remove(element)
+							to_remove.append(element)
+		for element in to_remove:
+			element.getparent().remove(element)
