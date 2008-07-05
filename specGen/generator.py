@@ -27,12 +27,12 @@ from lxml import etree
 
 #import processes.index, processes.num, processes.substitutions, processes.toc, processes.xref
 
-from processes import xref
+from processes import xref, toc
 
 class generator(object):
 	""" This oversees all the actual work done """
 	
-	def process(self, input, output, processes = [xref.xref], xml_input = False, xml_output = False, **kwargs):
+	def process(self, input, output, processes = [xref.xref, toc.toc], xml_input = False, xml_output = False, **kwargs):
 		""" Process the given "input" (a file-like object) writing to "output".
 		Preconditions for each process are here to avoid expensive function
 		calls. """

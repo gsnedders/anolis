@@ -22,13 +22,13 @@
 from lxml import etree
 from copy import deepcopy
 
+from specGen import utils
 from specGen.processes import outliner
 
 class toc(object):
 	"""Build and add TOC."""
 	
 	toc = None
-	num = []
 	
 	def __init__(self, ElementTree, **kwargs):
 		self.toc = etree.Element("ol", {"class": "toc"})
@@ -42,6 +42,9 @@ class toc(object):
 		
 		# Get a list of all the top level sections, and their depth (0)
 		sections = [(section, 0) for section in outline]
+		
+		# Numbering
+		num = []
 		
 		# Loop over all sections in a DFS
 		while sections:
@@ -110,13 +113,13 @@ class toc(object):
 				if isinstance(node, etree._Comment) and node.text.strip(utils.spaceCharacters) == "end-toc":
 					in_toc = False
 				else:
-					node.getparent.remove(node)
+					node.getparent().remove(node)
 			elif isinstance(node, etree._Comment):
 				if node.text.strip(utils.spaceCharacters) == "begin-toc":
 					in_toc = True
-					node.addnext(deepcopy(toc))
+					node.addnext(deepcopy(self.toc))
 				elif node.text.strip(utils.spaceCharacters) == "toc":
 					node.addprevious(etree.Comment("begin-toc"))
-					node.addprevious(deepcopy(toc))
+					node.addprevious(deepcopy(self.toc))
 					node.addprevious(etree.Comment("end-toc"))
-					node.getparent.remove(node)
+					node.getparent().remove(node)
