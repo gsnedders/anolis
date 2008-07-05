@@ -103,9 +103,11 @@ class toc(object):
 						# Make it link to the header
 						link.tag = "a"
 						link.set("href", "#" + id)
-						# TODO: Need to remove @id and @class, not set it to an empty string
-						link.set("id", "")
-						link.set("class", "")
+						# Remove @id and @class
+						if link.get("id") is not None:
+							del link.attrib["id"]
+						if link.get("class") is not None:
+							del link.attrib["class"]
 						# We don't want the old tail (or any tail, for that matter)
 						link.tail = None
 			# Add subsections in reverse order (so the next one is executed next) with a higher depth value
