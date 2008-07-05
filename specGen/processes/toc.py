@@ -25,6 +25,8 @@ from copy import deepcopy
 from specGen import utils
 from specGen.processes import outliner
 
+a_attribs = ("href", "target", "ping", "rel", "media", "hreflang", "type")
+
 class toc(object):
 	"""Build and add TOC."""
 	
@@ -108,6 +110,18 @@ class toc(object):
 							del link.attrib["id"]
 						if link.get("class") is not None:
 							del link.attrib["class"]
+						# TODO: Make the below removals nicer.
+						# Remove child a elements
+						for element in link.iterdescendants("a"):
+							element.tag = "span"
+							for attrib in a_attribs:
+								if element.get(attrib) is not None:
+									del element.attrib[attrib]
+						# Remove child dfn elements
+						for element in link.iterdescendants("dfn"):
+							element.tag = "span"
+							if element.get("id") is not None:
+								del element.attrib["id"]
 						# We don't want the old tail (or any tail, for that matter)
 						link.tail = None
 			# Add subsections in reverse order (so the next one is executed next) with a higher depth value
