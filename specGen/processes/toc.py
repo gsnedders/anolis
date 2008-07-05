@@ -77,7 +77,11 @@ class toc(object):
 						section.header[0:0] = [etree.Element("span", {"class": "secno"})]
 						section.header[0].tail = section.header.text
 						section.header.text = None
-						section.header[0].text = u".".join(map(str, num)) + u". "
+						section.header[0].text = u".".join(map(str, num))
+						# Don't ask: this just follows the CSS WG Postprocessor
+						if len(num) == 1 or len(num) >= 4:
+							section.header[0].text += u"."
+						section.header[0].text += u" "
 					# Add to TOC, if @class doesn't contain no-toc
 					if not utils.elementHasClass(section.header, "no-toc"):
 						# Find the appropriate section of the TOC 
