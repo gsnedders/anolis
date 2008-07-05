@@ -36,6 +36,12 @@ def getOptParser():
 	parser.add_option("", "--xml-output", action = "store_true",
 		default = False, dest = "xml_output", help = "Serialize the output to XML.")
 	
+	parser.add_option("", "--min-depth", action = "store", type = "int",
+		default = 2, dest = "min_depth", help = "Highest ranking header to number/insert into TOC.")
+	
+	parser.add_option("", "--max-depth", action = "store", type = "int",
+		default = 6, dest = "max_depth", help = "Lowest ranking header to number/insert into TOC.")
+	
 	parser.add_option("", "--profile", action = "store_true",
 		default = False, dest = "profile", help = "Profile the execution of %prog.")
 
