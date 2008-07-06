@@ -85,15 +85,14 @@ class xref(object):
 							element.tag = "a"
 							element.set("href", "#" + self.dfns[term])
 						else:
+							link = etree.Element("a", {"href": "#" + self.dfns[term]})
 							if w3c_compat or w3c_compat_xref_a_placement:
-								link = etree.Element("a", {"href": "#" + self.dfns[term]})
 								for node in element.iterchildren():
 									link.append(node)
 								link.text = element.text
 								element.text = None
 								element.append(link)
 							else:
-								link = etree.Element("a", {"href": "#" + self.dfns[term]})
 								link.append(deepcopy(element))
 								link.tail = link[0].tail
 								link[0].tail = None
