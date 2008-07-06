@@ -25,6 +25,7 @@ from copy import deepcopy
 from specGen import utils
 
 term_elements = ("span", "abbr", "code", "var", "i")
+w3c_term_elements = ("abbr", "acronym", "b", "bdo", "big", "code", "del", "em", "i", "ins", "kbd", "label", "legend", "q", "samp", "small", "span", "strong", "sub", "sup", "tt", "var")
 term_not_in_stack_with = ("a", "dfn", "datagrid")
 
 class xref(object):
@@ -54,10 +55,10 @@ class xref(object):
 				
 				self.dfns[term] = id
 	
-	def addReferences(self, ElementTree, w3c_compat = False, w3c_compat_xref_a_placement = False, **kwargs):
+	def addReferences(self, ElementTree, w3c_compat = False, w3c_compat_xref_elements = False, w3c_compat_xref_a_placement = False, **kwargs):
 		to_remove = []
 		for element in ElementTree.iter(tag=etree.Element):
-			if element.tag in term_elements:
+			if element.tag in term_elements or (w3c_compat or w3c_compat_xref_elements) and element.tag in w3c_term_elements:
 				if element.get(u"title") is not None:
 					term = element.get(u"title")
 				else:

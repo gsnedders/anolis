@@ -45,6 +45,9 @@ def getOptParser():
 	parser.add_option("", "--w3c-compat", action="store_true",
 		default=False, dest="w3c_compat", help="Behave in a (mostly) compatible way to the W3C CSS WG's Postprocessor.")
 	
+	parser.add_option("", "--w3c-compat-xref-elements", action="store_true",
+		default=False, dest="w3c_compat_xref_elements", help="Uses the same list of elements to look for cross-references in as the W3C CSS WG's Postprocessor, even when the elements shouldn't semantically be used for cross-reference terms.")
+	
 	parser.add_option("", "--w3c-compat-xref-a-placement", action="store_true",
 		default=False, dest="w3c_compat_xref_a_placement", help="When cross-referencing elements apart from span, put the a element inside the element instead of outside the element.")
 	
