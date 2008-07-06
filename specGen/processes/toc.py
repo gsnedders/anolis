@@ -123,7 +123,6 @@ class toc(object):
 										else:
 											element.getprevious().tail += element.text
 									else:
-										previoustext = element.getparent().text
 										if element.getparent().text is None:
 											element.getparent().text = element.text
 										else:
