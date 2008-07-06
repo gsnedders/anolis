@@ -113,28 +113,29 @@ class toc(object):
 						# Make it link to the header
 						link.tag = "a"
 						link.set("href", "#" + id)
-						# Remove @id and @class
-						if link.get("id") is not None:
-							del link.attrib["id"]
-						if link.get("class") is not None:
-							del link.attrib["class"]
 						# Remove child elements
 						for element_name in remove_elements_from_toc:
 							for element in link.iterdescendants(element_name):
-								if element.getprevious():
-									if element.getprevious().tail is None:
-										element.getprevious().tail = element.text
+								if element.text is not None:
+									if element.getprevious() is not None:
+										if element.getprevious().tail is None:
+											element.getprevious().tail = element.text
+										else:
+											element.getprevious().tail += element.text
 									else:
-										element.getprevious().tail += element.text
-								else:
-									previoustext = element.getparent().text
-									if element.getparent().text is None:
-										element.getparent().text = element.text
-									else:
-										element.getparent().text += element.text
+										previoustext = element.getparent().text
+										if element.getparent().text is None:
+											element.getparent().text = element.text
+										else:
+											element.getparent().text += element.text
 								for node in element.iterchildren():
 									element.addprevious(node)
 								to_remove.append(element)
+						# Remove unwanted attributes
+						for element in link.iter(tag=etree.Element):
+							for attribute_name in remove_attributes_from_toc:
+								if element.get(attribute_name) is not None:
+									del element.attrib[attribute_name]
 						# We don't want the old tail (or any tail, for that matter)
 						link.tail = None
 			# Add subsections in reverse order (so the next one is executed next) with a higher depth value
