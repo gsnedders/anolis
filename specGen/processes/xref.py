@@ -54,7 +54,7 @@ class xref(object):
 				
 				self.dfns[term] = id
 	
-	def addReferences(self, ElementTree, **kwargs):
+	def addReferences(self, ElementTree, w3c_compat = False, w3c_compat_xref_a_placement = False, **kwargs):
 		to_remove = []
 		for element in ElementTree.iter(tag=etree.Element):
 			if element.tag in term_elements:
@@ -85,11 +85,19 @@ class xref(object):
 							element.tag = "a"
 							element.set("href", "#" + self.dfns[term])
 						else:
-							link = etree.Element("a", {"href": "#" + self.dfns[term]})
-							link.append(deepcopy(element))
-							link.tail = link[0].tail
-							link[0].tail = None
-							element.addprevious(link)
-							to_remove.append(element)
+							if w3c_compat or w3c_compat_xref_a_placement:
+								link = etree.Element("a", {"href": "#" + self.dfns[term]})
+								for node in element.iterchildren():
+									link.append(node)
+								link.text = element.text
+								element.text = None
+								element.append(link)
+							else:
+								link = etree.Element("a", {"href": "#" + self.dfns[term]})
+								link.append(deepcopy(element))
+								link.tail = link[0].tail
+								link[0].tail = None
+								element.addprevious(link)
+								to_remove.append(element)
 		for element in to_remove:
 			element.getparent().remove(element)

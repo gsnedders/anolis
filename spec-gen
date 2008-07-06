@@ -42,6 +42,12 @@ def getOptParser():
 	parser.add_option("", "--max-depth", action="store", type="int",
 		default=6, dest="max_depth", help="Lowest ranking header to number/insert into TOC.")
 	
+	parser.add_option("", "--w3c-compat", action="store_true",
+		default=False, dest="w3c_compat", help="Behave in a (mostly) compatible way to the W3C CSS WG's Postprocessor.")
+	
+	parser.add_option("", "--w3c-compat-xref-a-placement", action="store_true",
+		default=False, dest="w3c_compat_xref_a_placement", help="When cross-referencing elements apart from span, put the a element inside the element instead of outside the element.")
+	
 	parser.add_option("", "--profile", action="store_true",
 		default=False, dest="profile", help="Profile the execution of %prog.")
 	
