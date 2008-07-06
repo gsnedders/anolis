@@ -25,7 +25,8 @@ from copy import deepcopy
 from specGen import utils
 from specGen.processes import outliner
 
-a_attribs = ("href", "target", "ping", "rel", "media", "hreflang", "type")
+remove_elements_from_toc = ("a", "dfn")
+remove_attributes_from_toc = ("class", "id")
 
 class toc(object):
 	"""Build and add TOC."""
@@ -47,6 +48,9 @@ class toc(object):
 		
 		# Numbering
 		num = []
+		
+		# List of elements to remove (due to odd behaviour of Element.iter() this has to be done afterwards)
+		to_remove = []
 		
 		# Loop over all sections in a DFS
 		while sections:
@@ -114,22 +118,29 @@ class toc(object):
 							del link.attrib["id"]
 						if link.get("class") is not None:
 							del link.attrib["class"]
-						# TODO: Make the below removals nicer.
-						# Remove child a elements
-						for element in link.iterdescendants("a"):
-							element.tag = "span"
-							for attrib in a_attribs:
-								if element.get(attrib) is not None:
-									del element.attrib[attrib]
-						# Remove child dfn elements
-						for element in link.iterdescendants("dfn"):
-							element.tag = "span"
-							if element.get("id") is not None:
-								del element.attrib["id"]
+						# Remove child elements
+						for element_name in remove_elements_from_toc:
+							for element in link.iterdescendants(element_name):
+								if element.getprevious():
+									if element.getprevious().tail is None:
+										element.getprevious().tail = element.text
+									else:
+										element.getprevious().tail += element.text
+								else:
+									previoustext = element.getparent().text
+									if element.getparent().text is None:
+										element.getparent().text = element.text
+									else:
+										element.getparent().text += element.text
+								for node in element.iterchildren():
+									element.addprevious(node)
+								to_remove.append(element)
 						# We don't want the old tail (or any tail, for that matter)
 						link.tail = None
 			# Add subsections in reverse order (so the next one is executed next) with a higher depth value
 			sections.extend((child_section, depth + 1) for child_section in reversed(section))
+		for element in to_remove:
+			element.getparent().remove(element)
 	
 	def addToc(self, ElementTree, **kwargs):
 		in_toc = False
