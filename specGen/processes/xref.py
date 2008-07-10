@@ -48,7 +48,7 @@ class xref(object):
 			
 			if len(term) > 0:
 				if term in self.dfns:
-					raise DuplicateTermException
+					raise DuplicateTermException, term
 				term = utils.spacesRegex.sub(" ", term)
 				
 				id = utils.generateID(dfn)
