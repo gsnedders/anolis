@@ -37,7 +37,7 @@ class xref(object):
 		self.buildReferences(ElementTree, **kwargs)
 		self.addReferences(ElementTree, **kwargs)
 	
-	def buildReferences(self, ElementTree, **kwargs):
+	def buildReferences(self, ElementTree, allow_duplicate_terms=False, **kwargs):
 		for dfn in ElementTree.iter("dfn"):
 			if dfn.get(u"title") is not None:
 				term = dfn.get(u"title")
@@ -47,7 +47,7 @@ class xref(object):
 			term = term.strip(utils.spaceCharacters).lower()
 			
 			if len(term) > 0:
-				if term in self.dfns:
+				if not allow_duplicate_terms and term in self.dfns:
 					raise DuplicateTermException, term
 				term = utils.spacesRegex.sub(" ", term)
 				
