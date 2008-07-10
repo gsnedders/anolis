@@ -154,6 +154,7 @@ class toc(object):
 			elif isinstance(node, etree._Comment):
 				if node.text.strip(utils.spaceCharacters) == "begin-toc":
 					in_toc = True
+					node.tail = None
 					node.addnext(deepcopy(self.toc))
 				elif node.text.strip(utils.spaceCharacters) == "toc":
 					node.addprevious(etree.Comment("begin-toc"))
