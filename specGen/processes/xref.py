@@ -31,9 +31,8 @@ term_not_in_stack_with = ("a", "dfn", "datagrid")
 class xref(object):
 	"""Add cross-references."""
 	
-	dfns = {}
-	
 	def __init__(self, ElementTree, **kwargs):
+		self.dfns = {}
 		self.buildReferences(ElementTree, **kwargs)
 		self.addReferences(ElementTree, **kwargs)
 	
