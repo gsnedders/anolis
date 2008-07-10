@@ -47,6 +47,8 @@ class xref(object):
 			term = term.strip(utils.spaceCharacters).lower()
 			
 			if len(term) > 0:
+				if term in self.dfns:
+					raise DuplicateTermException
 				term = utils.spacesRegex.sub(" ", term)
 				
 				id = utils.generateID(dfn)
@@ -101,3 +103,7 @@ class xref(object):
 								to_remove.append(element)
 		for element in to_remove:
 			element.getparent().remove(element)
+
+class DuplicateTermException(utils.SpecGenException):
+	"""Term already defined."""
+	pass

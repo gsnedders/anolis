@@ -83,3 +83,7 @@ def getElementById(base, id):
 
 def escapeXPathString(string):
 	return u"concat('', '%s')" % string.replace("'", "', \"'\", '")
+
+class SpecGenException(Exception):
+	"""Generic spec-gen error."""
+	pass
