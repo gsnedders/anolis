@@ -143,13 +143,14 @@ class toc(object):
 			element.getparent().remove(element)
 	
 	def addToc(self, ElementTree, **kwargs):
+		to_remove = []
 		in_toc = False
 		for node in ElementTree.iter():
 			if in_toc:
 				if isinstance(node, etree._Comment) and node.text.strip(utils.spaceCharacters) == "end-toc":
 					in_toc = False
 				else:
-					node.getparent().remove(node)
+					to_remove.append(node)
 			elif isinstance(node, etree._Comment):
 				if node.text.strip(utils.spaceCharacters) == "begin-toc":
 					in_toc = True
@@ -158,4 +159,6 @@ class toc(object):
 					node.addprevious(etree.Comment("begin-toc"))
 					node.addprevious(deepcopy(self.toc))
 					node.addprevious(etree.Comment("end-toc"))
-					node.getparent().remove(node)
+					to_remove.append(node)
+		for node in to_remove:
+			node.getparent().remove(node)
