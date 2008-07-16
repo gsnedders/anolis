@@ -25,6 +25,11 @@ import StringIO
 import os
 import unittest
 
+import html5lib
+from html5lib import treebuilders, treewalkers, serializer
+
+from lxml import etree
+
 from specGen import generator
 
 def get_files(*args):
@@ -39,19 +44,23 @@ def buildTestSuite():
 			try:
 				# Get the input
 				input = open(file_name, "r")
-				
-				# Prepare the output
-				output = StringIO.StringIO()
+				parser = html5lib.HTMLParser(tree=treebuilders.getTreeBuilder("lxml", etree))
+				tree = parser.parse(input)
 				
 				# Get the expected result
 				expected = open(file_name[:-9] + ".html", "r")
 				
 				# Run the spec-gen
 				gen = generator.generator()
-				gen.process(input, output)
+				gen.process(tree)
+				
+				# Get the output
+				walker = treewalkers.getTreeWalker("lxml")
+				s = serializer.htmlserializer.HTMLSerializer()
+				output = s.render(walker(tree), encoding="utf-8")
 				
 				# Run the test
-				self.assertEquals(output.getvalue(), expected.read())
+				self.assertEquals(output, expected.read())
 				
 				# Close the files
 				input.close()

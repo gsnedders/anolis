@@ -19,44 +19,16 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-from collections import deque
-
-import html5lib
-from html5lib import treebuilders, treewalkers, serializer
-from lxml import etree
-
-#import processes.index, processes.num, processes.substitutions, processes.toc, processes.xref
-
 from processes import xref, toc, sub
 
 class generator(object):
 	""" This oversees all the actual work done """
 	
-	def process(self, input, output, processes = [xref.xref, toc.toc, sub.sub], xml_input = False, xml_output = False, **kwargs):
+	def process(self, tree, processes = [xref.xref, toc.toc, sub.sub], **kwargs):
 		""" Process the given "input" (a file-like object) writing to "output".
 		Preconditions for each process are here to avoid expensive function
 		calls. """
 		
-		if xml_input:
-			# Parse the XML
-			tree = etree.parse(input)
-		else:
-			# Parse the HTML
-			parser = html5lib.HTMLParser(tree=treebuilders.getTreeBuilder("lxml", etree))
-			tree = parser.parse(input)
-		
 		# Find number of passes to do
 		for process in processes:
 			process(tree, **kwargs)
-		
-		if xml_output:
-			# Serialize to XML
-			rendered = etree.tostring(tree, encoding="utf-8")
-		else:
-			# Serialize to HTML
-			walker = treewalkers.getTreeWalker("lxml")
-			s = serializer.htmlserializer.HTMLSerializer(**kwargs)
-			rendered = s.render(walker(tree), encoding="utf-8")
-		
-		# Write to the output
-		output.write(rendered)

@@ -7,22 +7,61 @@ Post-process a document, adding cross-references, table of contents, etc.
 import cProfile
 from optparse import OptionParser
 import sys
+import html5lib
+from html5lib import treebuilders, treewalkers, serializer
+import lxml.html
+from lxml import etree
 
 from specGen import generator
 
 def main():
+	# Create the options parser
 	optParser = getOptParser()
 	opts, args = optParser.parse_args()
 	
+	# Check we have enough arguments
 	if len(args) >= 2:
-		gen = generator.generator()
+		# Get input/output
 		input = file(args[0], "r")
 		output = file(args[1], "w")
-		kwargs = vars(opts)
-		if kwargs["profile"]:
-			cProfile.runctx("gen.process(input, output, **kwargs)", {}, {"gen": gen, "input": input, "output": output, "kwargs": kwargs})
+		
+		# Parse as XML:
+		if opts.xml:
+			tree = etree.parse(input)
+		# Parse as HTML using lmxl.html
+		elif opts.lxml_html:
+			tree = lxml.html.parse(input)
+		# Parse as HTML using html5lib
 		else:
-			gen.process(input, output, **kwargs)
+			parser = html5lib.HTMLParser(tree=treebuilders.getTreeBuilder("lxml", etree))
+			tree = parser.parse(input)
+		
+		# Create the generator
+		gen = generator.generator()
+		
+		# Turn the options into a dict
+		kwargs = vars(opts)
+		
+		# Run the generator, and profile, or not, as the case may be
+		if kwargs["profile"]:
+			cProfile.runctx("gen.process(input, output, **kwargs)", {}, {"gen": gen, "tree": tree, "kwargs": kwargs})
+		else:
+			gen.process(tree, **kwargs)
+		
+		# Serialize to XML
+		if opts.xml:
+			rendered = etree.tostring(tree, encoding="utf-8")
+		# Serialize to HTML using lxml.html
+		elif opts.lxml_html:
+			rendered = lxml.html.tostring(tree, encoding="utf-8")
+		# Serialize to HTML using html5lib
+		else:
+			walker = treewalkers.getTreeWalker("lxml")
+			s = serializer.htmlserializer.HTMLSerializer(**kwargs)
+			rendered = s.render(walker(tree), encoding="utf-8")
+		
+		# Write to the output
+		output.write(rendered)
 	else:
 		sys.stderr.write("spec-gen expects two arguments. Use -h for help\n")
 		sys.exit(1)
@@ -30,11 +69,11 @@ def main():
 def getOptParser():
 	parser = OptionParser(usage = __doc__)
 	
-	parser.add_option("", "--xml-input", action="store_true",
-		default=False, dest="xml_input", help="Use an XML parser to parse the input.")
+	parser.add_option("", "--xml", action="store_true",
+		default=False, dest="xml", help="Use an XML parser/serializer.")
 	
-	parser.add_option("", "--xml-output", action="store_true",
-		default=False, dest="xml_output", help="Serialize the output to XML.")
+	parser.add_option("", "--lxml.html", action="store_true",
+		default=False, dest="lxml_html", help="Use lxml's HTML parser/serializer.")
 	
 	parser.add_option("", "--min-depth", action="store", type="int",
 		default=2, dest="min_depth", help="Highest ranking header to number/insert into TOC.")
