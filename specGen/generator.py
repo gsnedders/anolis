@@ -25,9 +25,7 @@ class generator(object):
 	""" This oversees all the actual work done """
 	
 	def process(self, tree, processes = [xref.xref, toc.toc, sub.sub], **kwargs):
-		""" Process the given "input" (a file-like object) writing to "output".
-		Preconditions for each process are here to avoid expensive function
-		calls. """
+		""" Process the given tree. """
 		
 		# Find number of passes to do
 		for process in processes:

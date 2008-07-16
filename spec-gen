@@ -44,7 +44,7 @@ def main():
 		
 		# Run the generator, and profile, or not, as the case may be
 		if kwargs["profile"]:
-			cProfile.runctx("gen.process(input, output, **kwargs)", {}, {"gen": gen, "tree": tree, "kwargs": kwargs})
+			cProfile.runctx("gen.process(tree, **kwargs)", {}, {"gen": gen, "tree": tree, "kwargs": kwargs})
 		else:
 			gen.process(tree, **kwargs)
 		
