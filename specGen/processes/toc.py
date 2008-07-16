@@ -115,7 +115,9 @@ class toc(object):
 						link.set("href", "#" + id)
 						# Remove child elements
 						for element_name in remove_elements_from_toc:
+							# Iterate over all the desendants of the new link with that element name
 							for element in link.iterdescendants(element_name):
+								# Preserve the element text
 								if element.text is not None:
 									if element.getprevious() is not None:
 										if element.getprevious().tail is None:
@@ -127,8 +129,22 @@ class toc(object):
 											element.getparent().text = element.text
 										else:
 											element.getparent().text += element.text
+								# Re-parent all the children of the element we're removing
 								for node in element.iterchildren():
 									element.addprevious(node)
+								# Preserve the element tail
+								if element.tail is not None:
+									if element.getprevious() is not None:
+										if element.getprevious().tail is None:
+											element.getprevious().tail = element.tail
+										else:
+											element.getprevious().tail += element.tail
+									else:
+										if element.getparent().text is None:
+											element.getparent().text = element.tail
+										else:
+											element.getparent().text += element.tail
+								# Add the element of the list of elements to remove
 								to_remove.append(element)
 						# Remove unwanted attributes
 						for element in link.iter(tag=etree.Element):
@@ -139,6 +155,7 @@ class toc(object):
 						link.tail = None
 			# Add subsections in reverse order (so the next one is executed next) with a higher depth value
 			sections.extend((child_section, depth + 1) for child_section in reversed(section))
+		# Remove all the elements in the list of nodes to remove
 		for element in to_remove:
 			element.getparent().remove(element)
 	
@@ -148,11 +165,14 @@ class toc(object):
 		for node in ElementTree.iter():
 			if in_toc:
 				if isinstance(node, etree._Comment) and node.text.strip(utils.spaceCharacters) == "end-toc":
+					if node.getparent() is not toc_parent:
+						raise DifferentParentException
 					in_toc = False
 				else:
 					to_remove.append(node)
 			elif isinstance(node, etree._Comment):
 				if node.text.strip(utils.spaceCharacters) == "begin-toc":
+					toc_parent = node.getparent()
 					in_toc = True
 					node.tail = None
 					node.addnext(deepcopy(self.toc))
@@ -163,3 +183,7 @@ class toc(object):
 					to_remove.append(node)
 		for node in to_remove:
 			node.getparent().remove(node)
+
+class DifferentParentException(utils.SpecGenException):
+	"""begin-toc and end-toc do not have the same parent."""
+	pass
