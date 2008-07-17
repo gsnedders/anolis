@@ -29,7 +29,7 @@ term_elements = ("span", "abbr", "code", "var", "i")
 w3c_term_elements = ("abbr", "acronym", "b", "bdo", "big", "code", "del", "em", "i", "ins", "kbd", "label", "legend", "q", "samp", "small", "span", "strong", "sub", "sup", "tt", "var")
 term_not_in_stack_with = ("a", "dfn", "datagrid")
 
-non_alphanumeric_spaces = re.compile(r"[^a-zA-Z0-9 ]+")
+non_alphanumeric_spaces = re.compile(r"[^a-zA-Z0-9 \-]+")
 
 class xref(object):
 	"""Add cross-references."""
