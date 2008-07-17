@@ -27,14 +27,19 @@ from specGen import utils
 
 year = re.compile(r"\[YEAR(:[^\]]*)?\]")
 year_sub = time.strftime("%Y", time.gmtime())
+year_identifier = u"[YEAR"
 
 date = re.compile(r"\[DATE(:[^\]]*)?\]")
 date_sub = time.strftime("%d %B %Y", time.gmtime())
+date_identifier = u"[DATE"
 
 cdate = re.compile(r"\[CDATE(:[^\]]*)?\]")
 cdate_sub = time.strftime("%", time.gmtime())
+cdate_identifier = u"[DATE"
 
-string_subs = {year: year_sub, date: date_sub, cdate: cdate_sub}
+string_subs = ((year, year_sub, year_identifier),
+               (date, date_sub, date_identifier),
+               (cdate, cdate_sub, cdate_identifier))
 
 class sub(object):
 	"""Perform substitutions."""
@@ -45,13 +50,14 @@ class sub(object):
 	
 	def stringSubstitutions(self, ElementTree, **kwargs):
 		for node in ElementTree.iter():
-			for regex, sub in string_subs.items():
-				if node.text is not None:
+			for regex, sub, identifier in string_subs:
+				if node.text is not None and identifier in node.text:
 					node.text = regex.sub(sub, node.text)
-				if node.tail is not None:
+				if node.tail is not None and identifier in node.tail:
 					node.tail = regex.sub(sub, node.tail)
 				for name, value in node.attrib.items():
-					node.attrib[name] = regex.sub(sub, value)
+					if identifier in value:
+						node.attrib[name] = regex.sub(sub, value)
 	
 	def commentSubstitutions(self, ElementTree, **kwargs):
 		pass
