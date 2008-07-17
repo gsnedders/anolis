@@ -84,7 +84,7 @@ class sub(object):
 				else:
 					if node.getparent() is link_parent:
 						link.append(deepcopy(node))
-					to_remove.append(node)
+				to_remove.append(node)
 			elif isinstance(node, etree._Comment) and node.text.strip(utils.spaceCharacters) == "begin-link":
 				link_parent = node.getparent()
 				in_link = True
@@ -92,6 +92,7 @@ class sub(object):
 				link.text = node.tail
 				node.tail = None
 				node.addnext(link)
+				to_remove.append(node)
 		for node in to_remove:
 			node.getparent().remove(node)
 
