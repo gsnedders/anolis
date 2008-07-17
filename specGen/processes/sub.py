@@ -22,6 +22,7 @@
 import re
 import time
 from lxml import etree
+from copy import deepcopy
 
 from specGen import utils
 
@@ -35,7 +36,10 @@ date_identifier = u"[DATE"
 
 cdate = re.compile(r"\[CDATE(:[^\]]*)?\]")
 cdate_sub = time.strftime("%", time.gmtime())
-cdate_identifier = u"[DATE"
+cdate_identifier = u"[CDATE"
+
+title = re.compile(r"\[TITLE(:[^\]]*)?\]")
+title_identifier = u"[TITLE"
 
 string_subs = ((year, year_sub, year_identifier),
                (date, date_sub, date_identifier),
@@ -49,8 +53,15 @@ class sub(object):
 		self.commentSubstitutions(ElementTree, **kwargs)
 	
 	def stringSubstitutions(self, ElementTree, **kwargs):
+		try:
+			doc_title = utils.textContent(ElementTree.getroot().find("head").find("title"))
+		except (AttributeError, TypeError):
+			doc_title = u""
+			
+		instance_string_subs = string_subs + ((title, doc_title, title_identifier),)
+		
 		for node in ElementTree.iter():
-			for regex, sub, identifier in string_subs:
+			for regex, sub, identifier in instance_string_subs:
 				if node.text is not None and identifier in node.text:
 					node.text = regex.sub(sub, node.text)
 				if node.tail is not None and identifier in node.tail:
@@ -60,4 +71,30 @@ class sub(object):
 						node.attrib[name] = regex.sub(sub, value)
 	
 	def commentSubstitutions(self, ElementTree, **kwargs):
-		pass
+		# Link
+		to_remove = []
+		in_link = False
+		for node in ElementTree.iter():
+			if in_link:
+				if isinstance(node, etree._Comment) and node.text.strip(utils.spaceCharacters) == "end-link":
+					if node.getparent() is not link_parent:
+						raise DifferentParentException
+					link.set("href", utils.textContent(link))
+					in_link = False
+				else:
+					if node.getparent() is link_parent:
+						link.append(deepcopy(node))
+					to_remove.append(node)
+			elif isinstance(node, etree._Comment) and node.text.strip(utils.spaceCharacters) == "begin-link":
+				link_parent = node.getparent()
+				in_link = True
+				link = etree.Element("a")
+				link.text = node.tail
+				node.tail = None
+				node.addnext(link)
+		for node in to_remove:
+			node.getparent().remove(node)
+
+class DifferentParentException(utils.SpecGenException):
+	"""begin-link and end-link do not have the same parent."""
+	pass
