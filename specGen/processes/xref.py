@@ -19,6 +19,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+import re
 from lxml import etree
 from copy import deepcopy
 
@@ -27,6 +28,8 @@ from specGen import utils
 term_elements = ("span", "abbr", "code", "var", "i")
 w3c_term_elements = ("abbr", "acronym", "b", "bdo", "big", "code", "del", "em", "i", "ins", "kbd", "label", "legend", "q", "samp", "small", "span", "strong", "sub", "sup", "tt", "var")
 term_not_in_stack_with = ("a", "dfn", "datagrid")
+
+non_alphanumeric_spaces = re.compile(r"[^a-zA-Z0-9 ]+")
 
 class xref(object):
 	"""Add cross-references."""
@@ -38,17 +41,11 @@ class xref(object):
 	
 	def buildReferences(self, ElementTree, allow_duplicate_terms=False, **kwargs):
 		for dfn in ElementTree.iter("dfn"):
-			if dfn.get(u"title") is not None:
-				term = dfn.get(u"title")
-			else:
-				term = utils.textContent(dfn)
-			
-			term = term.strip(utils.spaceCharacters).lower()
+			term = self.getTerm(dfn, **kwargs)
 			
 			if len(term) > 0:
 				if not allow_duplicate_terms and term in self.dfns:
 					raise DuplicateTermException, term
-				term = utils.spacesRegex.sub(" ", term)
 				
 				id = utils.generateID(dfn)
 				
@@ -60,14 +57,7 @@ class xref(object):
 		to_remove = []
 		for element in ElementTree.iter(tag=etree.Element):
 			if element.tag in term_elements or (w3c_compat or w3c_compat_xref_elements) and element.tag in w3c_term_elements:
-				if element.get(u"title") is not None:
-					term = element.get(u"title")
-				else:
-					term = utils.textContent(element)
-				
-				term = term.strip(utils.spaceCharacters).lower()
-				
-				term = utils.spacesRegex.sub(" ", term)
+				term = self.getTerm(element, **kwargs)
 				
 				if term in self.dfns:
 					goodParentingAndChildren = True
@@ -102,6 +92,21 @@ class xref(object):
 								to_remove.append(element)
 		for element in to_remove:
 			element.getparent().remove(element)
+	
+	def getTerm(self, element, w3c_compat = False, w3c_compat_xref_normalization = False, **kwargs):
+		if element.get(u"title") is not None:
+			term = element.get(u"title")
+		else:
+			term = utils.textContent(element)
+		
+		term = term.strip(utils.spaceCharacters).lower()
+		
+		term = utils.spacesRegex.sub(" ", term)
+		
+		if w3c_compat or w3c_compat_xref_normalization:
+			term = non_alphanumeric_spaces.sub("", term)
+		
+		return term
 
 class DuplicateTermException(utils.SpecGenException):
 	"""Term already defined."""
