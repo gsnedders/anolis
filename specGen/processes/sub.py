@@ -26,7 +26,7 @@ from copy import deepcopy
 
 from specGen import utils
 
-w3c_tr_url_status = re.compile(r"http://www.w3.org/TR/[^/]*/(WD|REC|PR|PER|CR|NOTE|MO)-")
+w3c_tr_url_status = re.compile(r"http://www.w3.org/TR/[^/]*/(MO|WD|CR|PR|REC|PER|NOTE)-")
 
 year = re.compile(r"\[YEAR[^\]]*\]")
 year_sub = time.strftime("%Y", time.gmtime())
