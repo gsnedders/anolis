@@ -26,7 +26,7 @@ from copy import deepcopy
 
 from specGen import utils
 
-w3c_tr_url_status = re.compile(r"http://www.w3.org/TR/[^/]*/(MO|WD|CR|PR|REC|PER|NOTE)-")
+w3c_tr_url_status = re.compile(r"http://www\.w3\.org/TR/[^/]*/(MO|WD|CR|PR|REC|PER|NOTE)-")
 
 year = re.compile(r"\[YEAR[^\]]*\]")
 year_sub = time.strftime("%Y", time.gmtime())
@@ -59,6 +59,9 @@ longstatus_map = {
 	"NOTE": "W3C Working Group Note"
 }
 
+w3c_stylesheet = re.compile(r"http://www\.w3\.org/StyleSheets/TR/W3C-(MO|ED|WD|CR|PR|REC|PER|NOTE|RSCND|Member-SUBM)(\.css)?")
+w3c_stylesheet_identifier = "http://www.w3.org/StyleSheets/TR/W3C-"
+
 string_subs = ((year, year_sub, year_identifier),
                (date, date_sub, date_identifier),
                (cdate, cdate_sub, cdate_identifier))
@@ -82,6 +85,8 @@ class sub(object):
 		if w3c_compat or w3c_compat_substitutions:
 			# Get the right long status
 			doc_longstatus = longstatus_map[self.w3c_status]
+			# Get the right stylesheet
+			doc_w3c_stylesheet = "http://www.w3.org/StyleSheets/TR/W3C-" + self.w3c_status
 		
 		# Get all the subs we want
 		instance_string_subs = string_subs + ((title, doc_title, title_identifier),)
@@ -89,7 +94,8 @@ class sub(object):
 		# And even more in compat. mode
 		if w3c_compat or w3c_compat_substitutions:
 			instance_string_subs += ((status, self.w3c_status, status_identifier),
-			                         (longstatus, doc_longstatus, longstatus_identifier))
+			                         (longstatus, doc_longstatus, longstatus_identifier),
+			                         (w3c_stylesheet, doc_w3c_stylesheet, w3c_stylesheet_identifier))
 		
 		for node in ElementTree.iter():
 			for regex, sub, identifier in instance_string_subs:
