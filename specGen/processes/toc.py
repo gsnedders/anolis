@@ -38,7 +38,7 @@ class toc(object):
 		self.buildToc(ElementTree, **kwargs)
 		self.addToc(ElementTree, **kwargs)
 	
-	def buildToc(self, ElementTree, min_depth = 2, max_depth = 6, **kwargs):
+	def buildToc(self, ElementTree, min_depth = 2, max_depth = 6, w3c_compat = False, w3c_compat_class_toc = False, **kwargs):
 		# Build the outline of the document
 		outline_creator = outliner.Outliner()
 		outline = outline_creator.build(ElementTree)
@@ -93,10 +93,14 @@ class toc(object):
 								# If the final li has no children, or the last children isn't an ol element
 								if len(toc_section[-1]) == 0 or toc_section[-1][-1].tag != "ol":
 									toc_section[-1].append(etree.Element("ol"))
+									if w3c_compat or w3c_compat_class_toc:
+										toc_section[-1][-1].set("class", "toc")
 							except IndexError:
 								# If the current ol has no li in it
 								toc_section.append(etree.Element("li"))
 								toc_section[0].append(etree.Element("ol"))
+								if w3c_compat or w3c_compat_class_toc:
+									toc_section[0][-1].set("class", "toc")
 							# TOC Section is now the final child (ol) of the final item (li) in the previous section
 							assert toc_section[-1].tag == "li"
 							assert toc_section[-1][-1].tag == "ol"

@@ -96,6 +96,9 @@ def getOptParser():
 	parser.add_option("", "--w3c-compat-xref-normalization", action="store_true",
 		default=False, dest="w3c_compat_xref_normalization", help="Only use ASCII letters, numbers, and spaces in comparison of cross-reference terms.")
 	
+	parser.add_option("", "--w3c-compat-class-toc", action="store_true",
+		default=False, dest="w3c_compat_class_toc", help="Add @class='toc' on every ol element in the table of contents (instead of only the root ol element).")
+	
 	parser.add_option("", "--profile", action="store_true",
 		default=False, dest="profile", help="Profile the execution of %prog.")
 	
