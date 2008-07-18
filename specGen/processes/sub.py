@@ -28,20 +28,36 @@ from specGen import utils
 
 w3c_tr_url_status = re.compile(r"http://www.w3.org/TR/[^/]*/(WD|REC|PR|PER|CR|NOTE|MO)-")
 
-year = re.compile(r"\[YEAR(:[^\]]*)?\]")
+year = re.compile(r"\[YEAR[^\]]*\]")
 year_sub = time.strftime("%Y", time.gmtime())
 year_identifier = u"[YEAR"
 
-date = re.compile(r"\[DATE(:[^\]]*)?\]")
+date = re.compile(r"\[DATE[^\]]*\]")
 date_sub = time.strftime("%d %B %Y", time.gmtime())
 date_identifier = u"[DATE"
 
-cdate = re.compile(r"\[CDATE(:[^\]]*)?\]")
+cdate = re.compile(r"\[CDATE[^\]]*\]")
 cdate_sub = time.strftime("%", time.gmtime())
 cdate_identifier = u"[CDATE"
 
-title = re.compile(r"\[TITLE(:[^\]]*)?\]")
+title = re.compile(r"\[TITLE[^\]]*\]")
 title_identifier = u"[TITLE"
+
+status = re.compile(r"\[STATUS[^\]]*\]")
+status_identifier = u"[STATUS"
+
+longstatus = re.compile(r"\[LONGSTATUS[^\]]*\]")
+longstatus_identifier = u"[LONGSTATUS"
+longstatus_map = {
+	"MO": "W3C Member-only Draft",
+	"ED": "Editor's Draft",
+	"WD": "W3C Working Draft",
+	"CR": "W3C Candidate Recommendation",
+	"PR": "W3C Proposed Recommendation",
+	"REC": "W3C Recommendation",
+	"PER": "W3C Proposed Edited Recommendation",
+	"NOTE": "W3C Working Group Note"
+}
 
 string_subs = ((year, year_sub, year_identifier),
                (date, date_sub, date_identifier),
@@ -50,17 +66,30 @@ string_subs = ((year, year_sub, year_identifier),
 class sub(object):
 	"""Perform substitutions."""
 	
-	def __init__(self, ElementTree, **kwargs):
-		self.stringSubstitutions(ElementTree, **kwargs)
-		self.commentSubstitutions(ElementTree, **kwargs)
+	def __init__(self, ElementTree, w3c_compat=False, w3c_compat_substitutions=False, **kwargs):
+		if w3c_compat or w3c_compat_substitutions:
+			self.w3c_status = self.getW3CStatus(ElementTree, **kwargs)
+		self.stringSubstitutions(ElementTree, w3c_compat, w3c_compat_substitutions, **kwargs)
+		self.commentSubstitutions(ElementTree, w3c_compat, w3c_compat_substitutions, **kwargs)
 	
-	def stringSubstitutions(self, ElementTree, **kwargs):
+	def stringSubstitutions(self, ElementTree, w3c_compat=False, w3c_compat_substitutions=False, **kwargs):
+		# Get doc_title from the title element
 		try:
 			doc_title = utils.textContent(ElementTree.getroot().find("head").find("title"))
 		except (AttributeError, TypeError):
 			doc_title = u""
-			
+		
+		if w3c_compat or w3c_compat_substitutions:
+			# Get the right long status
+			doc_longstatus = longstatus_map[self.w3c_status]
+		
+		# Get all the subs we want
 		instance_string_subs = string_subs + ((title, doc_title, title_identifier),)
+		
+		# And even more in compat. mode
+		if w3c_compat or w3c_compat_substitutions:
+			instance_string_subs += ((status, self.w3c_status, status_identifier),
+			                         (longstatus, doc_longstatus, longstatus_identifier))
 		
 		for node in ElementTree.iter():
 			for regex, sub, identifier in instance_string_subs:
@@ -72,9 +101,9 @@ class sub(object):
 					if identifier in value:
 						node.attrib[name] = regex.sub(sub, value)
 	
-	def commentSubstitutions(self, ElementTree, **kwargs):
+	def commentSubstitutions(self, ElementTree, w3c_compat=False, w3c_compat_substitutions=False, **kwargs):
 		# Link
-		to_remove = []
+		to_remove = set()
 		in_link = False
 		for node in ElementTree.iter():
 			if in_link:
@@ -86,7 +115,7 @@ class sub(object):
 				else:
 					if node.getparent() is link_parent:
 						link.append(deepcopy(node))
-				to_remove.append(node)
+				to_remove.add(node)
 			elif isinstance(node, etree._Comment) and node.text.strip(utils.spaceCharacters) == "begin-link":
 				link_parent = node.getparent()
 				in_link = True
@@ -94,7 +123,7 @@ class sub(object):
 				link.text = node.tail
 				node.tail = None
 				node.addnext(link)
-				to_remove.append(node)
+				to_remove.add(node)
 		for node in to_remove:
 			node.getparent().remove(node)
 	
