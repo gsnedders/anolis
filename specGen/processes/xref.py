@@ -57,7 +57,7 @@ class xref(object):
 		to_remove = []
 		for element in ElementTree.iter(tag=etree.Element):
 			if element.tag in term_elements or (w3c_compat or w3c_compat_xref_elements) and element.tag in w3c_term_elements:
-				term = self.getTerm(element, **kwargs)
+				term = self.getTerm(element, w3c_compat=w3c_compat, **kwargs)
 				
 				if term in self.dfns:
 					goodParentingAndChildren = True
