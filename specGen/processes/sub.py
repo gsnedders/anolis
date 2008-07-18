@@ -26,6 +26,8 @@ from copy import deepcopy
 
 from specGen import utils
 
+w3c_tr_url_status = re.compile(r"http://www.w3.org/TR/[^/]*/(WD|REC|PR|PER|CR|NOTE|MO)-")
+
 year = re.compile(r"\[YEAR(:[^\]]*)?\]")
 year_sub = time.strftime("%Y", time.gmtime())
 year_identifier = u"[YEAR"
@@ -95,6 +97,17 @@ class sub(object):
 				to_remove.append(node)
 		for node in to_remove:
 			node.getparent().remove(node)
+	
+	def getW3CStatus(self, ElementTree, **kwargs):
+		# Get all text nodes that contain case-insensitively "latest version" with any amount of whitespace inside the phrase, or contain http://www.w3.org/TR/
+		for text in ElementTree.xpath("//text()[contains(normalize-space(translate(., 'AEILNORSTV', 'aeilnorstv')), 'latest version') or contains(., 'http://www.w3.org/TR/')]"):
+			if "latest version" in text.lower():
+				return "ED"
+			elif w3c_tr_url_status.search(text):
+				return w3c_tr_url_status.search(text).group(1)
+		# Didn't find any status, return the default (ED)
+		else:
+			return "ED"
 
 class DifferentParentException(utils.SpecGenException):
 	"""begin-link and end-link do not have the same parent."""
