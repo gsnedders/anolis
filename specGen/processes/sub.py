@@ -37,7 +37,7 @@ date_sub = time.strftime("%d %B %Y", time.gmtime())
 date_identifier = u"[DATE"
 
 cdate = re.compile(r"\[CDATE[^\]]*\]")
-cdate_sub = time.strftime("%", time.gmtime())
+cdate_sub = time.strftime("%Y%m%d", time.gmtime())
 cdate_identifier = u"[CDATE"
 
 title = re.compile(r"\[TITLE[^\]]*\]")
