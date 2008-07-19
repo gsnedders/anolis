@@ -49,8 +49,8 @@ class toc(object):
 		# Numbering
 		num = []
 		
-		# List of elements to remove (due to odd behaviour of Element.iter() this has to be done afterwards)
-		to_remove = []
+		# Set of elements to remove (due to odd behaviour of Element.iter() this has to be done afterwards)
+		to_remove = set()
 		
 		# Loop over all sections in a DFS
 		while sections:
@@ -146,7 +146,7 @@ class toc(object):
 										else:
 											element.getparent().text += element.tail
 								# Add the element of the list of elements to remove
-								to_remove.append(element)
+								to_remove.add(element)
 						# Remove unwanted attributes
 						for element in link.iter(tag=etree.Element):
 							for attribute_name in remove_attributes_from_toc:
@@ -161,7 +161,7 @@ class toc(object):
 			element.getparent().remove(element)
 	
 	def addToc(self, ElementTree, **kwargs):
-		to_remove = []
+		to_remove = set()
 		in_toc = False
 		for node in ElementTree.iter():
 			if in_toc:
@@ -170,7 +170,7 @@ class toc(object):
 						raise DifferentParentException
 					in_toc = False
 				else:
-					to_remove.append(node)
+					to_remove.add(node)
 			elif node.tag is etree.Comment:
 				if node.text.strip(utils.spaceCharacters) == "begin-toc":
 					toc_parent = node.getparent()
@@ -181,7 +181,7 @@ class toc(object):
 					node.addprevious(etree.Comment("begin-toc"))
 					node.addprevious(deepcopy(self.toc))
 					node.addprevious(etree.Comment("end-toc"))
-					to_remove.append(node)
+					to_remove.add(node)
 		for node in to_remove:
 			node.getparent().remove(node)
 

@@ -54,7 +54,7 @@ class xref(object):
 				self.dfns[term] = id
 	
 	def addReferences(self, ElementTree, w3c_compat = False, w3c_compat_xref_elements = False, w3c_compat_xref_a_placement = False, **kwargs):
-		to_remove = []
+		to_remove = set()
 		for element in ElementTree.iter(tag=etree.Element):
 			if element.tag in term_elements or (w3c_compat or w3c_compat_xref_elements) and element.tag in w3c_term_elements:
 				term = self.getTerm(element, w3c_compat=w3c_compat, **kwargs)
@@ -89,7 +89,7 @@ class xref(object):
 								link.tail = link[0].tail
 								link[0].tail = None
 								element.addprevious(link)
-								to_remove.append(element)
+								to_remove.add(element)
 		for element in to_remove:
 			element.getparent().remove(element)
 	
