@@ -113,7 +113,7 @@ class sub(object):
 		in_link = False
 		for node in ElementTree.iter():
 			if in_link:
-				if isinstance(node, etree._Comment) and node.text.strip(utils.spaceCharacters) == "end-link":
+				if node.tag is etree.Comment and node.text.strip(utils.spaceCharacters) == "end-link":
 					if node.getparent() is not link_parent:
 						raise DifferentParentException
 					link.set("href", utils.textContent(link))
@@ -122,7 +122,7 @@ class sub(object):
 					if node.getparent() is link_parent:
 						link.append(deepcopy(node))
 				to_remove.add(node)
-			elif isinstance(node, etree._Comment) and node.text.strip(utils.spaceCharacters) == "begin-link":
+			elif node.tag is etree.Comment and node.text.strip(utils.spaceCharacters) == "begin-link":
 				link_parent = node.getparent()
 				in_link = True
 				link = etree.Element("a")

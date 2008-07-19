@@ -165,13 +165,13 @@ class toc(object):
 		in_toc = False
 		for node in ElementTree.iter():
 			if in_toc:
-				if isinstance(node, etree._Comment) and node.text.strip(utils.spaceCharacters) == "end-toc":
+				if node.tag is etree.Comment and node.text.strip(utils.spaceCharacters) == "end-toc":
 					if node.getparent() is not toc_parent:
 						raise DifferentParentException
 					in_toc = False
 				else:
 					to_remove.append(node)
-			elif isinstance(node, etree._Comment):
+			elif node.tag is etree.Comment:
 				if node.text.strip(utils.spaceCharacters) == "begin-toc":
 					toc_parent = node.getparent()
 					in_toc = True
