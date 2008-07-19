@@ -59,7 +59,7 @@ longstatus_map = {
 	"NOTE": "W3C Working Group Note"
 }
 
-w3c_stylesheet = re.compile(r"http://www\.w3\.org/StyleSheets/TR/W3C-(MO|ED|WD|CR|PR|REC|PER|NOTE|RSCND|Member-SUBM)(\.css)?")
+w3c_stylesheet = re.compile(r"http://www\.w3\.org/StyleSheets/TR/W3C-[A-Z]+")
 w3c_stylesheet_identifier = "http://www.w3.org/StyleSheets/TR/W3C-"
 
 string_subs = ((year, year_sub, year_identifier),
