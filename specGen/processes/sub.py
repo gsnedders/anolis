@@ -69,13 +69,13 @@ string_subs = ((year, year_sub, year_identifier),
 class sub(object):
 	"""Perform substitutions."""
 	
-	def __init__(self, ElementTree, w3c_compat=False, w3c_compat_substitutions=False, **kwargs):
-		if w3c_compat or w3c_compat_substitutions:
+	def __init__(self, ElementTree, w3c_compat=False, w3c_compat_substitutions=False, w3c_compat_crazy_substitutions=False, **kwargs):
+		if w3c_compat or w3c_compat_substitutions or w3c_compat_crazy_substitutions:
 			self.w3c_status = self.getW3CStatus(ElementTree, **kwargs)
-		self.stringSubstitutions(ElementTree, w3c_compat, w3c_compat_substitutions, **kwargs)
-		self.commentSubstitutions(ElementTree, w3c_compat, w3c_compat_substitutions, **kwargs)
+		self.stringSubstitutions(ElementTree, w3c_compat, w3c_compat_substitutions, w3c_compat_crazy_substitutions, **kwargs)
+		self.commentSubstitutions(ElementTree, w3c_compat, w3c_compat_substitutions, w3c_compat_crazy_substitutions, **kwargs)
 	
-	def stringSubstitutions(self, ElementTree, w3c_compat=False, w3c_compat_substitutions=False, **kwargs):
+	def stringSubstitutions(self, ElementTree, w3c_compat=False, w3c_compat_substitutions=False, w3c_compat_crazy_substitutions=False, **kwargs):
 		# Get doc_title from the title element
 		try:
 			doc_title = utils.textContent(ElementTree.getroot().find("head").find("title"))
@@ -85,6 +85,8 @@ class sub(object):
 		if w3c_compat or w3c_compat_substitutions:
 			# Get the right long status
 			doc_longstatus = longstatus_map[self.w3c_status]
+		
+		if w3c_compat_crazy_substitutions:
 			# Get the right stylesheet
 			doc_w3c_stylesheet = "http://www.w3.org/StyleSheets/TR/W3C-" + self.w3c_status
 		
@@ -94,8 +96,11 @@ class sub(object):
 		# And even more in compat. mode
 		if w3c_compat or w3c_compat_substitutions:
 			instance_string_subs += ((status, self.w3c_status, status_identifier),
-			                         (longstatus, doc_longstatus, longstatus_identifier),
-			                         (w3c_stylesheet, doc_w3c_stylesheet, w3c_stylesheet_identifier))
+			                         (longstatus, doc_longstatus, longstatus_identifier))
+		
+		# And more that aren't even enabled by default in compat. mode
+		if w3c_compat_crazy_substitutions:
+			instance_string_subs += ((w3c_stylesheet, doc_w3c_stylesheet, w3c_stylesheet_identifier),)
 		
 		for node in ElementTree.iter():
 			for regex, sub, identifier in instance_string_subs:
@@ -107,7 +112,7 @@ class sub(object):
 					if identifier in value:
 						node.attrib[name] = regex.sub(sub, value)
 	
-	def commentSubstitutions(self, ElementTree, w3c_compat=False, w3c_compat_substitutions=False, **kwargs):
+	def commentSubstitutions(self, ElementTree, w3c_compat=False, w3c_compat_substitutions=False, w3c_compat_crazy_substitutions=False, **kwargs):
 		# Link
 		to_remove = set()
 		in_link = False
