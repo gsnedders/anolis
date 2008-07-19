@@ -66,6 +66,10 @@ string_subs = ((year, year_sub, year_identifier),
                (date, date_sub, date_identifier),
                (cdate, cdate_sub, cdate_identifier))
 
+logo = etree.Element("p")
+logo.append(etree.Element("a", {"href": "http://www.w3.org/"}))
+logo[0].append(etree.Element("img", {"alt": "W3C", "src": "http://www.w3.org/Icons/w3c_home"}))
+
 class sub(object):
 	"""Perform substitutions."""
 	
@@ -113,8 +117,9 @@ class sub(object):
 						node.attrib[name] = regex.sub(sub, value)
 	
 	def commentSubstitutions(self, ElementTree, w3c_compat=False, w3c_compat_substitutions=False, w3c_compat_crazy_substitutions=False, **kwargs):
-		# Link
 		to_remove = set()
+		
+		# Link
 		in_link = False
 		for node in ElementTree.iter():
 			if in_link:
@@ -135,6 +140,31 @@ class sub(object):
 				node.tail = None
 				node.addnext(link)
 				to_remove.add(node)
+		
+		# Logo
+		if w3c_compat or w3c_compat_substitutions:
+			in_logo = False
+			for node in ElementTree.iter():
+				if in_logo:
+					if node.tag is etree.Comment and node.text.strip(utils.spaceCharacters) == "end-logo":
+						if node.getparent() is not logo_parent:
+							raise DifferentParentException
+						in_logo = False
+					else:
+						to_remove.add(node)
+				elif node.tag is etree.Comment:
+					if node.text.strip(utils.spaceCharacters) == "begin-logo":
+						logo_parent = node.getparent()
+						in_logo = True
+						node.tail = None
+						node.addnext(deepcopy(logo))
+					elif node.text.strip(utils.spaceCharacters) == "logo":
+						node.addprevious(etree.Comment("begin-logo"))
+						node.addprevious(deepcopy(logo))
+						node.addprevious(etree.Comment("end-logo"))
+						to_remove.add(node)
+		
+		# Remove nodes
 		for node in to_remove:
 			node.getparent().remove(node)
 	
