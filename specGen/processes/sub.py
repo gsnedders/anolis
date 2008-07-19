@@ -66,9 +66,11 @@ string_subs = ((year, year_sub, year_identifier),
                (date, date_sub, date_identifier),
                (cdate, cdate_sub, cdate_identifier))
 
-logo = etree.Element("p")
-logo.append(etree.Element("a", {"href": "http://www.w3.org/"}))
-logo[0].append(etree.Element("img", {"alt": "W3C", "src": "http://www.w3.org/Icons/w3c_home"}))
+logo = etree.fromstring('<p><a href="http://www.w3.org/"><img alt="W3C" src="http://www.w3.org/Icons/w3c_home"/></a></p>')
+
+copyright = etree.fromstring('<p class="copyright"><a href="http://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> &#xA9; 2008 <a href="http://www.w3.org/"><acronym title="World Wide Web Consortium">W3C</acronym></a><sup>&#xAE;</sup> (<a href="http://www.csail.mit.edu/"><acronym title="Massachusetts Institute of Technology">MIT</acronym></a>, <a href="http://www.ercim.org/"><acronym title="European Research Consortium for Informatics and Mathematics">ERCIM</acronym></a>, <a href="http://www.keio.ac.jp/">Keio</a>), All Rights Reserved. W3C <a href="http://www.w3.org/Consortium/Legal/ipr-notice#Legal_Disclaimer">liability</a>, <a href="http://www.w3.org/Consortium/Legal/ipr-notice#W3C_Trademarks">trademark</a> and <a href="http://www.w3.org/Consortium/Legal/copyright-documents">document use</a> rules apply.</p>')
+
+basic_comment_subs = ()
 
 class sub(object):
 	"""Perform substitutions."""
@@ -117,6 +119,14 @@ class sub(object):
 						node.attrib[name] = regex.sub(sub, value)
 	
 	def commentSubstitutions(self, ElementTree, w3c_compat=False, w3c_compat_substitutions=False, w3c_compat_crazy_substitutions=False, **kwargs):
+		# Basic substitutions
+		instance_basic_comment_subs = basic_comment_subs
+		
+		# Add more basic substitutions in compat. mode
+		if w3c_compat or w3c_compat_substitutions:
+			instance_basic_comment_subs += ("logo", "copyright")
+		
+		# Set of nodes to remove
 		to_remove = set()
 		
 		# Link
@@ -141,27 +151,29 @@ class sub(object):
 				node.addnext(link)
 				to_remove.add(node)
 		
-		# Logo
-		if w3c_compat or w3c_compat_substitutions:
-			in_logo = False
+		# Basic substitutions
+		for basic_comment_sub in instance_basic_comment_subs:
+			begin_sub = "begin-" + basic_comment_sub
+			end_sub = "end-" + basic_comment_sub
+			in_sub = False
 			for node in ElementTree.iter():
-				if in_logo:
-					if node.tag is etree.Comment and node.text.strip(utils.spaceCharacters) == "end-logo":
-						if node.getparent() is not logo_parent:
+				if in_sub:
+					if node.tag is etree.Comment and node.text.strip(utils.spaceCharacters) == end_sub:
+						if node.getparent() is not sub_parent:
 							raise DifferentParentException
-						in_logo = False
+						in_sub = False
 					else:
 						to_remove.add(node)
 				elif node.tag is etree.Comment:
-					if node.text.strip(utils.spaceCharacters) == "begin-logo":
-						logo_parent = node.getparent()
-						in_logo = True
+					if node.text.strip(utils.spaceCharacters) == begin_sub:
+						sub_parent = node.getparent()
+						in_sub = True
 						node.tail = None
-						node.addnext(deepcopy(logo))
-					elif node.text.strip(utils.spaceCharacters) == "logo":
-						node.addprevious(etree.Comment("begin-logo"))
-						node.addprevious(deepcopy(logo))
-						node.addprevious(etree.Comment("end-logo"))
+						node.addnext(deepcopy(eval(basic_comment_sub)))
+					elif node.text.strip(utils.spaceCharacters) == basic_comment_sub:
+						node.addprevious(etree.Comment(begin_sub))
+						node.addprevious(deepcopy(eval(basic_comment_sub)))
+						node.addprevious(etree.Comment(end_sub))
 						to_remove.add(node)
 		
 		# Remove nodes
