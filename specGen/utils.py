@@ -58,11 +58,11 @@ def generateID(Element):
 	id = source
 	
 	i = 0
-	while getElementById(Element.getroottree(), id) is not None:
+	while getElementById(Element.getroottree().getroot(), id) is not None:
 		id = source + u"-" + repr(i)
 		i += 1
 	
-	ids[repr(Element.getroottree())][id] = Element
+	ids[Element.getroottree().getroot()][id] = Element
 	
 	return id
 
@@ -70,16 +70,17 @@ def textContent(Element):
 	return etree.tostring(Element, encoding=unicode, method='text', with_tail=False)
 
 def getElementById(base, id):
-	if repr(base) in ids:
+	if base in ids:
 		try:
-			return ids[repr(base)][id]
+			return ids[base][id]
 		except KeyError:
 			return None
 	else:
-		ids[repr(base)] = {}
+		ids[base] = {}
 		for element in base.iter(tag=etree.Element):
 			if element.get("id"):
-				ids[repr(base)][element.get("id")] = element
+				ids[base][element.get("id")] = element
+		return getElementById(base, id)
 
 def escapeXPathString(string):
 	return u"concat('', '%s')" % string.replace("'", "', \"'\", '")
