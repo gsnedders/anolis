@@ -29,6 +29,8 @@ ids = {}
 spaceCharacters = u"".join(spaceCharacters)
 spacesRegex = re.compile(u"[%s]+" % spaceCharacters)
 
+non_sgml_name = re.compile("[^A-Za-z0-9\-_:.]+")
+
 def splitOnSpaces(string):
 	return spacesRegex.split(string)
 
@@ -51,8 +53,26 @@ def generateID(Element):
 	source = source.strip(spaceCharacters).lower()
 	if source == u"":
 		source = u"generatedID"
+	elif Element.getroottree().docinfo.public_id in \
+		(u"-//W3C//DTD HTML 4.0//EN",
+		 u"-//W3C//DTD HTML 4.0 Transitional//EN",
+		 u"-//W3C//DTD HTML 4.0 Frameset//EN",
+		 u"-//W3C//DTD HTML 4.01//EN",
+		 u"-//W3C//DTD HTML 4.01 Transitional//EN",
+		 u"-//W3C//DTD HTML 4.01 Frameset//EN",
+		 u"ISO/IEC 15445:2000//DTD HyperText Markup Language//EN",
+		 u"ISO/IEC 15445:2000//DTD HTML//EN",
+		 u"-//W3C//DTD XHTML 1.0 Strict//EN",
+		 u"-//W3C//DTD XHTML 1.0 Transitional//EN",
+		 u"-//W3C//DTD XHTML 1.0 Frameset//EN",
+		 u"-//W3C//DTD XHTML 1.1//EN"):
+		source = non_sgml_name.sub(u"-", source)
+		if not source[0].isalpha():
+			source = u"x" + source
 	else:
 		source = spacesRegex.sub(u"-", source)
+	
+	source = source.strip(u"-")
 	
 	# Initally set the id to the source
 	id = source
