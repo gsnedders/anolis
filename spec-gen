@@ -69,8 +69,8 @@ def main():
 def getOptParser():
 	parser = OptionParser(usage = __doc__)
 	
-	parser.add_option("", "--xml", action="store_true",
-		default=False, dest="xml", help="Use an XML parser/serializer.")
+	#parser.add_option("", "--xml", action="store_true",
+	#	default=False, dest="xml", help="Use an XML parser/serializer.")
 	
 	parser.add_option("", "--lxml.html", action="store_true",
 		default=False, dest="lxml_html", help="Use lxml's HTML parser/serializer.")
