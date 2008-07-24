@@ -1,0 +1,44 @@
+<!DOCTYPE html><html lang=en-gb-x-sneddy><head><meta charset=utf-8>
+<title>spec-gen 1.0a3-dev</title>
+<link href=http://www.whatwg.org/style/specification rel=stylesheet>
+
+</head><body><div class=head>
+	<h1>spec-gen 1.0a3-dev</h1>
+	<h2 class="no-num no-toc" id=documentation-—-[date]>Documentation — 24 July 2008</h2>
+</div>
+
+<h2 class="no-num no-toc" id=contents>Contents</h2>
+<!--begin-toc--><ol class=toc><li><a href=#introduction><span>1 </span>Introduction</a></li><li><a href=#processes><span>2 </span>Processes</a><ol><li><a href=#cross-referencing-0><span>2.1 </span>Cross-Referencing</a></li></ol></li></ol><!--end-toc--><h2 id=introduction><span class=secno>1 </span>Introduction</h2>
+
+<p>The need for the spec-gen came from the need for long technical documents to
+include niceties such as cross-references and a table of contents for the
+purpose of easy navigation: doing this manually can be a great chore especially
+when sections are numbered and a section is added, consquently changing the
+numbering of many others, leading to it being advantageous to do it
+programmatically.</p>
+
+<h2 id=processes><span class=secno>2 </span>Processes</h2>
+
+<h3 id=cross-referencing-0><span class=secno>2.1 </span>Cross-Referencing</h3>
+
+<p><dfn id=cross-referencing>Cross-referencing</dfn> has two essential parts: <dfn id=term title=term>terms</dfn> that define what something is, and <dfn id=instance title=instance>instances</dfn> of those terms.</p>
+
+<p><a href=#term title=term>Terms</a> are marked-up using the dfn element: the
+<a href=#term>term</a> itself is taken from the title attribute if it is present, or
+from the <span>textContent</span> property of the dfn element. By default, the
+spec-gen will throw a fatal error if a <a href=#term>term</a> is defined more than
+once: this behaviour can be turned off (causing the final definition of the
+<a href=#term>term</a> to be the one that is used) by the
+<dfn id=allow-duplicate-terms>--allow-duplicate-terms</dfn> option.
+
+</p><p><a href=#instance title=instance>Instances</a> are marked-up with various elements,
+depending on the setting of <dfn id=w3c-compat-elements>--w3c-compat-elements</dfn>: if it is disabled
+(the default), the <code>abbr</code>, <code>code</code>, <code>i</code>,
+<code>span</code>, and <code>var</code> elements are used for <a href=#instance title=instance>instances</a>; if it is enabled, the <code>abbr</code>,
+<code>acronym</code>, <code>b</code>, <code>bdo</code>, <code>big</code>,
+<code>code</code>, <code>del</code>, <code>em</code>, <code>i</code>,
+<code>ins</code>, <code>kbd</code>, <code>label</code>, <code>legend</code>,
+<code>q</code>, <code>samp</code>, <code>small</code>, <code>span</code>,
+<code>strong</code>, <code>sub</code>, <code>sup</code>, <code>tt</code>,
+<code>var</code> elements are used for <a href=#instance title=instance>instances</a>.
+</p></body></html>

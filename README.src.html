@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en-gb-x-sneddy">
+<meta charset="utf-8">
+<title>spec-gen 1.0a3-dev</title>
+<link rel="stylesheet" href="http://www.whatwg.org/style/specification">
+
+<div class="head">
+	<h1>spec-gen 1.0a3-dev</h1>
+	<h2 class="no-num no-toc">Documentation — [DATE]</h2>
+</div>
+
+<h2 class="no-num no-toc">Contents</h2>
+<!--toc-->
+
+<h2>Introduction</h2>
+
+<p>The need for the spec-gen came from the need for long technical documents to
+include niceties such as cross-references and a table of contents for the
+purpose of easy navigation: doing this manually can be a great chore especially
+when sections are numbered and a section is added, consquently changing the
+numbering of many others, leading to it being advantageous to do it
+programmatically.</p>
+
+<h2>Processes</h2>
+
+<h3>Cross-Referencing</h3>
+
+<p><dfn>Cross-referencing</dfn> has two essential parts: <dfn
+title="term">terms</dfn> that define what something is, and <dfn
+title="instance">instances</dfn> of those terms.</p>
+
+<p><span title="term">Terms</span> are marked-up using the dfn element: the
+<span>term</span> itself is taken from the title attribute if it is present, or
+from the <span>textContent</span> property of the dfn element. By default, the
+spec-gen will throw a fatal error if a <span>term</span> is defined more than
+once: this behaviour can be turned off (causing the final definition of the
+<span>term</span> to be the one that is used) by the
+<dfn>--allow-duplicate-terms</dfn> option.
+
+<p><span title="instance">Instances</span> are marked-up with various elements,
+depending on the setting of <dfn>--w3c-compat-elements</dfn>: if it is disabled
+(the default), the <code>abbr</code>, <code>code</code>, <code>i</code>,
+<code>span</code>, and <code>var</code> elements are used for <span
+title="instance">instances</span>; if it is enabled, the <code>abbr</code>,
+<code>acronym</code>, <code>b</code>, <code>bdo</code>, <code>big</code>,
+<code>code</code>, <code>del</code>, <code>em</code>, <code>i</code>,
+<code>ins</code>, <code>kbd</code>, <code>label</code>, <code>legend</code>,
+<code>q</code>, <code>samp</code>, <code>small</code>, <code>span</code>,
+<code>strong</code>, <code>sub</code>, <code>sup</code>, <code>tt</code>,
+<code>var</code> elements are used for <span title="instance">instances</span>.
