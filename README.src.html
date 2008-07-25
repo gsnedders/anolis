@@ -3,6 +3,12 @@
 <meta charset="utf-8">
 <title>spec-gen 1.0a3-dev</title>
 <link rel="stylesheet" href="http://www.whatwg.org/style/specification">
+<style>
+a:not([href]) {
+background-color: #00f;
+color: #fff;
+}
+</style>
 
 <div class="head">
 	<h1>spec-gen 1.0a3-dev</h1>
@@ -20,6 +26,57 @@ purpose of easy navigation: doing this manually can be a great chore especially
 when sections are numbered and a section is added, consquently changing the
 numbering of many others, leading to it being advantageous to do it
 programmatically.</p>
+
+<h2>Installing the spec-gen</h2>
+
+<h3>Requirements</h3>
+
+<p>The following are the minimum requirements: later versions should also work
+without issue.</p>
+
+<ul>
+	<li><a>Python</a> 2.5
+	<li><a>lxml</a> 2.0
+	<li><a>html5lib</a> 0.10
+</ul>
+
+<h3>Obtaining A Copy</h3>
+
+<p>Releases are occasionally made. A link to the latest release can be found
+from the <a>spec-gen website</a>.</p>
+
+<p>Alternatively, a copy can be obtained from <dfn>our <a>Mercurial</a>
+repository</dfn>: this is where our ongoing development occurs, and allows any
+revision (and therefore any release) to be downloaded. Our repository is located
+at
+<code><!--begin-link-->http://hg.gsnedders.com/spec-gen/<!--end-link--></code>.
+
+<h3>Installation</h3>
+
+<p>Normally, installation is done through setuptools, with the following
+command:</p>
+
+<p><code>python setup.py install</code></p>
+
+<p>Or in Unix-like enviroments:</p>
+
+<p><code>make install</code></p>
+
+<h3>Running the test suite</h3>
+
+<p>The source distribution and the current development copy (in <span title="our
+mercurial repository">Mercurial</span>) both contain a test suite. It can be run
+with the following command:</p>
+
+<p><code>python runtests.py</code></p>
+
+<p>Or in Unix-like enviroments:</p>
+
+<p><code>make test</code></p>
+
+<p>Any test failures should be reported at our <dfn><a
+href="http://bugs.gsnedders.com/projects/show/spec-gen">bug
+tracker</a></dfn>.</p>
 
 <h2>Processes</h2>
 

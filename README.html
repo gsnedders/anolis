@@ -1,14 +1,20 @@
 <!DOCTYPE html><html lang=en-gb-x-sneddy><head><meta charset=utf-8>
 <title>spec-gen 1.0a3-dev</title>
 <link href=http://www.whatwg.org/style/specification rel=stylesheet>
+<style>
+a:not([href]) {
+background-color: #00f;
+color: #fff;
+}
+</style>
 
 </head><body><div class=head>
 	<h1>spec-gen 1.0a3-dev</h1>
-	<h2 class="no-num no-toc" id=documentation-—-[date]>Documentation — 24 July 2008</h2>
+	<h2 class="no-num no-toc" id=documentation-—-[date]>Documentation — 25 July 2008</h2>
 </div>
 
 <h2 class="no-num no-toc" id=contents>Contents</h2>
-<!--begin-toc--><ol class=toc><li><a href=#introduction><span>1 </span>Introduction</a></li><li><a href=#processes><span>2 </span>Processes</a><ol><li><a href=#cross-referencing-0><span>2.1 </span>Cross-Referencing</a></li></ol></li></ol><!--end-toc--><h2 id=introduction><span class=secno>1 </span>Introduction</h2>
+<!--begin-toc--><ol class=toc><li><a href=#introduction><span>1 </span>Introduction</a></li><li><a href=#installing-the-spec-gen><span>2 </span>Installing the spec-gen</a><ol><li><a href=#requirements><span>2.1 </span>Requirements</a></li><li><a href=#obtaining-a-copy><span>2.2 </span>Obtaining A Copy</a></li><li><a href=#installation><span>2.3 </span>Installation</a></li><li><a href=#running-the-test-suite><span>2.4 </span>Running the test suite</a></li></ol></li><li><a href=#processes><span>3 </span>Processes</a><ol><li><a href=#cross-referencing-0><span>3.1 </span>Cross-Referencing</a></li></ol></li></ol><!--end-toc--><h2 id=introduction><span class=secno>1 </span>Introduction</h2>
 
 <p>The need for the spec-gen came from the need for long technical documents to
 include niceties such as cross-references and a table of contents for the
@@ -17,9 +23,59 @@ when sections are numbered and a section is added, consquently changing the
 numbering of many others, leading to it being advantageous to do it
 programmatically.</p>
 
-<h2 id=processes><span class=secno>2 </span>Processes</h2>
+<h2 id=installing-the-spec-gen><span class=secno>2 </span>Installing the spec-gen</h2>
 
-<h3 id=cross-referencing-0><span class=secno>2.1 </span>Cross-Referencing</h3>
+<h3 id=requirements><span class=secno>2.1 </span>Requirements</h3>
+
+<p>The following are the minimum requirements: later versions should also work
+without issue.</p>
+
+<ul>
+	<li><a>Python</a> 2.5
+	</li><li><a>lxml</a> 2.0
+	</li><li><a>html5lib</a> 0.10
+</li></ul>
+
+<h3 id=obtaining-a-copy><span class=secno>2.2 </span>Obtaining A Copy</h3>
+
+<p>Releases are occasionally made. A link to the latest release can be found
+from the <a>spec-gen website</a>.</p>
+
+<p>Alternatively, a copy can be obtained from <dfn id=our-mercurial-repository>our <a>Mercurial</a>
+repository</dfn>: this is where our ongoing development occurs, and allows any
+revision (and therefore any release) to be downloaded. Our repository is located
+at
+<code><a href=http://hg.gsnedders.com/spec-gen/>http://hg.gsnedders.com/spec-gen/</a></code>.
+
+</p><h3 id=installation><span class=secno>2.3 </span>Installation</h3>
+
+<p>Normally, installation is done through setuptools, with the following
+command:</p>
+
+<p><code>python setup.py install</code></p>
+
+<p>Or in Unix-like enviroments:</p>
+
+<p><code>make install</code></p>
+
+<h3 id=running-the-test-suite><span class=secno>2.4 </span>Running the test suite</h3>
+
+<p>The source distribution and the current development copy (in <a href=#our-mercurial-repository title="our
+mercurial repository">Mercurial</a>) both contain a test suite. It can be run
+with the following command:</p>
+
+<p><code>python runtests.py</code></p>
+
+<p>Or in Unix-like enviroments:</p>
+
+<p><code>make test</code></p>
+
+<p>Any test failures should be reported at our <dfn id=bug-tracker><a href=http://bugs.gsnedders.com/projects/show/spec-gen>bug
+tracker</a></dfn>.</p>
+
+<h2 id=processes><span class=secno>3 </span>Processes</h2>
+
+<h3 id=cross-referencing-0><span class=secno>3.1 </span>Cross-Referencing</h3>
 
 <p><dfn id=cross-referencing>Cross-referencing</dfn> has two essential parts: <dfn id=term title=term>terms</dfn> that define what something is, and <dfn id=instance title=instance>instances</dfn> of those terms.</p>
 
