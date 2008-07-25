@@ -79,13 +79,16 @@ tracker</a></dfn>.</p>
 are the local name of the element either in null namespace or in the <dfn id=html-namespace>HTML
 namespace</dfn> (<code>http://www.w3.org/1999/xhtml</code>).</p>
 
+<p>The <dfn id=textcontent>textContent</dfn> property is the same as that defined in <a>DOM
+Level 3 Core</a>.</p>
+
 <h3 id=cross-referencing-0><span class=secno>3.1 </span>Cross-referencing</h3>
 
 <p><dfn id=cross-referencing>Cross-referencing</dfn> has two essential parts: <dfn id=term title=term>terms</dfn> that define what something is, and <dfn id=instance title=instance>instances</dfn> of those terms.</p>
 
 <p><a href=#term title=term>Terms</a> are marked-up using the dfn element: the
 <a href=#term>term</a> itself is taken from the title attribute if it is present, or
-from the <span>textContent</span> property of the dfn element. By default, the
+from the <a href=#textcontent>textContent</a> property of the dfn element. By default, the
 spec-gen will throw a fatal error if a <a href=#term>term</a> is defined more than
 once: this behaviour can be turned off (causing the final definition of the
 <a href=#term>term</a> to be the one that is used) by the
