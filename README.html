@@ -20,13 +20,19 @@ color: #fff;
 <h2 class="no-num no-toc" id=contents>Contents</h2>
 <!--begin-toc--><ol class=toc><li><a href=#introduction><span class=secno>1 </span>Introduction</a></li><li><a href=#installing-the-spec-gen><span class=secno>2 </span>Installing the spec-gen</a><ol><li><a href=#requirements><span class=secno>2.1 </span>Requirements</a></li><li><a href=#obtaining-a-copy><span class=secno>2.2 </span>Obtaining a copy</a></li><li><a href=#installation><span class=secno>2.3 </span>Installation</a></li><li><a href=#running-the-test-suite><span class=secno>2.4 </span>Running the test suite</a></li></ol></li><li><a href=#processes><span class=secno>3 </span>Processes</a><ol><li><a href=#cross-referencing-0><span class=secno>3.1 </span>Cross-referencing</a></li></ol></li></ol><!--end-toc--><h2 id=introduction><span class=secno>1 </span>Introduction</h2>
 
-<p>The need for the spec-gen came from the need for long technical documents to include niceties such as cross-references and a table of contents for the purpose of easy navigation: doing this manually can be a great chore especially when sections are numbered and a section is added, consquently changing the numbering of many others, leading to it being advantageous to do it programmatically.</p>
+<p>The need for the spec-gen came from the need for long technical documents to
+include niceties such as cross-references and a table of contents for the
+purpose of easy navigation: doing this manually can be a great chore especially
+when sections are numbered and a section is added, consquently changing the
+numbering of many others, leading to it being advantageous to do it
+programmatically.</p>
 
 <h2 id=installing-the-spec-gen><span class=secno>2 </span>Installing the spec-gen</h2>
 
 <h3 id=requirements><span class=secno>2.1 </span>Requirements</h3>
 
-<p>The following are the minimum requirements: later versions should also work without issue.</p>
+<p>The following are the minimum requirements: later versions should also work
+without issue.</p>
 
 <ul>
 	<li><a>Python</a> 2.5
@@ -36,14 +42,19 @@ color: #fff;
 
 <h3 id=obtaining-a-copy><span class=secno>2.2 </span>Obtaining a copy</h3>
 
-<p>Releases are occasionally made. A link to the latest release can be found from the <a>spec-gen website</a>.</p>
+<p>Releases are occasionally made. A link to the latest release can be found
+from the <a>spec-gen website</a>.</p>
 
-<p>Alternatively, a copy can be obtained from <dfn id=our-mercurial-repository>our <a>Mercurial</a> repository</dfn>: this is where our ongoing development occurs, and allows any revision (and therefore any release) to be downloaded. Our repository is located at
+<p>Alternatively, a copy can be obtained from <dfn id=our-mercurial-repository>our <a>Mercurial</a>
+repository</dfn>: this is where our ongoing development occurs, and allows any
+revision (and therefore any release) to be downloaded. Our repository is located
+at
 <code><a href=http://hg.gsnedders.com/spec-gen/>http://hg.gsnedders.com/spec-gen/</a></code>.
 
 </p><h3 id=installation><span class=secno>2.3 </span>Installation</h3>
 
-<p>Normally, installation is done through setuptools, with the following command:</p>
+<p>Normally, installation is done through setuptools, with the following
+command:</p>
 
 <p><code>python setup.py install</code></p>
 
@@ -53,7 +64,9 @@ color: #fff;
 
 <h3 id=running-the-test-suite><span class=secno>2.4 </span>Running the test suite</h3>
 
-<p>The source distribution and the current development copy (in <a href=#our-mercurial-repository title="our mercurial repository">Mercurial</a>) both contain a test suite. It can be run with the following command:</p>
+<p>The source distribution and the current development copy (in <a href=#our-mercurial-repository title="our
+mercurial repository">Mercurial</a>) both contain a test suite. It can be run
+with the following command:</p>
 
 <p><code>python runtests.py</code></p>
 
@@ -61,20 +74,46 @@ color: #fff;
 
 <p><code>make test</code></p>
 
-<p>Any test failures should be reported at our <dfn id=bug-tracker><a href=http://bugs.gsnedders.com/projects/show/spec-gen>bug tracker</a></dfn>.</p>
+<p>Any test failures should be reported at our <dfn id=bug-tracker><a href=http://bugs.gsnedders.com/projects/show/spec-gen>bug
+tracker</a></dfn>.</p>
 
 <h2 id=processes><span class=secno>3 </span>Processes</h2>
 
-<p>The elements listed in the below processes, except where otherwise stated, are the local name of the element either in null namespace or in the <dfn id=html-namespace>HTML namespace</dfn> (<code>http://www.w3.org/1999/xhtml</code>).</p>
+<p>The elements listed in the below processes, except where otherwise stated,
+are the local name of the element either in null namespace or in the <dfn id=html-namespace>HTML
+namespace</dfn> (<code>http://www.w3.org/1999/xhtml</code>).</p>
 
-<p>The <dfn id=textcontent>textContent</dfn> property is the same as that defined in <a>DOM Level 3 Core</a> on the Node interface.</p>
+<p>The <dfn id=textcontent>textContent</dfn> property is the same as that defined in <a>DOM
+Level 3 Core</a> on the Node interface.</p>
 
 <h3 id=cross-referencing-0><span class=secno>3.1 </span>Cross-referencing</h3>
 
 <p><dfn id=cross-referencing>Cross-referencing</dfn> has two essential parts: <dfn id=term title=term>terms</dfn> that define what something is, and <dfn id=instance title=instance>instances</dfn> of those terms.</p>
 
-<p><a href=#term title=term>Terms</a> are marked-up using the <code>dfn</code> element: the <a href=#term>term</a> itself is taken from the <code>title</code> attribute if it is present, otherwise it is taken from the <a href=#textcontent>textContent</a> property of the <code>dfn</code> element. By default, the spec-gen will throw a fatal error if a <a href=#term>term</a> is defined more than once: this behaviour can be turned off (causing the final definition of the <a href=#term>term</a> to be the one that is used) by the
+<p><a href=#term title=term>Terms</a> are marked-up using the <code>dfn</code>
+element: the <a href=#term>term</a> itself is taken from the <code>title</code>
+attribute if it is present, otherwise it is taken from the
+<a href=#textcontent>textContent</a> property of the <code>dfn</code> element. By default,
+the spec-gen will throw a fatal error if a <a href=#term>term</a> is defined more
+than once: this behaviour can be turned off (causing the final definition of the
+<a href=#term>term</a> to be the one that is used) by the
 <dfn id=allow-duplicate-terms>--allow-duplicate-terms</dfn> option.
 
-</p><p><a href=#instance title=instance>Instances</a> are marked-up with various elements, depending on the setting of <dfn id=w3c-compat-elements>--w3c-compat-elements</dfn>: if it is disabled (the default), the <code>abbr</code>, <code>code</code>, <code>i</code>, <code>span</code>, and <code>var</code> elements are used for <a href=#instance title=instance>instances</a>; if it is enabled, the <code>abbr</code>, <code>acronym</code>, <code>b</code>, <code>bdo</code>, <code>big</code>, <code>code</code>, <code>del</code>, <code>em</code>, <code>i</code>, <code>ins</code>, <code>kbd</code>, <code>label</code>, <code>legend</code>, <code>q</code>, <code>samp</code>, <code>small</code>, <code>span</code>, <code>strong</code>, <code>sub</code>, <code>sup</code>, <code>tt</code>, <code>var</code> elements are used for <a href=#instance title=instance>instances</a>. Those that are only there in <span>compatibility mode</span> are there because either they shouldn't semantically be used for an <a href=#instance>instance</a>, or because they aren't present in <a>HTML 5</a>. Similar to <a href=#term title=term>terms</a>, the <a href=#instance>instance</a> is taken from the <code>title</code> attribute if it is present, otherwise it is taken from the <a href=#textcontent>textContent</a> property.
-</p></body></html>
+</p><p><a href=#instance title=instance>Instances</a> are marked-up with various elements,
+depending on the setting of <dfn id=w3c-compat-elements>--w3c-compat-elements</dfn>: if it is disabled
+(the default), the <code>abbr</code>, <code>code</code>, <code>i</code>,
+<code>span</code>, and <code>var</code> elements are used for <a href=#instance title=instance>instances</a>; if it is enabled, the <code>abbr</code>,
+<code>acronym</code>, <code>b</code>, <code>bdo</code>, <code>big</code>,
+<code>code</code>, <code>del</code>, <code>em</code>, <code>i</code>,
+<code>ins</code>, <code>kbd</code>, <code>label</code>, <code>legend</code>,
+<code>q</code>, <code>samp</code>, <code>small</code>, <code>span</code>,
+<code>strong</code>, <code>sub</code>, <code>sup</code>, <code>tt</code>,
+<code>var</code> elements are used for <a href=#instance title=instance>instances</a>.
+Those that are only there in <span>compatibility mode</span> are there because
+either they shouldn't semantically be used for an <a href=#instance>instance</a>, or
+because they aren't present in <a>HTML 5</a>. Similar to <a href=#term title=term>terms</a>, the <a href=#instance>instance</a> is taken from the
+<code>title</code> attribute if it is present, otherwise it is taken from the
+<a href=#textcontent>textContent</a> property. An <a href=#instance>instance</a> is only used if it
+does not have a <code>a</code>, <code>dfn</code>, or <code>datagrid</code>
+element as either a parent or a child.</p>
+</body></html>
