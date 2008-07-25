@@ -26,9 +26,9 @@ color: #fff;
 
 <p>The need for the spec-gen came from the need for long technical documents to
 include niceties such as cross-references and a table of contents for the
-purpose of easy navigation — doing this manually can be a great chore especially
-when sections are numbered and a section is added, consequently changing the
-numbering of many others, leading to it being advantageous to do it
+purpose of easy navigation — doing this manually can be a great chore
+especially when sections are numbered and a section is added, consequently
+changing the numbering of many others, leading to it being advantageous to do it
 programmatically.</p>
 
 <h2>Installing the spec-gen</h2>
@@ -104,22 +104,23 @@ attribute if it is present, otherwise it is taken from the
 the spec-gen will throw a fatal error if a <span>term</span> is defined more
 than once: this behaviour can be turned off (causing the final definition of the
 <span>term</span> to be the one that is used) by the
-<dfn>--allow-duplicate-terms</dfn> option.
+<dfn><code>--allow-duplicate-terms</code></dfn> option.
 
 <p><span title="instance">Instances</span> are marked-up with various elements,
-depending on the setting of <dfn>--w3c-compat-elements</dfn>: if it is disabled
-(the default), the <code>abbr</code>, <code>code</code>, <code>i</code>,
-<code>span</code>, and <code>var</code> elements are used for <span
-title="instance">instances</span>; if it is enabled, the <code>abbr</code>,
-<code>acronym</code>, <code>b</code>, <code>bdo</code>, <code>big</code>,
-<code>code</code>, <code>del</code>, <code>em</code>, <code>i</code>,
-<code>ins</code>, <code>kbd</code>, <code>label</code>, <code>legend</code>,
-<code>q</code>, <code>samp</code>, <code>small</code>, <code>span</code>,
-<code>strong</code>, <code>sub</code>, <code>sup</code>, <code>tt</code>,
-<code>var</code> elements are used for <span title="instance">instances</span>.
-Those that are only there in <span>compatibility mode</span> are there because
-either they shouldn't semantically be used for an <span>instance</span>, or
-because they aren't present in <a>HTML 5</a>. Similar to <span
+depending on the setting of <dfn><code>--w3c-compat-elements</code></dfn>: if it
+is disabled (the default), the <code>abbr</code>, <code>code</code>,
+<code>i</code>, <code>span</code>, and <code>var</code> elements are used for
+<span title="instance">instances</span>; if it is enabled, the
+<code>abbr</code>, <code>acronym</code>, <code>b</code>, <code>bdo</code>,
+<code>big</code>, <code>code</code>, <code>del</code>, <code>em</code>,
+<code>i</code>, <code>ins</code>, <code>kbd</code>, <code>label</code>,
+<code>legend</code>, <code>q</code>, <code>samp</code>, <code>small</code>,
+<code>span</code>, <code>strong</code>, <code>sub</code>, <code>sup</code>,
+<code>tt</code>, <code>var</code> elements are used for <span
+title="instance">instances</span>. Those that are only there in
+<span>compatibility mode</span> are there because either they shouldn't
+semantically be used for an <span>instance</span>, or because they aren't
+present in <a>HTML 5</a>. Similar to <span
 title="term">terms</span>, the <span>instance</span> is taken from the
 <code>title</code> attribute if it is present, otherwise it is taken from the
 <span>textContent</span> property. An <span>instance</span> is only used if it
@@ -137,11 +138,11 @@ locale setting of Python),
 	<li>All consecutive <span>whitespace</span> is replaced with a single U+0020
 SPACE CHARACTER<!-- unless there is a <code>pre</code> element as a parent-->,
 and
-	<li>If <dfn>--w3c-compat-xref-normalization</dfn> is enabled, all characters
-apart from U+0020 SPACE CHARACTER, U+002D HYPHEN-MINUS (-), U+0030 DIGIT ZERO to
-U+0039 DIGIT NINE (0–9), U+0041 LATIN CAPITAL LETTER A to U+005A LATIN CAPITAL
-LETTER Z (A–Z), and U+0061 LATIN SMALL LETTER A to U+007A LATIN SMALL LETTER Z
-(a–z) are removed.
+	<li>If <dfn><code>--w3c-compat-xref-normalization</code></dfn> is enabled, all
+characters apart from U+0020 SPACE CHARACTER, U+002D HYPHEN-MINUS (-), U+0030
+DIGIT ZERO to U+0039 DIGIT NINE (0–9), U+0041 LATIN CAPITAL LETTER A to U+005A
+LATIN CAPITAL LETTER Z (A–Z), and U+0061 LATIN SMALL LETTER A to U+007A LATIN
+SMALL LETTER Z (a–z) are removed.
 </ul>
 
 <p>If the <span>instance</span> is contained within a <code>span</code> element,
@@ -152,10 +153,11 @@ href=#foo>foo&lt;/a></code>) — all other attributes are preserved. Otherwise
 (when the <span>instance</span> is not contained within a <code>span</code>
 element), the location of the <code>a</code> element when linking an
 <span>instance</span> is dependent on the
-<dfn>--w3c-compat-xref-a-placement</dfn> option: if it is disabled (the
-default), the <code>a</code> element is placed around the element containing the
-<span>instance</span> (e.g., <code>&lt;i>foo&lt;/i></code> becomes <code>&lt;a
-href=#foo>&lt;i>foo&lt;/i>&lt;/a></code>); if it is enabled, the <code>a</code>
-element goes within the element containing the <span>instance</span> and goes
-around all of its content (e.g., <code>&lt;i>foo&lt;/i></code> becomes
-<code>&lt;i>&lt;a href=#foo>foo&lt;/a>&lt;/i></code>).
+<dfn><code>--w3c-compat-xref-a-placement</code></dfn> option: if it is disabled
+(the default), the <code>a</code> element is placed around the element
+containing the <span>instance</span> (e.g., <code>&lt;i>foo&lt;/i></code>
+becomes <code>&lt;a href=#foo>&lt;i>foo&lt;/i>&lt;/a></code>); if it is enabled,
+the <code>a</code> element goes within the element containing the
+<span>instance</span> and goes around all of its content (e.g.,
+<code>&lt;i>foo&lt;/i></code> becomes <code>&lt;i>&lt;a
+href=#foo>foo&lt;/a>&lt;/i></code>).

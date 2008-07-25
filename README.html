@@ -22,9 +22,9 @@ color: #fff;
 
 <p>The need for the spec-gen came from the need for long technical documents to
 include niceties such as cross-references and a table of contents for the
-purpose of easy navigation — doing this manually can be a great chore especially
-when sections are numbered and a section is added, consequently changing the
-numbering of many others, leading to it being advantageous to do it
+purpose of easy navigation — doing this manually can be a great chore
+especially when sections are numbered and a section is added, consequently
+changing the numbering of many others, leading to it being advantageous to do it
 programmatically.</p>
 
 <h2 id=installing-the-spec-gen><span class=secno>2 </span>Installing the spec-gen</h2>
@@ -97,21 +97,22 @@ attribute if it is present, otherwise it is taken from the
 the spec-gen will throw a fatal error if a <a href=#term>term</a> is defined more
 than once: this behaviour can be turned off (causing the final definition of the
 <a href=#term>term</a> to be the one that is used) by the
-<dfn id=allow-duplicate-terms>--allow-duplicate-terms</dfn> option.
+<dfn id=allow-duplicate-terms><code>--allow-duplicate-terms</code></dfn> option.
 
 </p><p><a href=#instance title=instance>Instances</a> are marked-up with various elements,
-depending on the setting of <dfn id=w3c-compat-elements>--w3c-compat-elements</dfn>: if it is disabled
-(the default), the <code>abbr</code>, <code>code</code>, <code>i</code>,
-<code>span</code>, and <code>var</code> elements are used for <a href=#instance title=instance>instances</a>; if it is enabled, the <code>abbr</code>,
-<code>acronym</code>, <code>b</code>, <code>bdo</code>, <code>big</code>,
-<code>code</code>, <code>del</code>, <code>em</code>, <code>i</code>,
-<code>ins</code>, <code>kbd</code>, <code>label</code>, <code>legend</code>,
-<code>q</code>, <code>samp</code>, <code>small</code>, <code>span</code>,
-<code>strong</code>, <code>sub</code>, <code>sup</code>, <code>tt</code>,
-<code>var</code> elements are used for <a href=#instance title=instance>instances</a>.
-Those that are only there in <span>compatibility mode</span> are there because
-either they shouldn't semantically be used for an <a href=#instance>instance</a>, or
-because they aren't present in <a>HTML 5</a>. Similar to <a href=#term title=term>terms</a>, the <a href=#instance>instance</a> is taken from the
+depending on the setting of <dfn id=w3c-compat-elements><code>--w3c-compat-elements</code></dfn>: if it
+is disabled (the default), the <code>abbr</code>, <code>code</code>,
+<code>i</code>, <code>span</code>, and <code>var</code> elements are used for
+<a href=#instance title=instance>instances</a>; if it is enabled, the
+<code>abbr</code>, <code>acronym</code>, <code>b</code>, <code>bdo</code>,
+<code>big</code>, <code>code</code>, <code>del</code>, <code>em</code>,
+<code>i</code>, <code>ins</code>, <code>kbd</code>, <code>label</code>,
+<code>legend</code>, <code>q</code>, <code>samp</code>, <code>small</code>,
+<code>span</code>, <code>strong</code>, <code>sub</code>, <code>sup</code>,
+<code>tt</code>, <code>var</code> elements are used for <a href=#instance title=instance>instances</a>. Those that are only there in
+<span>compatibility mode</span> are there because either they shouldn't
+semantically be used for an <a href=#instance>instance</a>, or because they aren't
+present in <a>HTML 5</a>. Similar to <a href=#term title=term>terms</a>, the <a href=#instance>instance</a> is taken from the
 <code>title</code> attribute if it is present, otherwise it is taken from the
 <a href=#textcontent>textContent</a> property. An <a href=#instance>instance</a> is only used if it
 does not have an <code>a</code>, <code>dfn</code>, or <code>datagrid</code>
@@ -127,11 +128,11 @@ locale setting of Python),
 	</li><li>All consecutive <span>whitespace</span> is replaced with a single U+0020
 SPACE CHARACTER<!-- unless there is a <code>pre</code> element as a parent-->,
 and
-	</li><li>If <dfn id=w3c-compat-xref-normalization>--w3c-compat-xref-normalization</dfn> is enabled, all characters
-apart from U+0020 SPACE CHARACTER, U+002D HYPHEN-MINUS (-), U+0030 DIGIT ZERO to
-U+0039 DIGIT NINE (0–9), U+0041 LATIN CAPITAL LETTER A to U+005A LATIN CAPITAL
-LETTER Z (A–Z), and U+0061 LATIN SMALL LETTER A to U+007A LATIN SMALL LETTER Z
-(a–z) are removed.
+	</li><li>If <dfn id=w3c-compat-xref-normalization><code>--w3c-compat-xref-normalization</code></dfn> is enabled, all
+characters apart from U+0020 SPACE CHARACTER, U+002D HYPHEN-MINUS (-), U+0030
+DIGIT ZERO to U+0039 DIGIT NINE (0–9), U+0041 LATIN CAPITAL LETTER A to U+005A
+LATIN CAPITAL LETTER Z (A–Z), and U+0061 LATIN SMALL LETTER A to U+007A LATIN
+SMALL LETTER Z (a–z) are removed.
 </li></ul>
 
 <p>If the <a href=#instance>instance</a> is contained within a <code>span</code> element,
@@ -142,11 +143,12 @@ href=#foo&gt;foo&lt;/a&gt;</code>) — all other attributes are preserved. Other
 (when the <a href=#instance>instance</a> is not contained within a <code>span</code>
 element), the location of the <code>a</code> element when linking an
 <a href=#instance>instance</a> is dependent on the
-<dfn id=w3c-compat-xref-a-placement>--w3c-compat-xref-a-placement</dfn> option: if it is disabled (the
-default), the <code>a</code> element is placed around the element containing the
-<a href=#instance>instance</a> (e.g., <code>&lt;i&gt;foo&lt;/i&gt;</code> becomes <code>&lt;a
-href=#foo&gt;&lt;i&gt;foo&lt;/i&gt;&lt;/a&gt;</code>); if it is enabled, the <code>a</code>
-element goes within the element containing the <a href=#instance>instance</a> and goes
-around all of its content (e.g., <code>&lt;i&gt;foo&lt;/i&gt;</code> becomes
-<code>&lt;i&gt;&lt;a href=#foo&gt;foo&lt;/a&gt;&lt;/i&gt;</code>).
+<dfn id=w3c-compat-xref-a-placement><code>--w3c-compat-xref-a-placement</code></dfn> option: if it is disabled
+(the default), the <code>a</code> element is placed around the element
+containing the <a href=#instance>instance</a> (e.g., <code>&lt;i&gt;foo&lt;/i&gt;</code>
+becomes <code>&lt;a href=#foo&gt;&lt;i&gt;foo&lt;/i&gt;&lt;/a&gt;</code>); if it is enabled,
+the <code>a</code> element goes within the element containing the
+<a href=#instance>instance</a> and goes around all of its content (e.g.,
+<code>&lt;i&gt;foo&lt;/i&gt;</code> becomes <code>&lt;i&gt;&lt;a
+href=#foo&gt;foo&lt;/a&gt;&lt;/i&gt;</code>).
 </p></body></html>
