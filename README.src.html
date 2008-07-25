@@ -8,6 +8,10 @@ a:not([href]) {
 background-color: #00f;
 color: #fff;
 }
+span:not([title=""]):not(.secno) {
+background-color: #a00;
+color: #fff;
+}
 </style>
 
 <div class="head">
@@ -95,11 +99,11 @@ title="instance">instances</dfn> of those terms.</p>
 
 <p><span title="term">Terms</span> are marked-up using the <code>dfn</code>
 element: the <span>term</span> itself is taken from the <code>title</code>
-attribute if it is present, or from the <span>textContent</span> property of the
-<code>dfn</code> element. By default, the spec-gen will throw a fatal error if a
-<span>term</span> is defined more than once: this behaviour can be turned off
-(causing the final definition of the <span>term</span> to be the one that is
-used) by the
+attribute if it is present, otherwise it is taken from the
+<span>textContent</span> property of the <code>dfn</code> element. By default,
+the spec-gen will throw a fatal error if a <span>term</span> is defined more
+than once: this behaviour can be turned off (causing the final definition of the
+<span>term</span> to be the one that is used) by the
 <dfn>--allow-duplicate-terms</dfn> option.
 
 <p><span title="instance">Instances</span> are marked-up with various elements,
@@ -113,3 +117,9 @@ title="instance">instances</span>; if it is enabled, the <code>abbr</code>,
 <code>q</code>, <code>samp</code>, <code>small</code>, <code>span</code>,
 <code>strong</code>, <code>sub</code>, <code>sup</code>, <code>tt</code>,
 <code>var</code> elements are used for <span title="instance">instances</span>.
+Those that are only there in <span>compatibility mode</span> are there because
+either they shouldn't semantically be used for an <span>instance</span>, or
+because they aren't present in <a>HTML 5</a>. Similar to <span
+title="term">terms</span>, the <span>instance</span> is taken from the
+<code>title</code> attribute if it is present, otherwise it is taken from the
+<span>textContent</span> property.
