@@ -86,12 +86,13 @@ Level 3 Core</a> on the Node interface.</p>
 
 <p><dfn id=cross-referencing>Cross-referencing</dfn> has two essential parts: <dfn id=term title=term>terms</dfn> that define what something is, and <dfn id=instance title=instance>instances</dfn> of those terms.</p>
 
-<p><a href=#term title=term>Terms</a> are marked-up using the dfn element: the
-<a href=#term>term</a> itself is taken from the title attribute if it is present, or
-from the <a href=#textcontent>textContent</a> property of the dfn element. By default, the
-spec-gen will throw a fatal error if a <a href=#term>term</a> is defined more than
-once: this behaviour can be turned off (causing the final definition of the
-<a href=#term>term</a> to be the one that is used) by the
+<p><a href=#term title=term>Terms</a> are marked-up using the <code>dfn</code>
+element: the <a href=#term>term</a> itself is taken from the <code>title</code>
+attribute if it is present, or from the <a href=#textcontent>textContent</a> property of the
+<code>dfn</code> element. By default, the spec-gen will throw a fatal error if a
+<a href=#term>term</a> is defined more than once: this behaviour can be turned off
+(causing the final definition of the <a href=#term>term</a> to be the one that is
+used) by the
 <dfn id=allow-duplicate-terms>--allow-duplicate-terms</dfn> option.
 
 </p><p><a href=#instance title=instance>Instances</a> are marked-up with various elements,

@@ -93,12 +93,13 @@ Level 3 Core</a> on the Node interface.</p>
 title="term">terms</dfn> that define what something is, and <dfn
 title="instance">instances</dfn> of those terms.</p>
 
-<p><span title="term">Terms</span> are marked-up using the dfn element: the
-<span>term</span> itself is taken from the title attribute if it is present, or
-from the <span>textContent</span> property of the dfn element. By default, the
-spec-gen will throw a fatal error if a <span>term</span> is defined more than
-once: this behaviour can be turned off (causing the final definition of the
-<span>term</span> to be the one that is used) by the
+<p><span title="term">Terms</span> are marked-up using the <code>dfn</code>
+element: the <span>term</span> itself is taken from the <code>title</code>
+attribute if it is present, or from the <span>textContent</span> property of the
+<code>dfn</code> element. By default, the spec-gen will throw a fatal error if a
+<span>term</span> is defined more than once: this behaviour can be turned off
+(causing the final definition of the <span>term</span> to be the one that is
+used) by the
 <dfn>--allow-duplicate-terms</dfn> option.
 
 <p><span title="instance">Instances</span> are marked-up with various elements,
