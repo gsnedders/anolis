@@ -26,7 +26,7 @@ from specGen import utils
 from specGen.processes import outliner
 
 remove_elements_from_toc = ("a", "dfn")
-remove_attributes_from_toc = ("class", "id")
+remove_attributes_from_toc = ("id",)
 
 class toc(object):
 	"""Build and add TOC."""
