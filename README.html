@@ -116,4 +116,17 @@ because they aren't present in <a>HTML 5</a>. Similar to <a href=#term title=ter
 <a href=#textcontent>textContent</a> property. An <a href=#instance>instance</a> is only used if it
 does not have a <code>a</code>, <code>dfn</code>, or <code>datagrid</code>
 element as either a parent or a child.</p>
+
+<p>Both <a href=#term title=term>terms</a> and <a href=#instance title=instance>instances</a> are normalized as follows:</p>
+
+<ul>
+	<li>Leading and trailing whitespace is stripped,
+	</li><li>Converted to lowercase (behaviour of this is dependant on the current
+locale setting of Python), and
+	</li><li>If <dfn id=w3c-compat-xref-normalization>--w3c-compat-xref-normalization</dfn> is enabled, all characters
+apart from U+0020 SPACE CHARACTER, U+002D HYPHEN-MINUS (-), U+0030 DIGIT ZERO to
+U+0039 DIGIT NINE (0–9), U+0041 LATIN CAPITAL LETTER A to U+005A LATIN CAPITAL
+LETTER Z (A–Z), and U+0061 LATIN SMALL LETTER A to U+007A LATIN SMALL LETTER Z
+(a–z) are removed.
+</li></ul>
 </body></html>
