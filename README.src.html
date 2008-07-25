@@ -134,7 +134,8 @@ title="instance">instances</span> are normalized as follows:</p>
 	<li>Converted to lowercase (behaviour of this is dependant on the current
 locale setting of Python),
 	<li>All consecutive <span>whitespace</span> is replaced with a single U+0020
-SPACE CHARACTER, and
+SPACE CHARACTER<!-- unless there is a <code>pre</code> element as a parent-->,
+and
 	<li>If <dfn>--w3c-compat-xref-normalization</dfn> is enabled, all characters
 apart from U+0020 SPACE CHARACTER, U+002D HYPHEN-MINUS (-), U+0030 DIGIT ZERO to
 U+0039 DIGIT NINE (0–9), U+0041 LATIN CAPITAL LETTER A to U+005A LATIN CAPITAL
