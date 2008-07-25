@@ -143,3 +143,19 @@ U+0039 DIGIT NINE (0–9), U+0041 LATIN CAPITAL LETTER A to U+005A LATIN CAPITAL
 LETTER Z (A–Z), and U+0061 LATIN SMALL LETTER A to U+007A LATIN SMALL LETTER Z
 (a–z) are removed.
 </ul>
+
+<p>If the <span>instance</span> is contained within a <code>span</code> element,
+the <code>span</code> element is turned into an <code>a</code> element, and a
+<code>href</code> attribute is added to link it to the <span>term</span> (e.g.,
+<code>&lt;span>foo&lt;/span></code> becomes <code>&lt;a
+href=#foo>foo&lt;/a></code>) — all other attributes are preserved. Otherwise
+(when the <span>instance</span> is not contained within a <code>span</code>
+element), the location of the <code>a</code> element when linking an
+<span>instance</span> is dependant on the
+<dfn>--w3c-compat-xref-a-placement</dfn> option: if it is disabled (the
+default), the <code>a</code> element is placed around the element containing the
+<span>instance</span> (e.g., <code>&lt;i>foo&lt;/i></code> becomes <code>&lt;a
+href=#foo>&lt;i>foo&lt;/i>&lt;/a></code>); if it is enabled, the <code>a</code>
+element goes within the element containing the <span>instance</span> and goes
+around all of its content (e.g., <code>&lt;i>foo&lt;/i></code> becomes
+<code>&lt;i>&lt;a href=#foo>foo&lt;/a>&lt;/i></code>).
