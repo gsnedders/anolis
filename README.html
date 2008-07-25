@@ -22,8 +22,8 @@ color: #fff;
 
 <p>The need for the spec-gen came from the need for long technical documents to
 include niceties such as cross-references and a table of contents for the
-purpose of easy navigation: doing this manually can be a great chore especially
-when sections are numbered and a section is added, consquently changing the
+purpose of easy navigation — doing this manually can be a great chore especially
+when sections are numbered and a section is added, consequently changing the
 numbering of many others, leading to it being advantageous to do it
 programmatically.</p>
 
@@ -134,4 +134,19 @@ LETTER Z (A–Z), and U+0061 LATIN SMALL LETTER A to U+007A LATIN SMALL LETTER Z
 (a–z) are removed.
 </li></ul>
 
-<p>If the <a href=#instance>instance</a> is contained within a <code>span</code> element, the <code>span</code> element is turned into an <code>a</code> element, and a <code>href</code> attribute is added to link it to the <a href=#term>term</a> (e.g., <code>&lt;span&gt;foo&lt;/span&gt;</code> becomes <code>&lt;a href=#foo&gt;foo&lt;/a&gt;</code>) — all other attributes are preserved. Otherwise (when the <a href=#instance>instance</a> is not contained within a <code>span</code> element), the location of the <code>a</code> element when linking an <a href=#instance>instance</a> is dependant on the <dfn id=w3c-compat-xref-a-placement>--w3c-compat-xref-a-placement</dfn> option: if it is disabled (the default), the <code>a</code> element is placed around the element containing the <a href=#instance>instance</a> (e.g., <code>&lt;i&gt;foo&lt;/i&gt;</code> becomes <code>&lt;a href=#foo&gt;&lt;i&gt;foo&lt;/i&gt;&lt;/a&gt;</code>); if it is enabled, the <code>a</code> element goes within the element containing the <a href=#instance>instance</a> and goes around all of its content (e.g., <code>&lt;i&gt;foo&lt;/i&gt;</code> becomes <code>&lt;i&gt;&lt;a href=#foo&gt;foo&lt;/a&gt;&lt;/i&gt;</code>).</p></body></html>
+<p>If the <a href=#instance>instance</a> is contained within a <code>span</code> element,
+the <code>span</code> element is turned into an <code>a</code> element, and a
+<code>href</code> attribute is added to link it to the <a href=#term>term</a> (e.g.,
+<code>&lt;span&gt;foo&lt;/span&gt;</code> becomes <code>&lt;a
+href=#foo&gt;foo&lt;/a&gt;</code>) — all other attributes are preserved. Otherwise
+(when the <a href=#instance>instance</a> is not contained within a <code>span</code>
+element), the location of the <code>a</code> element when linking an
+<a href=#instance>instance</a> is dependant on the
+<dfn id=w3c-compat-xref-a-placement>--w3c-compat-xref-a-placement</dfn> option: if it is disabled (the
+default), the <code>a</code> element is placed around the element containing the
+<a href=#instance>instance</a> (e.g., <code>&lt;i&gt;foo&lt;/i&gt;</code> becomes <code>&lt;a
+href=#foo&gt;&lt;i&gt;foo&lt;/i&gt;&lt;/a&gt;</code>); if it is enabled, the <code>a</code>
+element goes within the element containing the <a href=#instance>instance</a> and goes
+around all of its content (e.g., <code>&lt;i&gt;foo&lt;/i&gt;</code> becomes
+<code>&lt;i&gt;&lt;a href=#foo&gt;foo&lt;/a&gt;&lt;/i&gt;</code>).
+</p></body></html>
