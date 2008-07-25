@@ -26,7 +26,8 @@ def main():
 		output = file(args[1], "w")
 		
 		# Parse as XML:
-		if opts.xml:
+		#if opts.xml:
+		if False:
 			tree = etree.parse(input)
 		# Parse as HTML using lmxl.html
 		elif opts.lxml_html:
@@ -49,7 +50,8 @@ def main():
 			gen.process(tree, **kwargs)
 		
 		# Serialize to XML
-		if opts.xml:
+		#if opts.xml:
+		if False:
 			rendered = etree.tostring(tree, encoding="utf-8")
 		# Serialize to HTML using lxml.html
 		elif opts.lxml_html:
@@ -69,7 +71,7 @@ def main():
 def getOptParser():
 	parser = OptionParser(usage = __doc__)
 	
-	#parser.add_option("", "--xml", action="store_true",
+	#parser.add_option("", "", action="store_true",
 	#	default=False, dest="xml", help="Use an XML parser/serializer.")
 	
 	parser.add_option("", "--lxml.html", action="store_true",
@@ -106,7 +108,7 @@ def getOptParser():
 		default=False, dest="w3c_compat_crazy_substitutions", help="Do crazy W3C specific substitutions, which may cause unexpected behaviour (i.e., replacing random strings within the document with no special marker).")
 	
 	parser.add_option("", "--profile", action="store_true",
-		default=False, dest="profile", help="Profile the execution of %prog.")
+		default=False, dest="profile", help="Profile the execution of the spec-gen.")
 	
 	parser.add_option("", "--inject-meta-charset", action="store_true",
 		default=False, dest="inject_meta_charset", help="inject <meta charset>")
