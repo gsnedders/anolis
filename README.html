@@ -53,10 +53,13 @@ at
 
 </p><h3 id=installation><span class=secno>2.3 </span>Installation</h3>
 
-<p>Normally, installation is done through setuptools, with the following
+<p>Normally, installation is done through <a>setuptools</a>, with the following
 command:</p>
 
 <p><code>python setup.py install</code></p>
+
+<p>Please see setuptools' documentation for information on installation options
+(such as installing in non-standard locations).</p>
 
 <h3 id=running-the-test-suite><span class=secno>2.4 </span>Running the test suite</h3>
 
@@ -77,6 +80,10 @@ are the local name of the element <!--either--> in null namespace<!-- or in the
 
 <p>The <dfn id=textcontent>textContent</dfn> property is the same as that defined in <a>DOM
 Level 3 Core</a> on the Node interface.</p>
+
+<p><dfn id=whitespace>Whitespace</dfn> is as defined in <a>HTML 5</a>: <q>U+0020 SPACE, U+0009
+CHARACTER TABULATION (tab), U+000A LINE FEED (LF), U+000C FORM FEED (FF), and
+U+000D CARRIAGE RETURN (CR)</q>.</p>
 
 <h3 id=cross-referencing-0><span class=secno>3.1 </span>Cross-referencing</h3>
 
@@ -114,10 +121,10 @@ element as either a parent or a child.</p>
 normalization">normalized</dfn> as follows:</p>
 
 <ul>
-	<li>Leading and trailing <span>whitespace</span> is stripped,
+	<li>Leading and trailing <a href=#whitespace>whitespace</a> is stripped,
 	</li><li>Converted to lowercase (behaviour of this is dependent on the current
 locale setting of Python),
-	</li><li>All consecutive <span>whitespace</span> is replaced with a single U+0020
+	</li><li>All consecutive <a href=#whitespace>whitespace</a> is replaced with a single U+0020
 SPACE CHARACTER<!-- unless there is a <code>pre</code> element as a parent-->,
 and
 	</li><li>If <dfn id=w3c-compat-xref-normalization><code>--w3c-compat-xref-normalization</code></dfn> is enabled, all
