@@ -121,6 +121,11 @@ class toc(object):
 							# Remove the element
 							to_remove.add(element)
 					
+					# Remove all the elements in the list of nodes to remove (so that the above change doesn't lead to crazy IDs)
+					for element in to_remove:
+						element.getparent().remove(element)
+					to_remove = set()
+					
 					# Add ID to header
 					id = utils.generateID(section.header)
 					section.header.set("id", id)
