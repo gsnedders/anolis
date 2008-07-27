@@ -160,8 +160,10 @@ class toc(object):
 									del element.attrib[attribute_name]
 						# We don't want the old tail (or any tail, for that matter)
 						link.tail = None
-			# Add subsections in reverse order (so the next one is executed next) with a higher depth value
-			sections.extend((child_section, depth + 1) for child_section in reversed(section))
+			# If we aren't at the max depth all ready
+			if depth < max_depth - 1:
+				# Add subsections in reverse order (so the next one is executed next) with a higher depth value
+				sections.extend((child_section, depth + 1) for child_section in reversed(section))
 		# Remove all the elements in the list of nodes to remove
 		for element in to_remove:
 			element.getparent().remove(element)
