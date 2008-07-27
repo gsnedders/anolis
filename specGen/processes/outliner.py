@@ -21,9 +21,7 @@
 
 from lxml import etree
 
-heading_content = frozenset(["h1", "h2", "h3", "h4", "h5", "h6", "header"])
-sectioning_content = frozenset(["body", "section", "nav", "article", "aside"])
-sectioning_root = frozenset(["blockquote", "figure", "td", "datagrid"])
+from specGen import utils
 
 # Rank of heading elements (these are negative so h1 > h6)
 rank = {"h1": -1, "h2": -2, "h3": -3, "h4": -4, "h5": -5, "h6": -6, "header": -1}
@@ -60,17 +58,17 @@ class Outliner:
 			# If the top of the stack is an element, and you are exiting that element
 			if action == "end" and self.stack and self.stack[-1] == element:
 				# Note: The element being exited is a heading content element.
-				assert element.tag in heading_content
+				assert element.tag in utils.heading_content
 				# Pop that element from the stack.
 				self.stack.pop()
 			
 			# If the top of the stack is a heading content element
-			elif self.stack and self.stack[-1].tag in heading_content:
+			elif self.stack and self.stack[-1].tag in utils.heading_content:
 				# Do nothing.
 				pass
 			
 			# When entering a sectioning content element or a sectioning root element
-			elif action == "start" and (element.tag in sectioning_content or element.tag in sectioning_root):
+			elif action == "start" and (element.tag in utils.sectioning_content or element.tag in utils.sectioning_root):
 				# If current outlinee is not null, push current outlinee onto the stack.
 				if self.current_outlinee is not None:
 					self.stack.append(self.current_outlinee)
@@ -82,7 +80,7 @@ class Outliner:
 				self.outlines[self.current_outlinee] = [self.current_section]
 				
 			# When exiting a sectioning content element, if the stack is not empty
-			elif action == "end" and element.tag in sectioning_content and self.stack:
+			elif action == "end" and element.tag in utils.sectioning_content and self.stack:
 				# Pop the top element from the stack, and let the current outlinee be that element.
 				self.current_outlinee = self.stack.pop()
 				# Let current section be the last section in the outline of the current outlinee element.
@@ -91,7 +89,7 @@ class Outliner:
 				self.current_section += self.outlines[element]
 				
 			# When exiting a sectioning root element, if the stack is not empty
-			elif action == "end" and element.tag in sectioning_root and self.stack:
+			elif action == "end" and element.tag in utils.sectioning_root and self.stack:
 				# Pop the top element from the stack, and let the current outlinee be that element.
 				self.current_outlinee = self.stack.pop()
 				# Let current section be the last section in the outline of the current outlinee element.
@@ -104,7 +102,7 @@ class Outliner:
 					# Go back to the substep labeled Loop.
 					
 			# When exiting a sectioning content element or a sectioning root element
-			elif action == "end" and (element.tag in sectioning_content or element.tag in sectioning_root):
+			elif action == "end" and (element.tag in utils.sectioning_content or element.tag in utils.sectioning_root):
 				# Note: The current outlinee is the element being exited.
 				assert self.current_outlinee == element
 				# Let current section be the first section in the outline of the current outlinee element.
@@ -118,7 +116,7 @@ class Outliner:
 				pass
 			
 			# When entering a heading content element
-			elif action == "start" and element.tag in heading_content:
+			elif action == "start" and element.tag in utils.heading_content:
 				# If the current section has no heading, let the element being entered be the heading for the current section.
 				if self.current_section.header is None:
 					self.current_section.header = element

@@ -47,9 +47,16 @@ class xref(object):
 				if not allow_duplicate_terms and term in self.dfns:
 					raise DuplicateTermException, term
 				
-				id = utils.generateID(dfn)
+				link_to = dfn
 				
-				dfn.set(u"id", id)
+				for parent_element in dfn.iterancestors(tag=etree.Element):
+					if parent_element.tag in utils.heading_content:
+						link_to = parent_element
+						break
+				
+				id = utils.generateID(link_to)
+				
+				link_to.set(u"id", id)
 				
 				self.dfns[term] = id
 	

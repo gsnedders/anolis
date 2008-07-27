@@ -29,6 +29,10 @@ ids = {}
 spaceCharacters = u"".join(spaceCharacters)
 spacesRegex = re.compile(u"[%s]+" % spaceCharacters)
 
+heading_content = frozenset(["h1", "h2", "h3", "h4", "h5", "h6", "header"])
+sectioning_content = frozenset(["body", "section", "nav", "article", "aside"])
+sectioning_root = frozenset(["blockquote", "figure", "td", "datagrid"])
+
 non_sgml_name = re.compile("[^A-Za-z0-9\-_:.]+")
 
 def splitOnSpaces(string):
