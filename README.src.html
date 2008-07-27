@@ -186,4 +186,21 @@ becomes <code>&lt;a href=#foo>&lt;i>foo&lt;/i>&lt;/a></code>); if it is enabled,
 the <code>a</code> element goes within the element containing the
 <span>instance</span> and goes around all of its content (e.g.,
 <code>&lt;i>foo&lt;/i></code> becomes <code>&lt;i>&lt;a
-href=#foo>foo&lt;/a>&lt;/i></code>).
+href=#foo>foo&lt;/a>&lt;/i></code>).</p>
+
+<h3>Table of contents/section numbering</h3>
+
+<p>To create a table of contents, and to number the sections of the document, an
+outline is created, per HTML 5. This means not only are the
+<code>h1</code>–<code>h6</code> elements supported, but also elements such as
+<code>section</code> are used to create the outline. After creating the outline,
+every section with a depth between those provided by
+<dfn><code>--min-depth</code></dfn> and <dfn><code>--max-depth</code></dfn>
+(defaulting to two and six respectively), and which has a heading, is numbered
+if it does not have <code>no-num</code> as a class, and is added to the table of
+contents if it does not have <code>no-toc</code> as a class. Sections without
+headings are treated as if they didn't exist, unless they have children, in
+which they will appear to exist while not existing all at once (e.g., they
+increment the section numbering, though that is not output anywhere; and they
+get a list item in the table of contents, with only the children within it, and
+no link to the section itself).</p>

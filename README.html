@@ -14,11 +14,11 @@ color: #fff;
 
 </head><body><div class=head>
 	<h1>spec-gen 1.0a3-dev</h1>
-	<h2 class="no-num no-toc" id=documentation-—-[date]>Documentation — 26 July 2008</h2>
+	<h2 class="no-num no-toc" id=documentation-—-[date]>Documentation — 27 July 2008</h2>
 </div>
 
 <h2 class="no-num no-toc" id=contents>Contents</h2>
-<!--begin-toc--><ol class=toc><li><a href=#introduction><span class=secno>1 </span>Introduction</a></li><li><a href=#installing-the-spec-gen><span class=secno>2 </span>Installing the spec-gen</a><ol><li><a href=#requirements><span class=secno>2.1 </span>Requirements</a></li><li><a href=#obtaining-a-copy><span class=secno>2.2 </span>Obtaining a copy</a></li><li><a href=#installation><span class=secno>2.3 </span>Installation</a></li><li><a href=#running-the-test-suite><span class=secno>2.4 </span>Running the test suite</a></li></ol></li><li><a href=#using-the-spec-gen><span class=secno>3 </span>Using the spec-gen</a></li><li><a href=#processes-0><span class=secno>4 </span>Processes</a><ol><li><a href=#cross-referencing-0><span class=secno>4.1 </span>Cross-referencing</a></li></ol></li></ol><!--end-toc--><h2 id=introduction><span class=secno>1 </span>Introduction</h2>
+<!--begin-toc--><ol class=toc><li><a href=#introduction><span class=secno>1 </span>Introduction</a></li><li><a href=#installing-the-spec-gen><span class=secno>2 </span>Installing the spec-gen</a><ol><li><a href=#requirements><span class=secno>2.1 </span>Requirements</a></li><li><a href=#obtaining-a-copy><span class=secno>2.2 </span>Obtaining a copy</a></li><li><a href=#installation><span class=secno>2.3 </span>Installation</a></li><li><a href=#running-the-test-suite><span class=secno>2.4 </span>Running the test suite</a></li></ol></li><li><a href=#using-the-spec-gen><span class=secno>3 </span>Using the spec-gen</a></li><li><a href=#processes-0><span class=secno>4 </span>Processes</a><ol><li><a href=#cross-referencing-0><span class=secno>4.1 </span>Cross-referencing</a></li><li><a href=#table-of-contents/section-numbering><span class=secno>4.2 </span>Table of contents/section numbering</a></li></ol></li></ol><!--end-toc--><h2 id=introduction><span class=secno>1 </span>Introduction</h2>
 
 <p>The need for the spec-gen came from the need for long technical documents to
 include niceties such as cross-references and a table of contents for the
@@ -175,5 +175,22 @@ becomes <code>&lt;a href=#foo&gt;&lt;i&gt;foo&lt;/i&gt;&lt;/a&gt;</code>); if it
 the <code>a</code> element goes within the element containing the
 <a href=#instance>instance</a> and goes around all of its content (e.g.,
 <code>&lt;i&gt;foo&lt;/i&gt;</code> becomes <code>&lt;i&gt;&lt;a
-href=#foo&gt;foo&lt;/a&gt;&lt;/i&gt;</code>).
-</p></body></html>
+href=#foo&gt;foo&lt;/a&gt;&lt;/i&gt;</code>).</p>
+
+<h3 id=table-of-contents/section-numbering><span class=secno>4.2 </span>Table of contents/section numbering</h3>
+
+<p>To create a table of contents, and to number the sections of the document, an
+outline is created, per HTML 5. This means not only are the
+<code>h1</code>–<code>h6</code> elements supported, but also elements such as
+<code>section</code> are used to create the outline. After creating the outline,
+every section with a depth between those provided by
+<dfn id=min-depth><code>--min-depth</code></dfn> and <dfn id=max-depth><code>--max-depth</code></dfn>
+(defaulting to two and six respectively), and which has a heading, is numbered
+if it does not have <code>no-num</code> as a class, and is added to the table of
+contents if it does not have <code>no-toc</code> as a class. Sections without
+headings are treated as if they didn't exist, unless they have children, in
+which they will appear to exist while not existing all at once (e.g., they
+increment the section numbering, though that is not output anywhere; and they
+get a list item in the table of contents, with only the children within it, and
+no link to the section itself).</p>
+</body></html>
