@@ -40,8 +40,8 @@ class toc(object):
 	
 	def buildToc(self, ElementTree, min_depth = 2, max_depth = 6, w3c_compat = False, w3c_compat_class_toc = False, **kwargs):
 		# Build the outline of the document
-		outline_creator = outliner.Outliner()
-		outline = outline_creator.build(ElementTree)
+		outline_creator = outliner.Outliner(ElementTree, **kwargs)
+		outline = outline_creator.build(**kwargs)
 		
 		# Get a list of all the top level sections, and their depth (0)
 		sections = [(section, 0) for section in reversed(outline)]
