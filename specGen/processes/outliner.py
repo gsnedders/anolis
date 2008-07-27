@@ -53,8 +53,7 @@ class Outliner:
 		outlines = {}
 		current_outlinee = None
 		current_section = None
-		context = etree.iterwalk(ElementTree, events=("start", "end"))
-		for action, element in context:
+		for action, element in etree.iterwalk(ElementTree, events=("start", "end")):
 			# If the top of the stack is an element, and you are exiting that element
 			if action == "end" and stack and stack[-1] == element:
 				# Note: The element being exited is a heading content element.
