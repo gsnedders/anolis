@@ -103,9 +103,28 @@ class toc(object):
 					
 				# If we have a header
 				if section.header is not None:
+					# Remove any existing number
+					for element in section.header.iter("span"):
+						if utils.elementHasClass(section.header, "secno"):
+							# Preserve the element tail
+							if element.tail is not None:
+								if element.getprevious() is not None:
+									if element.getprevious().tail is None:
+										element.getprevious().tail = element.tail
+									else:
+										element.getprevious().tail += element.tail
+								else:
+									if element.getparent().text is None:
+										element.getparent().text = element.tail
+									else:
+										element.getparent().text += element.tail
+							# Remove the element
+							to_remove.add(element)
+					
 					# Add ID to header
 					id = utils.generateID(section.header)
 					section.header.set("id", id)
+					
 					# Add number, if @class doesn't contain no-num
 					if not utils.elementHasClass(section.header, "no-num"):
 						section.header[0:0] = [etree.Element("span", {"class": "secno"})]
