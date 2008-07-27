@@ -105,7 +105,7 @@ class toc(object):
 				if section.header is not None:
 					# Remove any existing number
 					for element in section.header.iter("span"):
-						if utils.elementHasClass(section.header, "secno"):
+						if utils.elementHasClass(element, "secno"):
 							# Preserve the element tail
 							if element.tail is not None:
 								if element.getprevious() is not None:
