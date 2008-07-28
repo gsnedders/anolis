@@ -204,3 +204,26 @@ which they will appear to exist while not existing all at once (e.g., they
 increment the section numbering, though that is not output anywhere; and they
 get a list item in the table of contents, with only the children within it, and
 no link to the section itself).</p>
+
+<p>The format of section numbers should comply with <a>ISO 2145:1978</a>,
+Numbering of divisions and subdivisions in written documents. This means that
+each section number is given by Arabic numerals, seperated by a single U+002E
+FULL STOP character, and there is no trailing U+002E FULL STOP character.</p>
+
+<p>The section number is inserted as the first child node of the section heading
+as a <code>span</code> element with the <code>class</code> attribute set to
+<code>secno</code>: this is copied into the table of contents.</p>
+
+<p>Pre-existing <code>span</code> elements with a class of <code>secno</code>
+are removed from all section headings, regardless of whether their depth falls
+within the range given by <code>--min-depth</code> and
+<code>--max-depth</code>.</p>
+
+<p>The table of contents is built up as an ordered list (an <code>ol</code>
+element), with each section marked up as a <code>li</code> element, and child
+sections are marked up with an <code>ol</code> within that <code>li</code> (and
+this continues recursively, ad infinitum). By default, the root element of the
+table of contents (an <code>ol</code> element) is given a <code>class</code>
+attribute set to <code>toc</code>; however, with the
+<dfn><code>--w3c-compat-class-toc</code></dfn> option this is placed on every
+<code>ol</code> within the table of contents.</p>
