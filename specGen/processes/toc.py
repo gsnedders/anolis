@@ -56,6 +56,26 @@ class toc(object):
 		while sections:
 			# Get the section and depth at the end of list
 			section, depth = sections.pop()
+					
+			# If we have a header, regardless of how deep we are
+			if section.header is not None:
+				# Remove any existing number
+				for element in section.header.iter("span"):
+					if utils.elementHasClass(element, "secno"):
+						# Preserve the element tail
+						if element.tail is not None:
+							if element.getprevious() is not None:
+								if element.getprevious().tail is None:
+									element.getprevious().tail = element.tail
+								else:
+									element.getprevious().tail += element.tail
+							else:
+								if element.getparent().text is None:
+									element.getparent().text = element.tail
+								else:
+									element.getparent().text += element.tail
+						# Remove the element
+						to_remove.add(element)
 			
 			# Check we're in the valid depth range (min/max_depth are 1 based, depth is 0 based)
 			if depth >= min_depth - 1 and depth <= max_depth - 1:
@@ -103,25 +123,7 @@ class toc(object):
 					
 				# If we have a header
 				if section.header is not None:
-					# Remove any existing number
-					for element in section.header.iter("span"):
-						if utils.elementHasClass(element, "secno"):
-							# Preserve the element tail
-							if element.tail is not None:
-								if element.getprevious() is not None:
-									if element.getprevious().tail is None:
-										element.getprevious().tail = element.tail
-									else:
-										element.getprevious().tail += element.tail
-								else:
-									if element.getparent().text is None:
-										element.getparent().text = element.tail
-									else:
-										element.getparent().text += element.tail
-							# Remove the element
-							to_remove.add(element)
-					
-					# Remove all the elements in the list of nodes to remove (so that the above change doesn't lead to crazy IDs)
+					# Remove all the elements in the list of nodes to remove (so that the removal of existing numbers doesn't lead to crazy IDs)
 					for element in to_remove:
 						element.getparent().remove(element)
 					to_remove = set()
@@ -184,10 +186,8 @@ class toc(object):
 									del element.attrib[attribute_name]
 						# We don't want the old tail (or any tail, for that matter)
 						link.tail = None
-			# If we aren't at the max depth all ready
-			if depth < max_depth - 1:
-				# Add subsections in reverse order (so the next one is executed next) with a higher depth value
-				sections.extend((child_section, depth + 1) for child_section in reversed(section))
+			# Add subsections in reverse order (so the next one is executed next) with a higher depth value
+			sections.extend((child_section, depth + 1) for child_section in reversed(section))
 		# Remove all the elements in the list of nodes to remove
 		for element in to_remove:
 			element.getparent().remove(element)
