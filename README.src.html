@@ -2,8 +2,7 @@
 <html lang="en-gb-x-sneddy">
 <meta charset="utf-8">
 <title>spec-gen 1.0a3-dev</title>
-<link rel="stylesheet" href="http://www.whatwg.org/style/specification">
-<style>
+<link rel="stylesheet" href="http://www.whatwg.org/style/specification"> <style>
 a:not([href]) {
 background-color: #00f;
 color: #fff;
@@ -86,8 +85,8 @@ basic help.</p>
 <p>The most basic options alter what is used to parse and serialize the
 document: by default, html5lib is used to parse the document; passing the
 <dfn><code>--lxml.html</code></dfn> option uses libxml2's HTML parser and
-serializer instead (this is quicker, but does not comply to the HTML 5 standard,
-and sometimes results in a fatal error)<!--; passing the
+serializer instead (this is quicker, but does not comply to the <a>HTML 5</a>
+standard, and sometimes results in a fatal error)<!--; passing the
 <dfn><code>--xml</code></dfn> option uses libxml2's XML parser instead-->.</p>
 
 <p>The spec-gen offers a <dfn>compatibility mode</dfn>, which aims to be
@@ -190,45 +189,52 @@ href=#foo>foo&lt;/a>&lt;/i></code>).</p>
 
 <h3>Table of contents/section numbering</h3>
 
-<p>To create a table of contents, and to number the sections of the document, an
-outline is created, per HTML 5. This means not only are the
-<code>h1</code>–<code>h6</code> elements supported, but also elements such as
-<code>section</code> are used to create the outline. After creating the outline,
-every section with a depth between those provided by
+<p>To create a table of contents, and to number the <span
+title="section">sections</span> of the document, an <span>outline</span> is
+created. This means not only are the <code>h1</code>–<code>h6</code> elements
+supported, but also elements such as <code title="">section</code> are used to
+create the <span>outline</span>. After creating the <span>outline</span>, every
+<span>section</span> with a depth between those provided by
 <dfn><code>--min-depth</code></dfn> and <dfn><code>--max-depth</code></dfn>
-(defaulting to two and six respectively), and which has a heading, is numbered
-if it does not have <code>no-num</code> as a class, and is added to the table of
-contents if it does not have <code>no-toc</code> as a class. Sections without
-headings are treated as if they didn't exist, unless they have children, in
-which they will appear to exist while not existing all at once (e.g., they
-increment the section numbering, though that is not output anywhere; and they
-get a list item in the table of contents, with only the children within it, and
-no link to the section itself).</p>
+(defaulting to two and six respectively), and which has a <span title="section
+heading">heading</span>, is numbered if it does not have <code>no-num</code> as
+a class, and is added to the table of contents if it does not have
+<code>no-toc</code> as a class. <span title="section">Sections</span> without a
+<span title="section heading">heading</span> are treated as if they didn't
+exist, unless they have children, in which they will appear to exist while not
+existing all at once (e.g., they increment the <span>section</span> numbering,
+though that is not output anywhere; and they get a list item in the table of
+contents, with only the children within it, and no link to the
+<span>section</span> itself).</p>
 
-<p>The format of section numbers should comply with <a>ISO 2145:1978</a>,
-Numbering of divisions and subdivisions in written documents. This means that
-each section number is given by Arabic numerals, seperated by a single U+002E
-FULL STOP character, and there is no trailing U+002E FULL STOP character.</p>
+<p>The format of <span>section</span> numbers should comply with <a>ISO
+2145:1978</a>, Numbering of divisions and subdivisions in written documents.
+This means that each <span>section</span> number is given by Arabic numerals,
+seperated by a single U+002E FULL STOP character, and there is no trailing
+U+002E FULL STOP character.</p>
 
-<p>The section number is inserted as the first child node of the section heading
-as a <code>span</code> element with the <code>class</code> attribute set to
-<code>secno</code>: this is copied into the table of contents.</p>
+<p>The <span>section</span> number is inserted as the first child node of the
+<span>section heading</span> as a <code>span</code> element with the
+<code>class</code> attribute set to <code>secno</code>: this is copied into the
+table of contents.</p>
 
 <p>Pre-existing <code>span</code> elements with a class of <code>secno</code>
-are removed from all section headings, regardless of whether their depth falls
-within the range given by <code>--min-depth</code> and
-<code>--max-depth</code>.</p>
+are removed from all <span title="section heading">section headings</span>,
+regardless of whether their depth falls within the range given by
+<code>--min-depth</code> and <code>--max-depth</code>.</p>
 
 <p>The table of contents is built up as an ordered list (an <code>ol</code>
-element), with each section marked up as a <code>li</code> element, and child
-sections are marked up with an <code>ol</code> within that <code>li</code> (and
-this continues recursively, ad infinitum). By default, the root element of the
-table of contents (an <code>ol</code> element) is given a <code>class</code>
-attribute set to <code>toc</code>; however, with the
+element), with each <span>section</span> marked up as a <code>li</code> element,
+and child <span title="section">sections</span> are marked up with an
+<code>ol</code> within that <code>li</code> (and this continues recursively, ad
+infinitum). By default, the root element of the table of contents (an
+<code>ol</code> element) is given a <code>class</code> attribute set to
+<code>toc</code>; however, with the
 <dfn><code>--w3c-compat-class-toc</code></dfn> option this is placed on every
-<code>ol</code> within the table of contents. The entire section header is
-copied to be the content of the list item, with all <code>a</code>, and
-<code>dfn</code> elements and <code>id</code> attributes removed.</p>
+<code>ol</code> within the table of contents. The entire <span>section
+heading</span> is copied to be the content of the list item, with all
+<code>a</code>, and <code>dfn</code> elements and <code>id</code> attributes
+removed.</p>
 
 <p>The table of contents is inserted between a comment with a value equal to
 (with leading and trailing <span>whitespace</span> removed)
