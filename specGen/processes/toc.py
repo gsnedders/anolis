@@ -129,7 +129,7 @@ class toc(object):
 					to_remove = set()
 					
 					# Add ID to header
-					id = utils.generateID(section.header)
+					id = utils.generateID(section.header, **kwargs)
 					section.header.set("id", id)
 					
 					# Add number, if @class doesn't contain no-num

@@ -44,7 +44,7 @@ def elementHasClass(Element, class_name):
 	else:
 		return False
 
-def generateID(Element):
+def generateID(Element, force_html4_id=False, **kwargs):
 	if Element.get(u"id"):
 		return Element.get(u"id")
 	elif Element.get(u"title"):
@@ -57,7 +57,7 @@ def generateID(Element):
 	source = source.strip(spaceCharacters).lower()
 	if source == u"":
 		source = u"generatedID"
-	elif Element.getroottree().docinfo.public_id in \
+	elif force_html4_id or Element.getroottree().docinfo.public_id in \
 		(u"-//W3C//DTD HTML 4.0//EN",
 		 u"-//W3C//DTD HTML 4.0 Transitional//EN",
 		 u"-//W3C//DTD HTML 4.0 Frameset//EN",

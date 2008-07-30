@@ -86,6 +86,9 @@ def getOptParser():
 	parser.add_option("", "--allow-duplicate-terms", action="store_true",
 		default=False, dest="allow_duplicate_terms", help="Allow multiple definitions of terms when cross-referencing (the last instance of the term is used when referencing it).")
 	
+	parser.add_option("", "--force-html4-id", action="store_true",
+		default=False, dest="force_html4_id", help="Force the ID generation algorithm to create HTML 4 compliant IDs regardless of the DOCTYPE.")
+	
 	parser.add_option("", "--w3c-compat", action="store_true",
 		default=False, dest="w3c_compat", help="Behave in a (mostly) compatible way to the W3C CSS WG's Postprocessor (this implies all of the other --w3c-compat options with the exception of --w3c-compat-crazy-substitution, as that is too crazy).")
 	

@@ -54,7 +54,7 @@ class xref(object):
 						link_to = parent_element
 						break
 				
-				id = utils.generateID(link_to)
+				id = utils.generateID(link_to, **kwargs)
 				
 				link_to.set(u"id", id)
 				
