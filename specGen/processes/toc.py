@@ -104,15 +104,15 @@ class toc(object):
 							# If the final li has no children, or the last children isn't an ol element
 							if len(toc_section[-1]) == 0 or toc_section[-1][-1].tag != "ol":
 								toc_section[-1].append(etree.Element("ol"))
-								self.indentNode(toc_section[-1][-1], (i + 1) * 2)
+								self.indentNode(toc_section[-1][-1], (i + 1) * 2, **kwargs)
 								if w3c_compat or w3c_compat_class_toc:
 									toc_section[-1][-1].set("class", "toc")
 						except IndexError:
 							# If the current ol has no li in it
 							toc_section.append(etree.Element("li"))
-							self.indentNode(toc_section[0], (i + 1) * 2 - 1)
+							self.indentNode(toc_section[0], (i + 1) * 2 - 1, **kwargs)
 							toc_section[0].append(etree.Element("ol"))
-							self.indentNode(toc_section[0][0], (i + 1) * 2)
+							self.indentNode(toc_section[0][0], (i + 1) * 2, **kwargs)
 							if w3c_compat or w3c_compat_class_toc:
 								toc_section[0][0].set("class", "toc")
 						# TOC Section is now the final child (ol) of the final item (li) in the previous section
@@ -123,7 +123,7 @@ class toc(object):
 					# Add the current item to the TOC
 					item = etree.Element("li")
 					toc_section.append(item)
-					self.indentNode(item, (i + 1) * 2 - 1)
+					self.indentNode(item, (i + 1) * 2 - 1, **kwargs)
 					
 				# If we have a header
 				if section.header is not None:
@@ -213,20 +213,20 @@ class toc(object):
 					in_toc = True
 					node.tail = None
 					node.addnext(deepcopy(self.toc))
-					self.indentNode(node.getnext(), 0)
+					self.indentNode(node.getnext(), 0, **kwargs)
 				elif node.text.strip(utils.spaceCharacters) == "toc":
 					node.addprevious(etree.Comment("begin-toc"))
-					self.indentNode(node.getprevious(), 0)
+					self.indentNode(node.getprevious(), 0, **kwargs)
 					node.addprevious(deepcopy(self.toc))
-					self.indentNode(node.getprevious(), 0)
+					self.indentNode(node.getprevious(), 0, **kwargs)
 					node.addprevious(etree.Comment("end-toc"))
-					self.indentNode(node.getprevious(), 0)
+					self.indentNode(node.getprevious(), 0, **kwargs)
 					to_remove.add(node)
 		for node in to_remove:
 			node.getparent().remove(node)
 	
-	def indentNode(self, node, indent=0, **kwargs):
-		whitespace = "\n" + "\t" * indent
+	def indentNode(self, node, indent=0, newline_char="\n", indent_char="\t", **kwargs):
+		whitespace = newline_char + indent_char * indent
 		if node.getprevious() is not None:
 			if node.getprevious().tail is None:
 				node.getprevious().tail = whitespace

@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""usage: %prog [options] input output
+"""usage: spec-gen [options] input output
 
 Post-process a document, adding cross-references, table of contents, etc.
 """
@@ -77,6 +77,15 @@ def getOptParser():
 	parser.add_option("", "--lxml.html", action="store_true",
 		default=False, dest="lxml_html", help="Use lxml's HTML parser/serializer.")
 	
+	parser.add_option("", "--newline-char", action="store", type="string",
+		default="\n", dest="newline_char", help="Set the newline character/string used when creating new newlines. This should match the rest of the newlines in the document.")
+	
+	parser.add_option("", "--indent-char", action="store", type="string",
+		default="\t", dest="indent_char", help="Set the character/string used when creating indenting new blocks of (X)HTML. This should match the rest of the indentation in the document.")
+	
+	parser.add_option("", "--force-html4-id", action="store_true",
+		default=False, dest="force_html4_id", help="Force the ID generation algorithm to create HTML 4 compliant IDs regardless of the DOCTYPE.")
+	
 	parser.add_option("", "--min-depth", action="store", type="int",
 		default=2, dest="min_depth", help="Highest ranking header to number/insert into TOC.")
 	
@@ -85,9 +94,6 @@ def getOptParser():
 	
 	parser.add_option("", "--allow-duplicate-terms", action="store_true",
 		default=False, dest="allow_duplicate_terms", help="Allow multiple definitions of terms when cross-referencing (the last instance of the term is used when referencing it).")
-	
-	parser.add_option("", "--force-html4-id", action="store_true",
-		default=False, dest="force_html4_id", help="Force the ID generation algorithm to create HTML 4 compliant IDs regardless of the DOCTYPE.")
 	
 	parser.add_option("", "--w3c-compat", action="store_true",
 		default=False, dest="w3c_compat", help="Behave in a (mostly) compatible way to the W3C CSS WG's Postprocessor (this implies all of the other --w3c-compat options with the exception of --w3c-compat-crazy-substitution, as that is too crazy).")
