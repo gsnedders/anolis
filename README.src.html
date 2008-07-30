@@ -226,4 +226,17 @@ this continues recursively, ad infinitum). By default, the root element of the
 table of contents (an <code>ol</code> element) is given a <code>class</code>
 attribute set to <code>toc</code>; however, with the
 <dfn><code>--w3c-compat-class-toc</code></dfn> option this is placed on every
-<code>ol</code> within the table of contents.</p>
+<code>ol</code> within the table of contents. The entire section header is
+copied to be the content of the list item, with all <code>a</code>, and
+<code>dfn</code> elements and <code>id</code> attributes removed.</p>
+
+<p>The table of contents is inserted between a comment with a value equal to
+(with leading and trailing <span>whitespace</span> removed)
+<code>begin-toc</code> and one (under the same conditions) equal to
+<code>end-toc</code>. If the comment with a value of <code>end-toc</code> does
+that have the same parent as the previous <code>begin-toc</code> one, it is a
+<span>fatal error</span>. Any nodes between the two are removed before the new
+table of contents is inserted. Additionally, any comment (with leading and
+trailing <span>whitespace</span> removed) with a value equal to <code>toc</code>
+is replaced by the table of contents surrounded by <code>begin-toc</code> and
+<code>end-toc</code> comments.</p>

@@ -14,7 +14,7 @@ color: #fff;
 
 </head><body><div class=head>
 	<h1>spec-gen 1.0a3-dev</h1>
-	<h2 class="no-num no-toc" id=documentation-—-[date]>Documentation — 28 July 2008</h2>
+	<h2 class="no-num no-toc" id=documentation-—-[date]>Documentation — 30 July 2008</h2>
 </div>
 
 <h2 class="no-num no-toc" id=contents>Contents</h2>
@@ -215,5 +215,18 @@ this continues recursively, ad infinitum). By default, the root element of the
 table of contents (an <code>ol</code> element) is given a <code>class</code>
 attribute set to <code>toc</code>; however, with the
 <dfn id=w3c-compat-class-toc><code>--w3c-compat-class-toc</code></dfn> option this is placed on every
-<code>ol</code> within the table of contents.</p>
+<code>ol</code> within the table of contents. The entire section header is
+copied to be the content of the list item, with all <code>a</code>, and
+<code>dfn</code> elements and <code>id</code> attributes removed.</p>
+
+<p>The table of contents is inserted between a comment with a value equal to
+(with leading and trailing <a href=#whitespace>whitespace</a> removed)
+<code>begin-toc</code> and one (under the same conditions) equal to
+<code>end-toc</code>. If the comment with a value of <code>end-toc</code> does
+that have the same parent as the previous <code>begin-toc</code> one, it is a
+<span>fatal error</span>. Any nodes between the two are removed before the new
+table of contents is inserted. Additionally, any comment (with leading and
+trailing <a href=#whitespace>whitespace</a> removed) with a value equal to <code>toc</code>
+is replaced by the table of contents surrounded by <code>begin-toc</code> and
+<code>end-toc</code> comments.</p>
 </body></html>
