@@ -34,7 +34,8 @@ color: #fff;
 			<li><a href=#table-of-contents/section-numbering><span class=secno>4.2 </span>Table of contents/section numbering</a></li>
 			<li><a href=#substitution><span class=secno>4.3 </span>Substitution</a>
 				<ol>
-					<li><a href=#string-substitutions><span class=secno>4.3.1 </span>String substitutions</a></li></ol></li></ol></li></ol>
+					<li><a href=#string-substitutions><span class=secno>4.3.1 </span>String substitutions</a></li>
+					<li><a href=#comment-substitutions><span class=secno>4.3.2 </span>Comment substitutions</a></li></ol></li></ol></li></ol>
 <!--end-toc-->
 
 <h2 id=introduction><span class=secno>1 </span>Introduction</h2>
@@ -251,16 +252,9 @@ heading</a> is copied to be the content of the list item, with all
 <code>a</code>, and <code>dfn</code> elements and <code>id</code> attributes
 removed.</p>
 
-<p>The table of contents is inserted between a comment with a value equal to
-(with leading and trailing <a href=#whitespace>whitespace</a> removed)
-<code>begin-toc</code> and one (under the same conditions) equal to
-<code>end-toc</code>. If the comment with a value of <code>end-toc</code> does
-that have the same parent as the previous <code>begin-toc</code> one, it is a
-<a href=#fatal-error>fatal error</a>. Any nodes between the two are removed before the new
-table of contents is inserted. Additionally, any comment (with leading and
-trailing <a href=#whitespace>whitespace</a> removed) with a value equal to <code>toc</code>
-is replaced by the table of contents surrounded by <code>begin-toc</code> and
-<code>end-toc</code> comments.</p>
+<p>A <a href=#normal-comment-substitution>normal comment substitution</a> is done with
+<var>sub_identifier</var> equal to <code>toc</code>, and the table of contents
+as the replacement.</p>
 
 <h3 id=substitution><span class=secno>4.3 </span>Substitution</h3>
 
@@ -353,7 +347,8 @@ exist.
 
 <p>If <dfn id=w3c-compat-substitutions><code>--w3c-compat-substitutions</code></dfn> is enabled, the
 following <a href=#normal-string-substitution title="normal string substitution">normal string
-substitutions</a> are done in addition to those above:</p>
+substitutions</a> are done in addition to those above (also see the extra
+comment substitutions that are done below):</p>
 
 <dl>
 	<dt><code>[STATUS]</code>
@@ -373,4 +368,27 @@ be. Like the <a href=#normal-string-substitution title="normal string substituti
 substitutions</a>, this string must be contained in a single text node.</p>
 
 <!-- Is that crazy enough to justify the option name? -->
+
+<h4 id=comment-substitutions><span class=secno>4.3.2 </span>Comment substitutions</h4>
+
+<p>A <dfn id=normal-comment-substitution>normal comment substitution</dfn> is one where there is a string,
+<var>sub_identifier</var>, that identifies the comment for the substitution, and
+the replacement. All nodes between a comment with a value equal to (with leading
+and trailing <a href=#whitespace>whitespace</a> removed) <code>begin-</code> followed by
+<var>sub_identifier</var> and one with q value equal to (with leading and
+trailing <a href=#whitespace>whitespace</a> removed) <code>end-</code> followed by
+<var>sub_identifier</var> are removed, and replaced with the replacement.
+Additionally, any comment (with leading and trailing <a href=#whitespace>whitespace</a>
+removed) with a value equal to <var>sub_identifier</var> is replaced with a
+comment with a value of <code>begin-</code> followed by
+<var>sub_identifier</var>, the replacement, and then a comment with a value of
+<code>end-</code> followed by <var>sub_identifier</var>.</p>
+
+<p>There is one comment substitution by default. Any nodes between a comment
+with a value equal to (with leading and trailing <a href=#whitespace>whitespace</a>
+removed) <code>begin-link</code> and one with a value equal to
+<code>end-link</code> are effectively wrapped in an <code>a</code> element, with
+a <code>href</code> attribute equal to the <a href=#textcontent><code>textContent</code></a> of all the
+nodes between the two comments concatenated in document order. The two comments
+must have the same parent, otherwise a <a href=#fatal-error>fatal error</a> occurs.</p>
 </body></html>
