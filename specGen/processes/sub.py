@@ -147,6 +147,7 @@ class sub(object):
 				in_link = True
 				link = etree.Element("a")
 				link.text = node.tail
+				node.tail = None
 				node.addnext(link)
 				to_remove.add(node)
 		
