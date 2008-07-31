@@ -263,7 +263,8 @@ case-sensitively the replacement, which may be followed by any characters apart
 from U+005D RIGHT SQUARE BRACKET (]) before the final U+005D RIGHT SQUARE
 BRACKET character — these extra characters are effectively a comment, and
 carry absolutely no meaning, and vanish into some as-of-yet unknown abyss when
-the string replacement is done.</p>
+the string replacement is done. The entire string must be contained within a
+single text node.</p>
 
 <p>The <dfn>W3C status</dfn> is found, when needed by one of the substitutions,
 by iterating all text nodes in document order (i.e., attribute values and
@@ -319,3 +320,23 @@ status</span> under the following mapping:</p>
 		<td>NOTE
 		<td>W3C Working Group Note
 </table>
+
+<p>By default, the <span title="normal string substitution">normal string
+substitutions</span> are:</p>
+
+<dl>
+	<dt><code>[<!---->DATE]</code>
+	<dd>This is replaced with the current date in the form of, e.g., "31 July
+2008". The word used for the month is dependent on the current locale of Python.
+	<dt><code>[<!---->CDATE]</code>
+	<dd>This is replaced with the date in the form YYYYMMDD, e.g., 20080731.
+This is a conforming <a>ISO 8601:2004</a> date.
+	<dt><code>[<!---->YEAR]</code>
+	<dd>This is replaced with the current year, in the form YYYY, e.g., 2008.
+This is a conforming <a>ISO 8601:2004</a> year.
+	<dt><code>[<!---->TITLE]</code>
+	<dd>This is replaced with the <span>textContent</span> of the first
+<code>title</code> element which is within the first <code>head</code> of the
+document, or an empty string if such a <code>title</code> element does not
+exist.
+</dl>
