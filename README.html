@@ -32,7 +32,9 @@ color: #fff;
 		<ol>
 			<li><a href=#cross-referencing-0><span class=secno>4.1 </span>Cross-referencing</a></li>
 			<li><a href=#table-of-contents/section-numbering><span class=secno>4.2 </span>Table of contents/section numbering</a></li>
-			<li><a href=#string/comment-substitution><span class=secno>4.3 </span>String/comment substitution</a></li></ol></li></ol>
+			<li><a href=#substitution><span class=secno>4.3 </span>Substitution</a>
+				<ol>
+					<li><a href=#string-substitutions><span class=secno>4.3.1 </span>String substitutions</a></li></ol></li></ol></li></ol>
 <!--end-toc-->
 
 <h2 id=introduction><span class=secno>1 </span>Introduction</h2>
@@ -260,7 +262,9 @@ trailing <a href=#whitespace>whitespace</a> removed) with a value equal to <code
 is replaced by the table of contents surrounded by <code>begin-toc</code> and
 <code>end-toc</code> comments.</p>
 
-<h3 id=string/comment-substitution><span class=secno>4.3 </span>String/comment substitution</h3>
+<h3 id=substitution><span class=secno>4.3 </span>Substitution</h3>
+
+<h4 id=string-substitutions><span class=secno>4.3.1 </span>String substitutions</h4>
 
 <p>Various strings are replaced in magic ways: a <dfn id=normal-string-substitution>normal string
 substitution</dfn> takes the form of <code>[xxx]</code> where xxx is
@@ -331,7 +335,8 @@ substitutions</a> are:</p>
 
 <dl>
 	<dt><code>[<!---->DATE]</code>
-	</dt><dd>This is replaced with the current date for UTC±0 in the form of, e.g., <samp>31 July 2008</samp>. The word used for the month is dependent on the
+	</dt><dd>This is replaced with the current date for UTC±0 in the form of, e.g.,
+<samp>31 July 2008</samp>. The word used for the month is dependent on the
 current locale of Python.
 	</dd><dt><code>[<!---->CDATE]</code>
 	</dt><dd>This is replaced with the current date for UTC±0 in the form YYYYMMDD,
