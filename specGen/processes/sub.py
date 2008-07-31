@@ -147,7 +147,6 @@ class sub(object):
 				in_link = True
 				link = etree.Element("a")
 				link.text = node.tail
-				node.tail = None
 				node.addnext(link)
 				to_remove.add(node)
 		
@@ -174,6 +173,7 @@ class sub(object):
 						node.addprevious(etree.Comment(begin_sub))
 						node.addprevious(deepcopy(eval(basic_comment_sub)))
 						node.addprevious(etree.Comment(end_sub))
+						node.getprevious().tail = node.tail
 						to_remove.add(node)
 		
 		# Remove nodes
