@@ -86,7 +86,9 @@ basic help.</p>
 document: by default, html5lib is used to parse the document; passing the
 <dfn><code>--lxml.html</code></dfn> option uses libxml2's HTML parser and
 serializer instead (this is quicker, but does not comply to the <a>HTML 5</a>
-standard, and sometimes results in a <span>fatal error</span>)<!--; passing the XXX: need double hyphen <dfn><code>xml</code></dfn> option uses libxml2's XML parser instead-->.</p>
+standard, and sometimes results in a <span>fatal error</span>)<!--; passing the
+XXX: need double hyphen <dfn><code>xml</code></dfn> option uses libxml2's XML
+parser instead-->.</p>
 
 <p>The spec-gen offers a <dfn>compatibility mode</dfn>, which aims to be
 compatible with the <a>CSS3 module postprocessor</a> (within reason). This is
@@ -252,3 +254,59 @@ table of contents is inserted. Additionally, any comment (with leading and
 trailing <span>whitespace</span> removed) with a value equal to <code>toc</code>
 is replaced by the table of contents surrounded by <code>begin-toc</code> and
 <code>end-toc</code> comments.</p>
+
+<h3>String/comment substitution</h3>
+
+<p>Various strings are replaced in magic ways: a <dfn>normal string
+substitution</dfn> takes the form of <code>[xxx]</code> where xxx is
+case-sensitively the replacement, which may be followed by any characters apart
+from U+005D RIGHT SQUARE BRACKET (]) before the final U+005D RIGHT SQUARE
+BRACKET character — these extra characters are effectively a comment, and
+carry absolutely no meaning, and vanish into some as-of-yet unknown abyss when
+the string replacement is done.</p>
+
+<p>The <dfn>W3C status</dfn> is found, when needed by one of the substitutions,
+by iterating all text nodes in document order (i.e., attribute values and
+comments have no effect), and for each node, the following is done:</p>
+
+<ol>
+	<li>If the node contains, case-insensitively, "latest version", searching
+stops, and the default is used (ED).
+	<li>Otherwise, if the node, case-sensitively, contains "http://www.w3.org/TR/"
+followed by one of "MO", "WD", "CR", "PR", "REC", "PER", or "NOTE", which in
+turn is followed by U+002D HYPHEN-MINUS (-), then the status is whatever matched
+the previous list of options.
+</ol>
+
+<p>There is also a <dfn>long W3C status</dfn>, which correlates to the <span>W3C
+status</span> under the following mapping:</p>
+
+<table>
+	<tr>
+		<th><span>W3C Status</span>
+		<th><span>Long W3C Status</span>
+	<tr>
+		<td>MO
+		<td>W3C Member-only Draft
+	<tr>
+		<td>ED
+		<td>Editor's Draft
+	<tr>
+		<td>WD
+		<td>W3C Working Draft
+	<tr>
+		<td>CR
+		<td>W3C Candidate Recommendation
+	<tr>
+		<td>PR
+		<td>W3C Proposed Recommendation
+	<tr>
+		<td>REC
+		<td>W3C Recommendation
+	<tr>
+		<td>PER
+		<td>W3C Proposed Edited Recommendation
+	<tr>
+		<td>NOTE
+		<td>W3C Working Group Note
+</table>

@@ -31,7 +31,8 @@ color: #fff;
 	<li><a href=#processes><span class=secno>4 </span>Processes</a>
 		<ol>
 			<li><a href=#cross-referencing-0><span class=secno>4.1 </span>Cross-referencing</a></li>
-			<li><a href=#table-of-contents/section-numbering><span class=secno>4.2 </span>Table of contents/section numbering</a></li></ol></li></ol>
+			<li><a href=#table-of-contents/section-numbering><span class=secno>4.2 </span>Table of contents/section numbering</a></li>
+			<li><a href=#string/comment-substitution><span class=secno>4.3 </span>String/comment substitution</a></li></ol></li></ol>
 <!--end-toc-->
 
 <h2 id=introduction><span class=secno>1 </span>Introduction</h2>
@@ -98,7 +99,9 @@ basic help.</p>
 document: by default, html5lib is used to parse the document; passing the
 <dfn id=lxml.html><code>--lxml.html</code></dfn> option uses libxml2's HTML parser and
 serializer instead (this is quicker, but does not comply to the <a>HTML 5</a>
-standard, and sometimes results in a <a href=#fatal-error>fatal error</a>)<!--; passing the XXX: need double hyphen <dfn><code>xml</code></dfn> option uses libxml2's XML parser instead-->.</p>
+standard, and sometimes results in a <a href=#fatal-error>fatal error</a>)<!--; passing the
+XXX: need double hyphen <dfn><code>xml</code></dfn> option uses libxml2's XML
+parser instead-->.</p>
 
 <p>The spec-gen offers a <dfn id=compatibility-mode>compatibility mode</dfn>, which aims to be
 compatible with the <a>CSS3 module postprocessor</a> (within reason). This is
@@ -256,4 +259,60 @@ table of contents is inserted. Additionally, any comment (with leading and
 trailing <a href=#whitespace>whitespace</a> removed) with a value equal to <code>toc</code>
 is replaced by the table of contents surrounded by <code>begin-toc</code> and
 <code>end-toc</code> comments.</p>
+
+<h3 id=string/comment-substitution><span class=secno>4.3 </span>String/comment substitution</h3>
+
+<p>Various strings are replaced in magic ways: a <dfn id=normal-string-substitution>normal string
+substitution</dfn> takes the form of <code>[xxx]</code> where xxx is
+case-sensitively the replacement, which may be followed by any characters apart
+from U+005D RIGHT SQUARE BRACKET (]) before the final U+005D RIGHT SQUARE
+BRACKET character — these extra characters are effectively a comment, and
+carry absolutely no meaning, and vanish into some as-of-yet unknown abyss when
+the string replacement is done.</p>
+
+<p>The <dfn id=w3c-status>W3C status</dfn> is found, when needed by one of the substitutions,
+by iterating all text nodes in document order (i.e., attribute values and
+comments have no effect), and for each node, the following is done:</p>
+
+<ol>
+	<li>If the node contains, case-insensitively, "latest version", searching
+stops, and the default is used (ED).
+	</li><li>Otherwise, if the node, case-sensitively, contains "http://www.w3.org/TR/"
+followed by one of "MO", "WD", "CR", "PR", "REC", "PER", or "NOTE", which in
+turn is followed by U+002D HYPHEN-MINUS (-), then the status is whatever matched
+the previous list of options.
+</li></ol>
+
+<p>There is also a <dfn id=long-w3c-status>long W3C status</dfn>, which correlates to the <a href=#w3c-status>W3C
+status</a> under the following mapping:</p>
+
+<table>
+	<tbody><tr>
+		<th><a href=#w3c-status>W3C Status</a>
+		</th><th><a href=#long-w3c-status>Long W3C Status</a>
+	</th></tr><tr>
+		<td>MO
+		</td><td>W3C Member-only Draft
+	</td></tr><tr>
+		<td>ED
+		</td><td>Editor's Draft
+	</td></tr><tr>
+		<td>WD
+		</td><td>W3C Working Draft
+	</td></tr><tr>
+		<td>CR
+		</td><td>W3C Candidate Recommendation
+	</td></tr><tr>
+		<td>PR
+		</td><td>W3C Proposed Recommendation
+	</td></tr><tr>
+		<td>REC
+		</td><td>W3C Recommendation
+	</td></tr><tr>
+		<td>PER
+		</td><td>W3C Proposed Edited Recommendation
+	</td></tr><tr>
+		<td>NOTE
+		</td><td>W3C Working Group Note
+</td></tr></tbody></table>
 </body></html>
