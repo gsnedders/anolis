@@ -147,8 +147,8 @@ is disabled (the default), the <code>abbr</code>, <code>code</code>,
 <code>span</code>, <code>strong</code>, <code>sub</code>, <code>sup</code>,
 <code>tt</code>, <code>var</code> elements are used for <span
 title="instance">instances</span>. Those that are only there in
-<span>compatibility mode</span> are there because either they shouldn't
-semantically be used for an <span>instance</span>, or because they aren't
+<span>compatibility mode</span> are there because either they should not
+semantically be used for an <span>instance</span>, or because they are not
 present in <a>HTML 5</a>. Similar to <span
 title="term">terms</span>, the <span>instance</span> is taken from the
 <code>title</code> attribute if it is present, otherwise it is taken from the
@@ -209,7 +209,7 @@ and which has a <span title="section heading">heading</span>, is numbered if it
 does not have <code>no-num</code> as a class, and is added to the table of
 contents if it does not have <code>no-toc</code> as a class. <span
 title="section">Sections</span> without a <span title="section
-heading">heading</span> are treated as if they didn't exist, unless they have
+heading">heading</span> are treated as if they did not exist, unless they have
 children, in which they will appear to exist while not existing all at once
 (e.g., they increment the <span>section</span> numbering, though that is not
 output anywhere; and they get a list item in the table of contents, with only
@@ -277,6 +277,15 @@ followed by one of "MO", "WD", "CR", "PR", "REC", "PER", or "NOTE", which in
 turn is followed by U+002D HYPHEN-MINUS (-), then the status is whatever matched
 the previous list of options.
 </ol>
+
+<!-- I wish the above was more sane — it took me several hours to work out
+(though the comment in the CSS3 Module Postprocessor docs saying, "If there is
+a H2 subheading under the H1 that gives the spec's status, the [STATUS]
+variable will be initialized from that, otherwise it will default to WD." did
+not help me work it out quickly, as what is done is completely utterly
+different to that) — even though the algorithm is simple enough, it is just
+far too unexpected. Sadly, though, pre-existing documents depend on this very
+exact behaviour, and thus it cannot be changed. -->
 
 <p>There is also a <dfn>long W3C status</dfn>, which correlates to the <span>W3C
 status</span> under the following mapping:</p>
