@@ -352,3 +352,15 @@ substitutions</span> are done in addition to those above:</p>
 	<dt><code>[LONGSTATUS]</code>
 	<dd>This is replaced with the <span>long W3C status</span>.
 </dl>
+
+<p>There is one further string substitution, and this is only done when
+<dfn><code>--w3c-compat-crazy-substitutions</code></dfn> is enabled (note that
+this is not included in <code>--w3c-compat</code>). A string of
+<code>http://www.w3.org/StyleSheets/TR/W3C-</code> followed by one or more
+characters in the range U+0041 LATIN CAPITAL LETTER A to U+005A LATIN CAPITAL
+LETTER Z (A–Z) is replaced with whatever
+<code>http://www.w3.org/StyleSheets/TR/W3C-[STATUS]</code> would evaluate to
+be. Like the <span title="normal string substitution">normal string
+substitutions</span>, this string must be contained in a single text node.</p>
+
+<!-- Is that crazy enough to justify the option name? -->
