@@ -221,6 +221,7 @@ class toc(object):
 					self.indentNode(node.getprevious(), 0, **kwargs)
 					node.addprevious(etree.Comment("end-toc"))
 					self.indentNode(node.getprevious(), 0, **kwargs)
+					node.getprevious().tail = node.tail
 					to_remove.add(node)
 		for node in to_remove:
 			node.getparent().remove(node)
