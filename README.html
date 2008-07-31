@@ -13,11 +13,26 @@ color: #fff;
 
 </head><body><div class=head>
 	<h1>spec-gen 1.0b1-dev</h1>
-	<h2 class="no-num no-toc" id=documentation-—-[date]>Documentation — 30 July 2008</h2>
+	<h2 class="no-num no-toc" id=documentation-—-[date]>Documentation — 31 July 2008</h2>
 </div>
 
 <h2 class="no-num no-toc" id=contents>Contents</h2>
-<!--begin-toc--><ol class=toc><li><a href=#introduction><span class=secno>1 </span>Introduction</a></li><li><a href=#installing-the-spec-gen><span class=secno>2 </span>Installing the spec-gen</a><ol><li><a href=#requirements><span class=secno>2.1 </span>Requirements</a></li><li><a href=#obtaining-a-copy><span class=secno>2.2 </span>Obtaining a copy</a></li><li><a href=#installation><span class=secno>2.3 </span>Installation</a></li><li><a href=#running-the-test-suite><span class=secno>2.4 </span>Running the test suite</a></li></ol></li><li><a href=#using-the-spec-gen><span class=secno>3 </span>Using the spec-gen</a></li><li><a href=#processes><span class=secno>4 </span>Processes</a><ol><li><a href=#cross-referencing-0><span class=secno>4.1 </span>Cross-referencing</a></li><li><a href=#table-of-contents/section-numbering><span class=secno>4.2 </span>Table of contents/section numbering</a></li></ol></li></ol><!--end-toc--><h2 id=introduction><span class=secno>1 </span>Introduction</h2>
+
+<!--begin-toc-->
+<ol class=toc>
+	<li><a href=#introduction><span class=secno>1 </span>Introduction</a></li>
+	<li><a href=#installing-the-spec-gen><span class=secno>2 </span>Installing the spec-gen</a>
+		<ol>
+			<li><a href=#requirements><span class=secno>2.1 </span>Requirements</a></li>
+			<li><a href=#obtaining-a-copy><span class=secno>2.2 </span>Obtaining a copy</a></li>
+			<li><a href=#installation><span class=secno>2.3 </span>Installation</a></li>
+			<li><a href=#running-the-test-suite><span class=secno>2.4 </span>Running the test suite</a></li></ol></li>
+	<li><a href=#using-the-spec-gen><span class=secno>3 </span>Using the spec-gen</a></li>
+	<li><a href=#processes><span class=secno>4 </span>Processes</a>
+		<ol>
+			<li><a href=#cross-referencing-0><span class=secno>4.1 </span>Cross-referencing</a></li>
+			<li><a href=#table-of-contents/section-numbering><span class=secno>4.2 </span>Table of contents/section numbering</a></li></ol></li></ol>
+<!--end-toc--><h2 id=introduction><span class=secno>1 </span>Introduction</h2>
 
 <p>The need for the spec-gen came from the need for long technical documents to
 include niceties such as cross-references and a table of contents for the
@@ -81,9 +96,7 @@ basic help.</p>
 document: by default, html5lib is used to parse the document; passing the
 <dfn id=lxml.html><code>--lxml.html</code></dfn> option uses libxml2's HTML parser and
 serializer instead (this is quicker, but does not comply to the <a>HTML 5</a>
-standard, and sometimes results in a fatal error)<!--; passing the XXX: need
-double hyphen <dfn><code>xml</code></dfn> option uses libxml2's XML parser
-instead-->.</p>
+standard, and sometimes results in a <a href=#fatal-error>fatal error</a>)<!--; passing the XXX: need double hyphen <dfn><code>xml</code></dfn> option uses libxml2's XML parser instead-->.</p>
 
 <p>The spec-gen offers a <dfn id=compatibility-mode>compatibility mode</dfn>, which aims to be
 compatible with the <a>CSS3 module postprocessor</a> (within reason). This is
@@ -104,6 +117,9 @@ under the <a href=#processes title=processes>process</a> to which they belong.</
 are the local name of the element <!--either--> in null namespace<!-- or in the
 <dfn>HTML namespace</dfn> (<code>http://www.w3.org/1999/xhtml</code>)-->.</p>
 
+<p>Upon a <dfn id=fatal-error>fatal error</dfn> processing of the document is terminated and
+nothing is written to the output file.</p>
+
 <p>The <dfn id=textcontent>textContent</dfn> property is the same as that defined in <a>DOM
 Level 3 Core</a> on the Node interface.</p>
 
@@ -119,9 +135,9 @@ U+000D CARRIAGE RETURN (CR)</q>.</p>
 element: the <a href=#term>term</a> itself is taken from the <code>title</code>
 attribute if it is present, otherwise it is taken from the
 <a href=#textcontent>textContent</a> property of the <code>dfn</code> element. By default,
-the spec-gen will throw a fatal error if a <a href=#term>term</a> is defined more
-than once: this behaviour can be turned off (causing the final definition of the
-<a href=#term>term</a> to be the one that is used) by the
+the spec-gen will throw a <a href=#fatal-error>fatal error</a> if a <a href=#term>term</a> is
+defined more than once: this behaviour can be turned off (causing the final
+definition of the <a href=#term>term</a> to be the one that is used) by the
 <dfn id=allow-duplicate-terms><code>--allow-duplicate-terms</code></dfn> option.
 
 </p><p><a href=#instance title=instance>Instances</a> are marked-up with various elements,
@@ -230,7 +246,7 @@ removed.</p>
 <code>begin-toc</code> and one (under the same conditions) equal to
 <code>end-toc</code>. If the comment with a value of <code>end-toc</code> does
 that have the same parent as the previous <code>begin-toc</code> one, it is a
-<span>fatal error</span>. Any nodes between the two are removed before the new
+<a href=#fatal-error>fatal error</a>. Any nodes between the two are removed before the new
 table of contents is inserted. Additionally, any comment (with leading and
 trailing <a href=#whitespace>whitespace</a> removed) with a value equal to <code>toc</code>
 is replaced by the table of contents surrounded by <code>begin-toc</code> and

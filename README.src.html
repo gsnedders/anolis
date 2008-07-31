@@ -86,9 +86,7 @@ basic help.</p>
 document: by default, html5lib is used to parse the document; passing the
 <dfn><code>--lxml.html</code></dfn> option uses libxml2's HTML parser and
 serializer instead (this is quicker, but does not comply to the <a>HTML 5</a>
-standard, and sometimes results in a fatal error)<!--; passing the XXX: need
-double hyphen <dfn><code>xml</code></dfn> option uses libxml2's XML parser
-instead-->.</p>
+standard, and sometimes results in a <span>fatal error</span>)<!--; passing the XXX: need double hyphen <dfn><code>xml</code></dfn> option uses libxml2's XML parser instead-->.</p>
 
 <p>The spec-gen offers a <dfn>compatibility mode</dfn>, which aims to be
 compatible with the <a>CSS3 module postprocessor</a> (within reason). This is
@@ -110,6 +108,9 @@ under the <span title="processes">process</span> to which they belong.</p>
 are the local name of the element <!--either--> in null namespace<!-- or in the
 <dfn>HTML namespace</dfn> (<code>http://www.w3.org/1999/xhtml</code>)-->.</p>
 
+<p>Upon a <dfn>fatal error</dfn> processing of the document is terminated and
+nothing is written to the output file.</p>
+
 <p>The <dfn>textContent</dfn> property is the same as that defined in <a>DOM
 Level 3 Core</a> on the Node interface.</p>
 
@@ -127,9 +128,9 @@ title="instance">instances</dfn> of those terms.</p>
 element: the <span>term</span> itself is taken from the <code>title</code>
 attribute if it is present, otherwise it is taken from the
 <span>textContent</span> property of the <code>dfn</code> element. By default,
-the spec-gen will throw a fatal error if a <span>term</span> is defined more
-than once: this behaviour can be turned off (causing the final definition of the
-<span>term</span> to be the one that is used) by the
+the spec-gen will throw a <span>fatal error</span> if a <span>term</span> is
+defined more than once: this behaviour can be turned off (causing the final
+definition of the <span>term</span> to be the one that is used) by the
 <dfn><code>--allow-duplicate-terms</code></dfn> option.
 
 <p><span title="instance">Instances</span> are marked-up with various elements,
