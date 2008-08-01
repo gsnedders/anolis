@@ -33,7 +33,7 @@ year_sub = time.strftime("%Y", time.gmtime())
 year_identifier = u"[YEAR"
 
 date = re.compile(r"\[DATE[^\]]*\]")
-date_sub = time.strftime("%d %B %Y", time.gmtime())
+date_sub = time.strftime("%d %B %Y", time.gmtime()).lstrip("0")
 date_identifier = u"[DATE"
 
 cdate = re.compile(r"\[CDATE[^\]]*\]")
