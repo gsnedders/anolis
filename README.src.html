@@ -263,11 +263,11 @@ order):</p>
 <ol>
 	<li>If the node contains, case-insensitively, "latest version", searching
 stops, and the default is used (ED).
-	<li>Otherwise, if the node, case-sensitively, contains "http://www.w3.org/TR/"
-followed by one of "MO", "WD", "CR", "PR", "REC", "PER", or "NOTE", which in
-turn is followed by U+002D HYPHEN-MINUS (-), then searching stops, and the
-status is whatever matched the previous list of options by the first match in
-the text node.
+	<li>Otherwise, if the node, case-sensitively, contains
+"http://www.w3.org/TR/" followed by one of "MO", "WD", "CR", "PR", "REC", "PER",
+or "NOTE", which in turn is followed by U+002D HYPHEN-MINUS (-), then searching
+stops, and the status is whatever matched the previous list of options by the
+first match in the text node.
 </ol>
 
 <p>A side-effect of doing it in this order is the fact that if a node contains
