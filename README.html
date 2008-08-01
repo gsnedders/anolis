@@ -259,17 +259,6 @@ as the replacement.</p>
 
 <h3 id=substitution><span class=secno>4.3 </span>Substitution</h3>
 
-<h4 id=string-substitutions><span class=secno>4.3.1 </span>String substitutions</h4>
-
-<p>Various strings are replaced in magic ways: a <dfn id=normal-string-substitution>normal string
-substitution</dfn> takes the form of <code>[xxx]</code> where xxx is
-case-sensitively the replacement, which may be followed by any characters apart
-from U+005D RIGHT SQUARE BRACKET (]) before the final U+005D RIGHT SQUARE
-BRACKET character — these extra characters are effectively a comment, and
-carry absolutely no meaning, and vanish into some as-of-yet unknown abyss when
-the string replacement is done. The entire string must be contained within a
-single text node.</p>
-
 <p>The <dfn id=w3c-status>W3C status</dfn> is found, when needed by one of the substitutions,
 by iterating all text nodes in document order (i.e., attribute values and
 comments have no effect), and for each node, the following is done:</p>
@@ -324,6 +313,17 @@ status</a> under the following mapping:</p>
 		<td>NOTE
 		</td><td>W3C Working Group Note
 </td></tr></tbody></table>
+
+<h4 id=string-substitutions><span class=secno>4.3.1 </span>String substitutions</h4>
+
+<p>Various strings are replaced in magic ways: a <dfn id=normal-string-substitution>normal string
+substitution</dfn> takes the form of <code>[xxx]</code> where xxx is
+case-sensitively the replacement, which may be followed by any characters apart
+from U+005D RIGHT SQUARE BRACKET (]) before the final U+005D RIGHT SQUARE
+BRACKET character — these extra characters are effectively a comment, and
+carry absolutely no meaning, and vanish into some as-of-yet unknown abyss when
+the string replacement is done. The entire string must be contained within a
+single text node.</p>
 
 <p>By default, the <a href=#normal-string-substitution title="normal string substitution">normal string
 substitutions</a> are:</p>

@@ -255,17 +255,6 @@ as the replacement.</p>
 
 <h3>Substitution</h3>
 
-<h4>String substitutions</h4>
-
-<p>Various strings are replaced in magic ways: a <dfn>normal string
-substitution</dfn> takes the form of <code>[xxx]</code> where xxx is
-case-sensitively the replacement, which may be followed by any characters apart
-from U+005D RIGHT SQUARE BRACKET (]) before the final U+005D RIGHT SQUARE
-BRACKET character — these extra characters are effectively a comment, and
-carry absolutely no meaning, and vanish into some as-of-yet unknown abyss when
-the string replacement is done. The entire string must be contained within a
-single text node.</p>
-
 <p>The <dfn>W3C status</dfn> is found, when needed by one of the substitutions,
 by iterating all text nodes in document order (i.e., attribute values and
 comments have no effect), and for each node, the following is done:</p>
@@ -320,6 +309,17 @@ status</span> under the following mapping:</p>
 		<td>NOTE
 		<td>W3C Working Group Note
 </table>
+
+<h4>String substitutions</h4>
+
+<p>Various strings are replaced in magic ways: a <dfn>normal string
+substitution</dfn> takes the form of <code>[xxx]</code> where xxx is
+case-sensitively the replacement, which may be followed by any characters apart
+from U+005D RIGHT SQUARE BRACKET (]) before the final U+005D RIGHT SQUARE
+BRACKET character — these extra characters are effectively a comment, and
+carry absolutely no meaning, and vanish into some as-of-yet unknown abyss when
+the string replacement is done. The entire string must be contained within a
+single text node.</p>
 
 <p>By default, the <span title="normal string substitution">normal string
 substitutions</span> are:</p>
