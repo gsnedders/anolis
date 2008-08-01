@@ -13,7 +13,7 @@ color: #fff;
 
 </head><body><header>
 	<h1>spec-gen 1.0b1-dev</h1>
-	<h2 class="no-num no-toc">Documentation — 31 July 2008</h2>
+	<h2 class="no-num no-toc">Documentation — 01 August 2008</h2>
 </header>
 
 <h2 class="no-num no-toc" id=contents>Contents</h2>
@@ -391,4 +391,32 @@ removed) <code>begin-link</code> and one with a value equal to
 a <code>href</code> attribute equal to the <a href=#textcontent><code>textContent</code></a> of all the
 nodes between the two comments concatenated in document order. The two comments
 must have the same parent, otherwise a <a href=#fatal-error>fatal error</a> occurs.</p>
+
+<p>If <a href=#w3c-compat-substitutions><code>--w3c-compat-substitutions</code></a> is enabled, the following <a href=#normal-comment-substitution title="normal comment substitution">normal comment substitutions</a> are
+done:</p>
+
+<dl>
+	<dt><var>sub_identifier</var> equal to <code>logo</code>
+	</dt><dd>Replacement is equal to: <code>&lt;p&gt;&lt;a
+href="http://www.w3.org/"&gt;&lt;img alt="W3C"
+src="http://www.w3.org/Icons/w3c_home"/&gt;&lt;/a&gt;&lt;/p&gt;</code> (parsed as an XML
+fragment, and serialized into the output document in the needed format).
+	
+	</dd><dt><var>sub_identifier</var> equal to <code>copyright</code>
+	</dt><dd>Replacement is equal to: <code>&lt;p class="copyright"&gt;&lt;a
+href="http://www.w3.org/Consortium/Legal/ipr-notice#Copyright"&gt;Copyright&lt;/a&gt;
+© [<!---->YEAR] &lt;a href="http://www.w3.org/"&gt;&lt;acronym title="World
+Wide Web Consortium"&gt;W3C&lt;/acronym&gt;&lt;/a&gt;&lt;sup&gt;®&lt;/sup&gt; (&lt;a
+href="http://www.csail.mit.edu/"&gt;&lt;acronym title="Massachusetts Institute of
+Technology"&gt;MIT&lt;/acronym&gt;&lt;/a&gt;, &lt;a
+href="http://www.ercim.org/"&gt;&lt;acronym title="European Research Consortium for
+Informatics and Mathematics"&gt;ERCIM&lt;/acronym&gt;&lt;/a&gt;, &lt;a
+href="http://www.keio.ac.jp/"&gt;Keio&lt;/a&gt;), All Rights Reserved. W3C &lt;a
+href="http://www.w3.org/Consortium/Legal/ipr-notice#Legal_Disclaimer"&gt;liability&lt;/a&gt;,
+&lt;a
+href="http://www.w3.org/Consortium/Legal/ipr-notice#W3C_Trademarks"&gt;trademark&lt;/a&gt;
+and &lt;a href="http://www.w3.org/Consortium/Legal/copyright-documents"&gt;document
+use&lt;/a&gt; rules apply.&lt;/p&gt;</code> (parsed as an XML fragment, and serialized
+into the output document in the needed format).
+</dd></dl>
 </body></html>

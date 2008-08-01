@@ -383,3 +383,32 @@ removed) <code>begin-link</code> and one with a value equal to
 a <code>href</code> attribute equal to the <code>textContent</code> of all the
 nodes between the two comments concatenated in document order. The two comments
 must have the same parent, otherwise a <span>fatal error</span> occurs.</p>
+
+<p>If <code>--w3c-compat-substitutions</code> is enabled, the following <span
+title="normal comment substitution">normal comment substitutions</span> are
+done:</p>
+
+<dl>
+	<dt><var>sub_identifier</var> equal to <code>logo</code>
+	<dd>Replacement is equal to: <code>&lt;p>&lt;a
+href="http://www.w3.org/">&lt;img alt="W3C"
+src="http://www.w3.org/Icons/w3c_home"/>&lt;/a>&lt;/p></code> (parsed as an XML
+fragment, and serialized into the output document in the needed format).
+	
+	<dt><var>sub_identifier</var> equal to <code>copyright</code>
+	<dd>Replacement is equal to: <code>&lt;p class="copyright">&lt;a
+href="http://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright&lt;/a>
+&#xA9; [<!---->YEAR] &lt;a href="http://www.w3.org/">&lt;acronym title="World
+Wide Web Consortium">W3C&lt;/acronym>&lt;/a>&lt;sup>&#xAE;&lt;/sup> (&lt;a
+href="http://www.csail.mit.edu/">&lt;acronym title="Massachusetts Institute of
+Technology">MIT&lt;/acronym>&lt;/a>, &lt;a
+href="http://www.ercim.org/">&lt;acronym title="European Research Consortium for
+Informatics and Mathematics">ERCIM&lt;/acronym>&lt;/a>, &lt;a
+href="http://www.keio.ac.jp/">Keio&lt;/a>), All Rights Reserved. W3C &lt;a
+href="http://www.w3.org/Consortium/Legal/ipr-notice#Legal_Disclaimer">liability&lt;/a>,
+&lt;a
+href="http://www.w3.org/Consortium/Legal/ipr-notice#W3C_Trademarks">trademark&lt;/a>
+and &lt;a href="http://www.w3.org/Consortium/Legal/copyright-documents">document
+use&lt;/a> rules apply.&lt;/p></code> (parsed as an XML fragment, and serialized
+into the output document in the needed format).
+</dl>
