@@ -38,9 +38,9 @@ programmatically.</p>
 without issue.</p>
 
 <ul>
-	<li><a>Python</a> 2.5
-	<li><a>lxml</a> 2.0
-	<li><a>html5lib</a> 0.10
+	<li><a href="http://python.org/">Python</a> 2.5
+	<li><a href="http://codespeak.net/lxml/">lxml</a> 2.0
+	<li><a href="http://code.google.com/p/html5lib">html5lib</a> 0.10
 </ul>
 
 <h3>Obtaining a copy</h3>
@@ -48,15 +48,16 @@ without issue.</p>
 <p>Releases are occasionally made. A link to the latest release can be found
 from the <a>spec-gen website</a>.</p>
 
-<p>Alternatively, a copy can be obtained from <dfn>our <a>Mercurial</a>
-repository</dfn>: this is where our ongoing development occurs, and allows any
-revision (and therefore any release) to be downloaded. Our repository is located
-at
+<p>Alternatively, a copy can be obtained from <dfn>our <a
+href="http://www.selenic.com/mercurial/">Mercurial</a> repository</dfn>: this is
+where our ongoing development occurs, and allows any revision (and therefore any
+release) to be downloaded. Our repository is located at
 <code><!--begin-link-->http://hg.gsnedders.com/spec-gen/<!--end-link--></code>.
 
 <h3>Installation</h3>
 
-<p>Normally, installation is done through <a>setuptools</a>, with the following
+<p>Normally, installation is done through <a
+href="http://pypi.python.org/pypi/setuptools">setuptools</a>, with the following
 command:</p>
 
 <p><code>python setup.py install</code></p>
@@ -85,10 +86,10 @@ basic help.</p>
 <p>The most basic options alter what is used to parse and serialize the
 document: by default, html5lib is used to parse the document; passing the
 <dfn><code>--lxml.html</code></dfn> option uses libxml2's HTML parser and
-serializer instead (this is quicker, but does not comply to the <a>HTML 5</a>
-standard, and sometimes results in a <span>fatal error</span>)<!--; passing the
-XXX: need double hyphen <dfn><code>xml</code></dfn> option uses libxml2's XML
-parser instead-->.</p>
+serializer instead (this is quicker, but does not comply to the <a
+href="http://whatwg.org/html5">HTML 5</a> standard, and sometimes results in a
+<span>fatal error</span>)<!--; passing the XXX: need double hyphen
+<dfn><code>xml</code></dfn> option uses libxml2's XML parser instead-->.</p>
 
 <p>The spec-gen offers a <dfn>compatibility mode</dfn>, which aims to be
 compatible with the <a>CSS3 module postprocessor</a> (within reason). This is
@@ -116,9 +117,9 @@ nothing is written to the output file.</p>
 <p>The <dfn>textContent</dfn> property is the same as that defined in <a>DOM
 Level 3 Core</a> on the Node interface.</p>
 
-<p><dfn>Whitespace</dfn> is as defined in <a>HTML 5</a>: <q>U+0020 SPACE, U+0009
-CHARACTER TABULATION (tab), U+000A LINE FEED (LF), U+000C FORM FEED (FF), and
-U+000D CARRIAGE RETURN (CR)</q>.</p>
+<p><dfn>Whitespace</dfn> is as defined in <a href="http://whatwg.org/html5">HTML
+5</a>: <q>U+0020 SPACE, U+0009 CHARACTER TABULATION (tab), U+000A LINE FEED
+(LF), U+000C FORM FEED (FF), and U+000D CARRIAGE RETURN (CR)</q>.</p>
 
 <h3>Cross-referencing</h3>
 
@@ -149,7 +150,7 @@ is disabled (the default), the <code>abbr</code>, <code>code</code>,
 title="instance">instances</span>. Those that are only there in
 <span>compatibility mode</span> are there because either they should not
 semantically be used for an <span>instance</span>, or because they are not
-present in <a>HTML 5</a>. Similar to <span
+present in <a href="http://whatwg.org/html5">HTML 5</a>. Similar to <span
 title="term">terms</span>, the <span>instance</span> is taken from the
 <code>title</code> attribute if it is present, otherwise it is taken from the
 <span>textContent</span> property. An <span>instance</span> is only used if it
@@ -199,9 +200,10 @@ created (this is a list of <span title="section">sections</span>, which can each
 contain more <span title="section">sections</span>, where a <dfn>section</dfn>
 represents a part of the document, and often has a <dfn title="section
 heading">heading</dfn> associated with it — for more detailed definitions see
-<a>HTML 5</a>). This means not only are the <code>h1</code>–<code>h6</code>
-elements supported, but also elements such as <code title="">section</code> are
-used to create the <span>outline</span>. After creating the
+<a href="http://whatwg.org/html5">HTML 5</a>). This means not only are the
+<code>h1</code>–<code>h6</code> elements supported, but also elements such as
+<code title="">section</code> are used to create the <span>outline</span>. After
+creating the
 <span>outline</span>, every <span>section</span> with a depth between those
 provided by <dfn><code>--min-depth</code></dfn> and
 <dfn><code>--max-depth</code></dfn> (defaulting to two and six respectively),
@@ -275,13 +277,13 @@ the previous list of options.
 </ol>
 
 <!-- I wish the above was more sane — it took me several hours to work out
-(though the comment in the CSS3 Module Postprocessor docs saying, "If there is
-a H2 subheading under the H1 that gives the spec's status, the [STATUS]
-variable will be initialized from that, otherwise it will default to WD." did
-not help me work it out quickly, as what is done is completely utterly
-different to that) — even though the algorithm is simple enough, it is just
-far too unexpected. Sadly, though, pre-existing documents depend on this very
-exact behaviour, and thus it cannot be changed. -->
+(though the comment in the CSS3 Module Postprocessor docs saying, "If there is a
+H2 subheading under the H1 that gives the spec's status, the [STATUS] variable
+will be initialized from that, otherwise it will default to WD." did not help me
+work it out quickly, as what is done is completely utterly different to that)
+— even though the algorithm is simple enough, it is just far too unexpected.
+Sadly, though, pre-existing documents depend on this very exact behaviour, and
+thus it cannot be changed. -->
 
 <p>There is also a <dfn>long W3C status</dfn>, which correlates to the <span>W3C
 status</span> under the following mapping:</p>
@@ -328,8 +330,8 @@ current locale of Python.
 	<dd>This is replaced with the current date for UTC±0 in the form YYYYMMDD,
 e.g., <samp>20080731</samp>. This is a conforming <a>ISO 8601:2004</a> date.
 	<dt><code>[<!---->YEAR]</code>
-	<dd>This is replaced with the current year for UTC±0, in the form YYYY,
-e.g., <samp>2008</samp>. This is a conforming <a>ISO 8601:2004</a> year.
+	<dd>This is replaced with the current year for UTC±0, in the form YYYY, e.g.,
+<samp>2008</samp>. This is a conforming <a>ISO 8601:2004</a> year.
 	<dt><code>[<!---->TITLE]</code>
 	<dd>This is replaced with the <span>textContent</span> of the first
 <code>title</code> element which is within the first <code>head</code> of the
@@ -355,8 +357,8 @@ this is not included in <code>--w3c-compat</code>). A string of
 <code>http://www.w3.org/StyleSheets/TR/W3C-</code> followed by one or more
 characters in the range U+0041 LATIN CAPITAL LETTER A to U+005A LATIN CAPITAL
 LETTER Z (A–Z) is replaced with whatever
-<code>http://www.w3.org/StyleSheets/TR/W3C-[STATUS]</code> would evaluate to
-be. Like the <span title="normal string substitution">normal string
+<code>http://www.w3.org/StyleSheets/TR/W3C-[STATUS]</code> would evaluate to be.
+Like the <span title="normal string substitution">normal string
 substitutions</span>, this string must be contained in a single text node.</p>
 
 <!-- Is that crazy enough to justify the option name? -->
