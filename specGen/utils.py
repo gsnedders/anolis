@@ -55,6 +55,7 @@ def generateID(Element, force_html4_id=False, **kwargs):
 		source = u""
 	
 	source = source.strip(spaceCharacters).lower()
+	
 	if source == u"":
 		source = u"generatedID"
 	elif force_html4_id or Element.getroottree().docinfo.public_id in \
@@ -70,13 +71,11 @@ def generateID(Element, force_html4_id=False, **kwargs):
 		 u"-//W3C//DTD XHTML 1.0 Transitional//EN",
 		 u"-//W3C//DTD XHTML 1.0 Frameset//EN",
 		 u"-//W3C//DTD XHTML 1.1//EN"):
-		source = non_sgml_name.sub(u"-", source)
+		source = non_sgml_name.sub(u"-", source).strip(u"-")
 		if not source[0].isalpha():
 			source = u"x" + source
 	else:
 		source = spacesRegex.sub(u"-", source)
-	
-	source = source.strip(u"-")
 	
 	# Initally set the id to the source
 	id = source
