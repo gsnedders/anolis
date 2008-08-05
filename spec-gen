@@ -69,7 +69,7 @@ def main():
 		sys.exit(1)
 
 def getOptParser():
-	parser = OptionParser(usage = __doc__, version="%prog 1.0b2")
+	parser = OptionParser(usage = __doc__, version="%prog 1.0RC1-dev")
 	
 	#parser.add_option("", "", action="store_true",
 	#	default=False, dest="xml", help="Use an XML parser/serializer.")
