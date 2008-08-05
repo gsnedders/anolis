@@ -59,8 +59,24 @@ class toc(object):
 					
 			# If we have a header, regardless of how deep we are
 			if section.header is not None:
+				# Get the element that represents the section header's text
+				if section.header.tag == u"header":
+					i = 1
+					while i <= 6:
+						section_header_text_element = section.header.find("h" + str(i))
+						if section_header_text_element is not None:
+							break
+					else:
+						section_header_text_element = None
+				else:
+					section_header_text_element = section.header
+			else:
+				section_header_text_element = None
+			
+			# If we have a section heading text element, regardless of depth
+			if section_header_text_element is not None:
 				# Remove any existing number
-				for element in section.header.iter("span"):
+				for element in section_header_text_element.iter("span"):
 					if utils.elementHasClass(element, "secno"):
 						# Preserve the element tail
 						if element.tail is not None:
@@ -91,11 +107,11 @@ class toc(object):
 					num.append(0)
 				
 				# Increment the current section's number
-				if section.header is not None and not utils.elementHasClass(section.header, "no-num") or section.header is None and section:
+				if section_header_text_element is not None and not utils.elementHasClass(section_header_text_element, "no-num") or section_header_text_element is None and section:
 					num[-1] += 1
 				
 				# Get the current TOC section for this depth, and add another item to it
-				if section.header is not None and not utils.elementHasClass(section.header, "no-toc") or section.header is None and section:
+				if section_header_text_element is not None and not utils.elementHasClass(section_header_text_element, "no-toc") or section_header_text_element is None and section:
 					# Find the appropriate section of the TOC 
 					i = 0
 					toc_section = self.toc
@@ -126,26 +142,28 @@ class toc(object):
 					self.indentNode(item, (i + 1) * 2 - 1, **kwargs)
 					
 				# If we have a header
-				if section.header is not None:
+				if section_header_text_element is not None:
 					# Remove all the elements in the list of nodes to remove (so that the removal of existing numbers doesn't lead to crazy IDs)
 					for element in to_remove:
 						element.getparent().remove(element)
 					to_remove = set()
 					
 					# Add ID to header
-					id = utils.generateID(section.header, **kwargs)
+					id = utils.generateID(section_header_text_element, **kwargs)
+					if section_header_text_element.get(u"id") is not None:
+						del section_header_text_element.attrib["id"]
 					section.header.set("id", id)
 					
 					# Add number, if @class doesn't contain no-num
-					if not utils.elementHasClass(section.header, "no-num"):
-						section.header[0:0] = [etree.Element("span", {"class": "secno"})]
-						section.header[0].tail = section.header.text
-						section.header.text = None
-						section.header[0].text = u".".join(map(str, num))
-						section.header[0].text += u" "
+					if not utils.elementHasClass(section_header_text_element, "no-num"):
+						section_header_text_element[0:0] = [etree.Element("span", {"class": "secno"})]
+						section_header_text_element[0].tail = section_header_text_element.text
+						section_header_text_element.text = None
+						section_header_text_element[0].text = u".".join(map(str, num))
+						section_header_text_element[0].text += u" "
 					# Add to TOC, if @class doesn't contain no-toc
-					if not utils.elementHasClass(section.header, "no-toc"):
-						link = deepcopy(section.header)
+					if not utils.elementHasClass(section_header_text_element, "no-toc"):
+						link = deepcopy(section_header_text_element)
 						item.append(link)
 						# Make it link to the header
 						link.tag = "a"
