@@ -5,7 +5,7 @@ Post-process a document, adding cross-references, table of contents, etc.
 """
 
 import cProfile
-from optparse import OptionParser
+from optparse import OptionParser, SUPPRESS_HELP
 import sys
 import html5lib
 from html5lib import treebuilders, treewalkers, serializer
@@ -117,39 +117,39 @@ def getOptParser():
 		default=False, dest="w3c_compat_crazy_substitutions", help="Do crazy W3C specific substitutions, which may cause unexpected behaviour (i.e., replacing random strings within the document with no special marker).")
 	
 	parser.add_option("", "--profile", action="store_true",
-		default=False, dest="profile", help="Profile the execution of the spec-gen.")
+		default=False, dest="profile", help=SUPPRESS_HELP)
 	
 	parser.add_option("", "--inject-meta-charset", action="store_true",
-		default=False, dest="inject_meta_charset", help="inject <meta charset>")
+		default=False, dest="inject_meta_charset", help=SUPPRESS_HELP)
 	
 	parser.add_option("", "--strip-whitespace", action="store_true",
-		default=False, dest="strip_whitespace", help="strip whitespace")
+		default=False, dest="strip_whitespace", help=SUPPRESS_HELP)
 
 	parser.add_option("", "--omit-optional-tags", action="store_true",
-		default=False, dest="omit_optional_tags", help="omit optional tags")
+		default=False, dest="omit_optional_tags", help=SUPPRESS_HELP)
 
 	parser.add_option("", "--quote-attr-values", action="store_true",
-		default=False, dest="quote_attr_values", help="quote attribute values")
+		default=False, dest="quote_attr_values", help=SUPPRESS_HELP)
 
 	parser.add_option("", "--use-best-quote-char", action="store_true",
-		default=False, dest="use_best_quote_char",	help="use best quote character")
+		default=False, dest="use_best_quote_char",	help=SUPPRESS_HELP)
 
 	parser.add_option("", "--no-minimize-boolean-attributes",
 		action="store_false", default=True,
-		dest="minimize_boolean_attributes", help="minimize boolean attributes")
+		dest="minimize_boolean_attributes", help=SUPPRESS_HELP)
 
 	parser.add_option("", "--use-trailing-solidus", action="store_true",
-		default=False, dest="use_trailing_solidus", help="use trailing solidus")
+		default=False, dest="use_trailing_solidus", help=SUPPRESS_HELP)
 
 	parser.add_option("", "--space-before-trailing-solidus",
 		action="store_true", default=False,
-		dest="space_before_trailing_solidus", help="add space before trailing solidus")
+		dest="space_before_trailing_solidus", help=SUPPRESS_HELP)
 
 	parser.add_option("", "--escape-lt-in-attrs", action="store_true",
-		default=False, dest="escape_lt_in_attrs", help="escape less than signs in attribute values")
+		default=False, dest="escape_lt_in_attrs", help=SUPPRESS_HELP)
 
 	parser.add_option("", "--escape-rcdata", action="store_true",
-		default=False, dest="escape_rcdata", help="escape rcdata element values")
+		default=False, dest="escape_rcdata", help=SUPPRESS_HELP)
 
 	return parser
 
