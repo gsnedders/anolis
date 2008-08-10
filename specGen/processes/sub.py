@@ -136,12 +136,13 @@ class sub(object):
 				if node.tag is etree.Comment and node.text.strip(utils.spaceCharacters) == u"end-link":
 					if node.getparent() is not link_parent:
 						raise DifferentParentException
+					utils.removeInteractiveContentChildren(link)
 					link.set(u"href", utils.textContent(link))
 					in_link = False
 				else:
 					if node.getparent() is link_parent:
 						link.append(deepcopy(node))
-				to_remove.add(node)
+					to_remove.add(node)
 			elif node.tag is etree.Comment and node.text.strip(utils.spaceCharacters) == u"begin-link":
 				link_parent = node.getparent()
 				in_link = True
@@ -149,7 +150,6 @@ class sub(object):
 				link.text = node.tail
 				node.tail = None
 				node.addnext(link)
-				to_remove.add(node)
 		
 		# Basic substitutions
 		for basic_comment_sub in instance_basic_comment_subs:

@@ -108,6 +108,55 @@ def getElementById(base, id):
 def escapeXPathString(string):
 	return u"concat('', '%s')" % string.replace(u"'", u"', \"'\", '")
 
+def removeInteractiveContentChildren(element):
+	# Set of elements to remove
+	to_remove = set()
+	
+	# Iter over decendants of element
+	for child in element.iterdescendants(etree.Element):
+		if isInteractiveContent(child):
+			# Preserve the element text
+			if child.text is not None:
+				if child.getprevious() is not None:
+					if child.getprevious().tail is None:
+						child.getprevious().tail = child.text
+					else:
+						child.getprevious().tail += child.text
+				else:
+					if child.getparent().text is None:
+						child.getparent().text = child.text
+					else:
+						child.getparent().text += child.text
+			# Re-parent all the children of the element we're removing
+			for node in child.iterchildren():
+				child.addprevious(node)
+			# Preserve the element tail
+			if child.tail is not None:
+				if child.getprevious() is not None:
+					if child.getprevious().tail is None:
+						child.getprevious().tail = child.tail
+					else:
+						child.getprevious().tail += child.tail
+				else:
+					if child.getparent().text is None:
+						child.getparent().text = child.tail
+					else:
+						child.getparent().text += child.tail
+			# Add the element of the list of elements to remove
+			to_remove.add(child)
+	
+	# Remove all elements to be removed
+	for element in to_remove:
+		element.getparent().remove(element)
+
+def isInteractiveContent(element):
+	if element.tag in (u"a", u"bb", u"details") \
+	or element.tag in (u"audio", u"video") and element.get(u"controls") is not None \
+	or element.tag == u"menu" and element.get(u"type") is not None and element.get(u"type").lower() == u"toolbar":
+		return True
+	else:
+		return False
+
 class SpecGenException(Exception):
 	"""Generic spec-gen error."""
 	pass

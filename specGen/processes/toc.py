@@ -169,38 +169,7 @@ class toc(object):
 						link.tag = u"a"
 						link.set(u"href", u"#" + id)
 						# Remove child elements
-						for element_name in remove_elements_from_toc:
-							# Iterate over all the desendants of the new link with that element name
-							for element in link.iterdescendants(element_name):
-								# Preserve the element text
-								if element.text is not None:
-									if element.getprevious() is not None:
-										if element.getprevious().tail is None:
-											element.getprevious().tail = element.text
-										else:
-											element.getprevious().tail += element.text
-									else:
-										if element.getparent().text is None:
-											element.getparent().text = element.text
-										else:
-											element.getparent().text += element.text
-								# Re-parent all the children of the element we're removing
-								for node in element.iterchildren():
-									element.addprevious(node)
-								# Preserve the element tail
-								if element.tail is not None:
-									if element.getprevious() is not None:
-										if element.getprevious().tail is None:
-											element.getprevious().tail = element.tail
-										else:
-											element.getprevious().tail += element.tail
-									else:
-										if element.getparent().text is None:
-											element.getparent().text = element.tail
-										else:
-											element.getparent().text += element.tail
-								# Add the element of the list of elements to remove
-								to_remove.add(element)
+						utils.removeInteractiveContentChildren(link)
 						# Remove unwanted attributes
 						for element in link.iter(tag=etree.Element):
 							for attribute_name in remove_attributes_from_toc:
