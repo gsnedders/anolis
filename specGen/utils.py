@@ -45,14 +45,12 @@ def elementHasClass(Element, class_name):
 		return False
 
 def generateID(Element, force_html4_id=False, **kwargs):
-	if Element.get(u"id"):
+	if Element.get(u"id") is not None:
 		return Element.get(u"id")
-	elif Element.get(u"title"):
+	elif Element.get(u"title") is not None and Element.get(u"title").strip(spaceCharacters) is not u"":
 		source = Element.get(u"title")
-	elif textContent(Element):
-		source = textContent(Element)
 	else:
-		source = u""
+		source = textContent(Element)
 	
 	source = source.strip(spaceCharacters).lower()
 	
