@@ -115,33 +115,8 @@ def removeInteractiveContentChildren(element):
 	# Iter over decendants of element
 	for child in element.iterdescendants(etree.Element):
 		if isInteractiveContent(child):
-			# Preserve the element text
-			if child.text is not None:
-				if child.getprevious() is not None:
-					if child.getprevious().tail is None:
-						child.getprevious().tail = child.text
-					else:
-						child.getprevious().tail += child.text
-				else:
-					if child.getparent().text is None:
-						child.getparent().text = child.text
-					else:
-						child.getparent().text += child.text
-			# Re-parent all the children of the element we're removing
-			for node in child.iterchildren():
-				child.addprevious(node)
-			# Preserve the element tail
-			if child.tail is not None:
-				if child.getprevious() is not None:
-					if child.getprevious().tail is None:
-						child.getprevious().tail = child.tail
-					else:
-						child.getprevious().tail += child.tail
-				else:
-					if child.getparent().text is None:
-						child.getparent().text = child.tail
-					else:
-						child.getparent().text += child.tail
+			# Copy content, to prepare for the node being removed
+			copyContentForRemoval(child)
 			# Add the element of the list of elements to remove
 			to_remove.add(child)
 	
@@ -157,6 +132,35 @@ def isInteractiveContent(element):
 	else:
 		return False
 
+def copyContentForRemoval(node):
+	# Preserve the text, if it is an element
+	if isinstance(node.tag, basestring) and node.text is not None:
+		if node.getprevious() is not None:
+			if node.getprevious().tail is None:
+				node.getprevious().tail = node.text
+			else:
+				node.getprevious().tail += node.text
+		else:
+			if node.getparent().text is None:
+				node.getparent().text = node.text
+			else:
+				node.getparent().text += node.text
+	# Re-parent all the children of the element we're removing
+	for node in node.iterchildren():
+		node.addprevious(node)
+	# Preserve the element tail
+	if node.tail is not None:
+		if node.getprevious() is not None:
+			if node.getprevious().tail is None:
+				node.getprevious().tail = node.tail
+			else:
+				node.getprevious().tail += node.tail
+		else:
+			if node.getparent().text is None:
+				node.getparent().text = node.tail
+			else:
+				node.getparent().text += node.tail
+						
 class SpecGenException(Exception):
 	"""Generic spec-gen error."""
 	pass

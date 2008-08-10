@@ -25,7 +25,9 @@ from copy import deepcopy
 from specGen import utils
 from specGen.processes import outliner
 
-remove_elements_from_toc = (u"a", u"dfn")
+# These are just the non-interactive elements to be removed
+remove_elements_from_toc = (u"dfn",)
+# These are, however, all the attributes to be removed
 remove_attributes_from_toc = (u"id",)
 
 class toc(object):
@@ -168,8 +170,16 @@ class toc(object):
 						# Make it link to the header
 						link.tag = u"a"
 						link.set(u"href", u"#" + id)
-						# Remove child elements
+						# Remove interactive content child elements
 						utils.removeInteractiveContentChildren(link)
+						# Remove other child elements
+						for element_name in remove_elements_from_toc:
+							# Iterate over all the desendants of the new link with that element name
+							for element in link.iterdescendants(element_name):
+								# Copy content, to prepare for the node being removed
+								utils.copyContentForRemoval(element)
+								# Add the element of the list of elements to remove
+								to_remove.add(element)
 						# Remove unwanted attributes
 						for element in link.iter(tag=etree.Element):
 							for attribute_name in remove_attributes_from_toc:
