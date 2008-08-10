@@ -24,7 +24,7 @@ from lxml import etree
 from specGen import utils
 
 # Rank of heading elements (these are negative so h1 > h6)
-rank = {"h1": -1, "h2": -2, "h3": -3, "h4": -4, "h5": -5, "h6": -6, "header": -1}
+rank = {u"h1": -1, u"h2": -2, u"h3": -3, u"h4": -4, u"h5": -5, u"h6": -6, u"header": -1}
 
 class section(list):
 	"""Represents the section of a document."""

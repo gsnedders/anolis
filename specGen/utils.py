@@ -29,9 +29,9 @@ ids = {}
 spaceCharacters = u"".join(spaceCharacters)
 spacesRegex = re.compile(u"[%s]+" % spaceCharacters)
 
-heading_content = frozenset(["h1", "h2", "h3", "h4", "h5", "h6", "header"])
-sectioning_content = frozenset(["body", "section", "nav", "article", "aside"])
-sectioning_root = frozenset(["blockquote", "figure", "td", "datagrid"])
+heading_content = frozenset([u"h1", u"h2", u"h3", u"h4", u"h5", u"h6", u"header"])
+sectioning_content = frozenset([u"body", u"section", u"nav", u"article", u"aside"])
+sectioning_root = frozenset([u"blockquote", u"figure", u"td", u"datagrid"])
 
 non_sgml_name = re.compile("[^A-Za-z0-9\-_:.]+")
 
@@ -39,7 +39,7 @@ def splitOnSpaces(string):
 	return spacesRegex.split(string)
 
 def elementHasClass(Element, class_name):
-	if Element.get("class") and class_name in splitOnSpaces(Element.get("class")):
+	if Element.get(u"class") and class_name in splitOnSpaces(Element.get(u"class")):
 		return True
 	else:
 		return False
@@ -82,7 +82,7 @@ def generateID(Element, force_html4_id=False, **kwargs):
 	
 	i = 0
 	while getElementById(Element.getroottree().getroot(), id) is not None:
-		id = source + u"-" + repr(i)
+		id = source + u"-" + unicode(i)
 		i += 1
 	
 	ids[Element.getroottree().getroot()][id] = Element
@@ -101,12 +101,12 @@ def getElementById(base, id):
 	else:
 		ids[base] = {}
 		for element in base.iter(tag=etree.Element):
-			if element.get("id"):
-				ids[base][element.get("id")] = element
+			if element.get(u"id"):
+				ids[base][element.get(u"id")] = element
 		return getElementById(base, id)
 
 def escapeXPathString(string):
-	return u"concat('', '%s')" % string.replace("'", "', \"'\", '")
+	return u"concat('', '%s')" % string.replace(u"'", u"', \"'\", '")
 
 class SpecGenException(Exception):
 	"""Generic spec-gen error."""

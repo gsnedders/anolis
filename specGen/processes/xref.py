@@ -25,9 +25,9 @@ from copy import deepcopy
 
 from specGen import utils
 
-term_elements = ("span", "abbr", "code", "var", "i")
-w3c_term_elements = ("abbr", "acronym", "b", "bdo", "big", "code", "del", "em", "i", "ins", "kbd", "label", "legend", "q", "samp", "small", "span", "strong", "sub", "sup", "tt", "var")
-term_not_in_stack_with = ("a", "dfn", "datagrid")
+term_elements = (u"span", u"abbr", u"code", u"var", u"i")
+w3c_term_elements = (u"abbr", u"acronym", u"b", u"bdo", u"big", u"code", u"del", u"em", u"i", u"ins", u"kbd", u"label", u"legend", u"q", u"samp", u"small", u"span", u"strong", u"sub", u"sup", u"tt", u"var")
+term_not_in_stack_with = (u"a", u"dfn", u"datagrid")
 
 non_alphanumeric_spaces = re.compile(r"[^a-zA-Z0-9 \-]+")
 
@@ -40,7 +40,7 @@ class xref(object):
 		self.addReferences(ElementTree, **kwargs)
 	
 	def buildReferences(self, ElementTree, allow_duplicate_terms=False, **kwargs):
-		for dfn in ElementTree.iter("dfn"):
+		for dfn in ElementTree.iter(u"dfn"):
 			term = self.getTerm(dfn, **kwargs)
 			
 			if len(term) > 0:
@@ -80,11 +80,11 @@ class xref(object):
 								break
 					
 					if goodParentingAndChildren:
-						if element.tag == "span":
-							element.tag = "a"
-							element.set("href", "#" + self.dfns[term])
+						if element.tag == u"span":
+							element.tag = u"a"
+							element.set(u"href", u"#" + self.dfns[term])
 						else:
-							link = etree.Element("a", {"href": "#" + self.dfns[term]})
+							link = etree.Element(u"a", {u"href": u"#" + self.dfns[term]})
 							if w3c_compat or w3c_compat_xref_a_placement:
 								for node in element.iterchildren():
 									link.append(node)
@@ -108,10 +108,10 @@ class xref(object):
 		
 		term = term.strip(utils.spaceCharacters).lower()
 		
-		term = utils.spacesRegex.sub(" ", term)
+		term = utils.spacesRegex.sub(u" ", term)
 		
 		if w3c_compat or w3c_compat_xref_normalization:
-			term = non_alphanumeric_spaces.sub("", term)
+			term = non_alphanumeric_spaces.sub(u"", term)
 		
 		return term
 

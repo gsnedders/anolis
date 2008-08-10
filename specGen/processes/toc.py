@@ -25,8 +25,8 @@ from copy import deepcopy
 from specGen import utils
 from specGen.processes import outliner
 
-remove_elements_from_toc = ("a", "dfn")
-remove_attributes_from_toc = ("id",)
+remove_elements_from_toc = (u"a", u"dfn")
+remove_attributes_from_toc = (u"id",)
 
 class toc(object):
 	"""Build and add TOC."""
@@ -34,7 +34,7 @@ class toc(object):
 	toc = None
 	
 	def __init__(self, ElementTree, **kwargs):
-		self.toc = etree.Element("ol", {"class": "toc"})
+		self.toc = etree.Element(u"ol", {u"class": u"toc"})
 		self.buildToc(ElementTree, **kwargs)
 		self.addToc(ElementTree, **kwargs)
 	
@@ -63,7 +63,7 @@ class toc(object):
 				if section.header.tag == u"header":
 					i = 1
 					while i <= 6:
-						section_header_text_element = section.header.find("h" + str(i))
+						section_header_text_element = section.header.find(u"h" + unicode(i))
 						if section_header_text_element is not None:
 							break
 					else:
@@ -76,8 +76,8 @@ class toc(object):
 			# If we have a section heading text element, regardless of depth
 			if section_header_text_element is not None:
 				# Remove any existing number
-				for element in section_header_text_element.iter("span"):
-					if utils.elementHasClass(element, "secno"):
+				for element in section_header_text_element.iter(u"span"):
+					if utils.elementHasClass(element, u"secno"):
 						# Preserve the element tail
 						if element.tail is not None:
 							if element.getprevious() is not None:
@@ -107,37 +107,37 @@ class toc(object):
 					num.append(0)
 				
 				# Increment the current section's number
-				if section_header_text_element is not None and not utils.elementHasClass(section_header_text_element, "no-num") or section_header_text_element is None and section:
+				if section_header_text_element is not None and not utils.elementHasClass(section_header_text_element, u"no-num") or section_header_text_element is None and section:
 					num[-1] += 1
 				
 				# Get the current TOC section for this depth, and add another item to it
-				if section_header_text_element is not None and not utils.elementHasClass(section_header_text_element, "no-toc") or section_header_text_element is None and section:
+				if section_header_text_element is not None and not utils.elementHasClass(section_header_text_element, u"no-toc") or section_header_text_element is None and section:
 					# Find the appropriate section of the TOC 
 					i = 0
 					toc_section = self.toc
 					while i < corrected_depth:
 						try:
 							# If the final li has no children, or the last children isn't an ol element
-							if len(toc_section[-1]) == 0 or toc_section[-1][-1].tag != "ol":
-								toc_section[-1].append(etree.Element("ol"))
+							if len(toc_section[-1]) == 0 or toc_section[-1][-1].tag != u"ol":
+								toc_section[-1].append(etree.Element(u"ol"))
 								self.indentNode(toc_section[-1][-1], (i + 1) * 2, **kwargs)
 								if w3c_compat or w3c_compat_class_toc:
-									toc_section[-1][-1].set("class", "toc")
+									toc_section[-1][-1].set(u"class", u"toc")
 						except IndexError:
 							# If the current ol has no li in it
-							toc_section.append(etree.Element("li"))
+							toc_section.append(etree.Element(u"li"))
 							self.indentNode(toc_section[0], (i + 1) * 2 - 1, **kwargs)
-							toc_section[0].append(etree.Element("ol"))
+							toc_section[0].append(etree.Element(u"ol"))
 							self.indentNode(toc_section[0][0], (i + 1) * 2, **kwargs)
 							if w3c_compat or w3c_compat_class_toc:
-								toc_section[0][0].set("class", "toc")
+								toc_section[0][0].set(u"class", u"toc")
 						# TOC Section is now the final child (ol) of the final item (li) in the previous section
-						assert toc_section[-1].tag == "li"
-						assert toc_section[-1][-1].tag == "ol"
+						assert toc_section[-1].tag == u"li"
+						assert toc_section[-1][-1].tag == u"ol"
 						toc_section = toc_section[-1][-1]
 						i += 1
 					# Add the current item to the TOC
-					item = etree.Element("li")
+					item = etree.Element(u"li")
 					toc_section.append(item)
 					self.indentNode(item, (i + 1) * 2 - 1, **kwargs)
 					
@@ -151,23 +151,23 @@ class toc(object):
 					# Add ID to header
 					id = utils.generateID(section_header_text_element, **kwargs)
 					if section_header_text_element.get(u"id") is not None:
-						del section_header_text_element.attrib["id"]
-					section.header.set("id", id)
+						del section_header_text_element.attrib[u"id"]
+					section.header.set(u"id", id)
 					
 					# Add number, if @class doesn't contain no-num
-					if not utils.elementHasClass(section_header_text_element, "no-num"):
-						section_header_text_element[0:0] = [etree.Element("span", {"class": "secno"})]
+					if not utils.elementHasClass(section_header_text_element, u"no-num"):
+						section_header_text_element[0:0] = [etree.Element(u"span", {u"class": u"secno"})]
 						section_header_text_element[0].tail = section_header_text_element.text
 						section_header_text_element.text = None
-						section_header_text_element[0].text = u".".join(map(str, num))
+						section_header_text_element[0].text = u".".join(map(unicode, num))
 						section_header_text_element[0].text += u" "
 					# Add to TOC, if @class doesn't contain no-toc
-					if not utils.elementHasClass(section_header_text_element, "no-toc"):
+					if not utils.elementHasClass(section_header_text_element, u"no-toc"):
 						link = deepcopy(section_header_text_element)
 						item.append(link)
 						# Make it link to the header
-						link.tag = "a"
-						link.set("href", "#" + id)
+						link.tag = u"a"
+						link.set(u"href", u"#" + id)
 						# Remove child elements
 						for element_name in remove_elements_from_toc:
 							# Iterate over all the desendants of the new link with that element name
@@ -219,32 +219,32 @@ class toc(object):
 		in_toc = False
 		for node in ElementTree.iter():
 			if in_toc:
-				if node.tag is etree.Comment and node.text.strip(utils.spaceCharacters) == "end-toc":
+				if node.tag is etree.Comment and node.text.strip(utils.spaceCharacters) == u"end-toc":
 					if node.getparent() is not toc_parent:
 						raise DifferentParentException
 					in_toc = False
 				else:
 					to_remove.add(node)
 			elif node.tag is etree.Comment:
-				if node.text.strip(utils.spaceCharacters) == "begin-toc":
+				if node.text.strip(utils.spaceCharacters) == u"begin-toc":
 					toc_parent = node.getparent()
 					in_toc = True
 					node.tail = None
 					node.addnext(deepcopy(self.toc))
 					self.indentNode(node.getnext(), 0, **kwargs)
-				elif node.text.strip(utils.spaceCharacters) == "toc":
-					node.addprevious(etree.Comment("begin-toc"))
+				elif node.text.strip(utils.spaceCharacters) == u"toc":
+					node.addprevious(etree.Comment(u"begin-toc"))
 					self.indentNode(node.getprevious(), 0, **kwargs)
 					node.addprevious(deepcopy(self.toc))
 					self.indentNode(node.getprevious(), 0, **kwargs)
-					node.addprevious(etree.Comment("end-toc"))
+					node.addprevious(etree.Comment(u"end-toc"))
 					self.indentNode(node.getprevious(), 0, **kwargs)
 					node.getprevious().tail = node.tail
 					to_remove.add(node)
 		for node in to_remove:
 			node.getparent().remove(node)
 	
-	def indentNode(self, node, indent=0, newline_char="\n", indent_char="\t", **kwargs):
+	def indentNode(self, node, indent=0, newline_char=u"\n", indent_char=u"\t", **kwargs):
 		whitespace = newline_char + indent_char * indent
 		if node.getprevious() is not None:
 			if node.getprevious().tail is None:
