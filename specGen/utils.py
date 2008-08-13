@@ -70,8 +70,11 @@ def generateID(Element, force_html4_id=False, **kwargs):
 		 u"-//W3C//DTD XHTML 1.0 Frameset//EN",
 		 u"-//W3C//DTD XHTML 1.1//EN"):
 		source = non_sgml_name.sub(u"-", source).strip(u"-")
-		if not source[0].isalpha():
-			source = u"x" + source
+		try:
+			if not source[0].isalpha():
+				source = u"x" + source
+		except IndexError:
+			source u"generatedID"
 	else:
 		source = spacesRegex.sub(u"-", source).strip(u"-")
 	
