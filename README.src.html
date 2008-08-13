@@ -110,6 +110,70 @@ title="processes">process</span>) — these are all implied by the
 <code>--w3c-compat-crazy-substitutions</code>, as it can lead to undesirable
 results.</p>
 
+<p>The options <dfn><code>--newline-char</code></dfn> and
+<dfn><code>--indent-char</code></dfn> set the newline and indent strings (they
+do not have to be a single character) respecively. They default to U+000A LINE
+FEED (LF) and U+0009 CHARACTER TABULATION (tab) respectively. These are only
+used when generating large trees of generated markup, such as the table of
+contents.</p>
+
+<p><dfn title="id generation">When an <code>id</code> attribute is needed, it is
+created as follows</dfn>:
+
+<ol>
+	<li>If the element already has an <code>id</code> attribute, its value is
+used, and this algorithm stops; otherwise:
+	<li>If the <code>title</code> attribute's value is not empty, and does not
+consist of <span>whitespace</span> only, let <var>generated_id</var> be equal to
+its value; otherwise, let <var>generated_id</var> be equal to
+<span>textContent</span>.
+	<li>The <var>generated_id</var> is stripped of leading/trailing
+<span>whitespace</span> and converted to lowercase (behaviour of this is
+dependent on the current locale setting of Python).
+	<li>The first of the following list whose condition matches the current
+state of the string is done:
+		<ol>
+			<li>If <var>generated_id</var> is an empty string,
+<var>generated_id</var> is set to <code>generatedID</code>.
+			<li>If the DOCTYPE's public identifier is one of <code>-//W3C//DTD
+HTML 4.0//EN</code>, <code>-//W3C//DTD HTML 4.0 Transitional//EN</code>,
+<code>-//W3C//DTD HTML 4.0 Frameset//EN</code>, <code>-//W3C//DTD HTML
+4.01//EN</code>, <code>-//W3C//DTD HTML 4.01 Transitional//EN</code>,
+<code>-//W3C//DTD HTML 4.01 Frameset//EN</code>, <code>ISO/IEC 15445:2000//DTD
+HyperText Markup Language//EN</code>, <code>ISO/IEC 15445:2000//DTD
+HTML//EN</code>, <code>-//W3C//DTD XHTML 1.0 Strict//EN</code>,
+<code>-//W3C//DTD XHTML 1.0 Transitional//EN</code>, <code>-//W3C//DTD XHTML 1.0
+Frameset//EN</code>, or <code>-//W3C//DTD XHTML 1.1//EN</code>; or the
+<dfn><code>--force-html4-id</code></dfn> option is used:
+				<ol>
+					<li>All runs of characters apart from U+002D HYPHEN-MINUS
+(-), U+002E FULL STOP (.), U+0030 DIGIT ZERO to U+0039 DIGIT NINE (0–9),
+U+003A COLON (:), U+0041 LATIN CAPITAL LETTER A to U+005A LATIN CAPITAL LETTER Z
+(A–Z), U+005F LOW LINE (_), and U+0061 LATIN SMALL LETTER A to U+007A LATIN
+SMALL LETTER Z (a–z) are replaced by a single U+002D HYPHEN-MINUS (-)
+character within <var>generated_id</var>.
+					<li>Leading and trailing U+002D HYPHEN-MINUS (-) characters
+are removed from <var>generated_id</var>.
+					<li>If <var>generated_id</var> is not empty, if the first
+character is not in the range U+0041 LATIN CAPITAL LETTER A to U+005A LATIN
+CAPITAL LETTER Z (A–Z) or U+0061 LATIN SMALL LETTER A to U+007A LATIN SMALL
+LETTER Z (a–z), <var>generated_id</var> is prefixed by a single U+0078 LATIN
+SMALL LETTER X (x) character; otherwise, <var>generated_id</var> is set to
+<code>generatedID</code>.
+				</ol>
+			<li>Otherwise, runs of <span>whitespace</span> characters are
+replaced by a single U+002D HYPHEN-MINUS (-) character within
+<var>generated_id</var>, and then leading and trailing U+002D HYPHEN-MINUS (-)
+characters are removed from <var>generated_id</var>.
+		</ol>
+	<li>If <var>generated_id</var> matches a ready-existing ID, continue to the
+next step; otherwise, jump to step 7.
+	<li>Increment <var>i</var> by one, or set it to one if it doesn't already
+exist.
+	<li>Go to step 4.
+	<li>The generated ID is <var>generated_id</var>.
+</ol>
+
 <p>Other <span title="processes">process</span> specific options are documented
 under the <span title="processes">process</span> to which they belong.</p>
 
@@ -177,11 +241,11 @@ locale setting of Python),
 	<li>All consecutive <span>whitespace</span> is replaced with a single U+0020
 SPACE CHARACTER<!-- unless there is a <code>pre</code> element as a parent-->,
 and
-	<li>If <dfn><code>--w3c-compat-xref-normalization</code></dfn> is enabled, all
-characters apart from U+0020 SPACE CHARACTER, U+002D HYPHEN-MINUS (-), U+0030
-DIGIT ZERO to U+0039 DIGIT NINE (0–9), U+0041 LATIN CAPITAL LETTER A to U+005A
-LATIN CAPITAL LETTER Z (A–Z), and U+0061 LATIN SMALL LETTER A to U+007A LATIN
-SMALL LETTER Z (a–z) are removed.
+	<li>If <dfn><code>--w3c-compat-xref-normalization</code></dfn> is enabled,
+all characters apart from U+0020 SPACE CHARACTER, U+002D HYPHEN-MINUS (-),
+U+0030 DIGIT ZERO to U+0039 DIGIT NINE (0–9), U+0041 LATIN CAPITAL LETTER A to
+U+005A LATIN CAPITAL LETTER Z (A–Z), and U+0061 LATIN SMALL LETTER A to U+007A
+LATIN SMALL LETTER Z (a–z) are removed.
 </ul>
 
 <p>If the <span>instance</span> is contained within a <code>span</code> element,
@@ -347,8 +411,10 @@ zeros.
 	<dd>This is replaced with the current date for UTC±0 in the form YYYYMMDD,
 e.g., <samp>20080731</samp>. This is a conforming <a
 href="http://www.iso.org/iso/iso_catalogue/catalogue_tc/catalogue_detail.htm?csnumber=40874">ISO
-8601:2004</a> date. 	<dt><code>[<!---->YEAR]</code>
-	<dd>This is replaced with the current year for UTC±0, in the form YYYY, e.g.,
+8601:2004</a> date.
+	<dt><code>[<!---->YEAR]</code>
+	<dd>This is replaced with the current year for UTC±0, in the form YYYY,
+e.g.,
 <samp>2008</samp>. This is a conforming <a
 href="http://www.iso.org/iso/iso_catalogue/catalogue_tc/catalogue_detail.htm?csnumber=40874">ISO
 8601:2004</a> year.
