@@ -74,7 +74,7 @@ def generateID(Element, force_html4_id=False, **kwargs):
 			if not source[0].isalpha():
 				source = u"x" + source
 		except IndexError:
-			source u"generatedID"
+			source = u"generatedID"
 	else:
 		source = spacesRegex.sub(u"-", source).strip(u"-")
 	
