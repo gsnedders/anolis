@@ -161,7 +161,8 @@ LETTER Z (a–z), <var>generated_id</var> is prefixed by a single U+0078 LATIN
 SMALL LETTER X (x) character; otherwise, <var>generated_id</var> is set to
 <code>generatedID</code>.
 				</ol>
-			<li>Otherwise, runs of <span>whitespace</span> characters are
+			<li>Otherwise, runs of characters that do not match the ifragment
+production in <a href="http://www.ietf.org/rfc/rfc3987">RFC 3987</a> are
 replaced by a single U+002D HYPHEN-MINUS (-) character within
 <var>generated_id</var>, and then leading and trailing U+002D HYPHEN-MINUS (-)
 characters are removed from <var>generated_id</var>.

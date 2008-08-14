@@ -14,7 +14,7 @@ color: #fff;
 
 </head><body><header>
 	<h1>spec-gen 1.0RC1-dev</h1>
-	<h2 class="no-num no-toc">Documentation — 13 August 2008</h2>
+	<h2 class="no-num no-toc">Documentation — 14 August 2008</h2>
 </header>
 
 <h2 class="no-num no-toc" id=contents>Contents</h2>
@@ -173,7 +173,8 @@ LETTER Z (a–z), <var>generated_id</var> is prefixed by a single U+0078 LATIN
 SMALL LETTER X (x) character; otherwise, <var>generated_id</var> is set to
 <code>generatedID</code>.
 				</li></ol>
-			</li><li>Otherwise, runs of <a href=#whitespace>whitespace</a> characters are
+			</li><li>Otherwise, runs of characters that do not match the ifragment
+production in <a href=http://www.ietf.org/rfc/rfc3987>RFC 3987</a> are
 replaced by a single U+002D HYPHEN-MINUS (-) character within
 <var>generated_id</var>, and then leading and trailing U+002D HYPHEN-MINUS (-)
 characters are removed from <var>generated_id</var>.
