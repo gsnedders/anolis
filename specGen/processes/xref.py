@@ -27,7 +27,9 @@ from specGen import utils
 
 term_elements = (u"span", u"abbr", u"code", u"var", u"i")
 w3c_term_elements = (u"abbr", u"acronym", u"b", u"bdo", u"big", u"code", u"del", u"em", u"i", u"ins", u"kbd", u"label", u"legend", u"q", u"samp", u"small", u"span", u"strong", u"sub", u"sup", u"tt", u"var")
-term_not_in_stack_with = (u"a", u"dfn", u"datagrid")
+
+# Instances cannot be in the stack with any of these element, or with interactive elements
+instance_not_in_stack_with = (u"dfn",)
 
 non_alphanumeric_spaces = re.compile(r"[^a-zA-Z0-9 \-]+")
 
@@ -70,12 +72,12 @@ class xref(object):
 					goodParentingAndChildren = True
 					
 					for parent_element in element.iterancestors(tag=etree.Element):
-						if parent_element.tag in term_not_in_stack_with:
+						if parent_element.tag in instance_not_in_stack_with or utils.isInteractiveContent(parent_element):
 							goodParentingAndChildren = False
 							break
 					else:
 						for child_element in element.iterdescendants(tag=etree.Element):
-							if child_element.tag in term_not_in_stack_with:
+							if child_element.tag in instance_not_in_stack_with or utils.isInteractiveContent(child_element):
 								goodParentingAndChildren = False
 								break
 					
