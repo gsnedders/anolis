@@ -66,9 +66,11 @@ string_subs = ((year, year_sub, year_identifier),
                (date, date_sub, date_identifier),
                (cdate, cdate_sub, cdate_identifier))
 
-logo = etree.fromstring(u'<p><a href="http://www.w3.org/"><img alt="W3C" src="http://www.w3.org/Icons/w3c_home"/></a></p>')
+logo = u"logo"
+logo_sub = etree.fromstring(u'<p><a href="http://www.w3.org/"><img alt="W3C" src="http://www.w3.org/Icons/w3c_home"/></a></p>')
 
-copyright = etree.fromstring(u'<p class="copyright"><a href="http://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> &#xA9; ' + time.strftime(u"%Y", time.gmtime()) + u' <a href="http://www.w3.org/"><acronym title="World Wide Web Consortium">W3C</acronym></a><sup>&#xAE;</sup> (<a href="http://www.csail.mit.edu/"><acronym title="Massachusetts Institute of Technology">MIT</acronym></a>, <a href="http://www.ercim.org/"><acronym title="European Research Consortium for Informatics and Mathematics">ERCIM</acronym></a>, <a href="http://www.keio.ac.jp/">Keio</a>), All Rights Reserved. W3C <a href="http://www.w3.org/Consortium/Legal/ipr-notice#Legal_Disclaimer">liability</a>, <a href="http://www.w3.org/Consortium/Legal/ipr-notice#W3C_Trademarks">trademark</a> and <a href="http://www.w3.org/Consortium/Legal/copyright-documents">document use</a> rules apply.</p>')
+copyright = u"copyright"
+copyright_sub = etree.fromstring(u'<p class="copyright"><a href="http://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> &#xA9; ' + time.strftime(u"%Y", time.gmtime()) + u' <a href="http://www.w3.org/"><acronym title="World Wide Web Consortium">W3C</acronym></a><sup>&#xAE;</sup> (<a href="http://www.csail.mit.edu/"><acronym title="Massachusetts Institute of Technology">MIT</acronym></a>, <a href="http://www.ercim.org/"><acronym title="European Research Consortium for Informatics and Mathematics">ERCIM</acronym></a>, <a href="http://www.keio.ac.jp/">Keio</a>), All Rights Reserved. W3C <a href="http://www.w3.org/Consortium/Legal/ipr-notice#Legal_Disclaimer">liability</a>, <a href="http://www.w3.org/Consortium/Legal/ipr-notice#W3C_Trademarks">trademark</a> and <a href="http://www.w3.org/Consortium/Legal/copyright-documents">document use</a> rules apply.</p>')
 
 basic_comment_subs = ()
 
@@ -124,7 +126,8 @@ class sub(object):
 		
 		# Add more basic substitutions in compat. mode
 		if w3c_compat or w3c_compat_substitutions:
-			instance_basic_comment_subs += (u"logo", u"copyright")
+			instance_basic_comment_subs += ((logo, logo_sub),
+			                                (copyright, copyright_sub))
 		
 		# Set of nodes to remove
 		to_remove = set()
@@ -152,9 +155,9 @@ class sub(object):
 				node.addnext(link)
 		
 		# Basic substitutions
-		for basic_comment_sub in instance_basic_comment_subs:
-			begin_sub = u"begin-" + basic_comment_sub
-			end_sub = u"end-" + basic_comment_sub
+		for comment, sub in instance_basic_comment_subs:
+			begin_sub = u"begin-" + comment
+			end_sub = u"end-" + comment
 			in_sub = False
 			for node in ElementTree.iter():
 				if in_sub:
@@ -169,10 +172,10 @@ class sub(object):
 						sub_parent = node.getparent()
 						in_sub = True
 						node.tail = None
-						node.addnext(deepcopy(eval(basic_comment_sub)))
-					elif node.text.strip(utils.spaceCharacters) == basic_comment_sub:
+						node.addnext(deepcopy(sub))
+					elif node.text.strip(utils.spaceCharacters) == comment:
 						node.addprevious(etree.Comment(begin_sub))
-						node.addprevious(deepcopy(eval(basic_comment_sub)))
+						node.addprevious(deepcopy(sub))
 						node.addprevious(etree.Comment(end_sub))
 						node.getprevious().tail = node.tail
 						to_remove.add(node)
