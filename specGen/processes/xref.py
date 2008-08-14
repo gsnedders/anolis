@@ -94,11 +94,10 @@ class xref(object):
 								element.text = None
 								element.append(link)
 							else:
-								link.append(deepcopy(element))
+								element.addprevious(link)
+								link.append(element)
 								link.tail = link[0].tail
 								link[0].tail = None
-								element.addprevious(link)
-								to_remove.add(element)
 		for element in to_remove:
 			element.getparent().remove(element)
 	
