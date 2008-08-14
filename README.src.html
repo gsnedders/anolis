@@ -197,18 +197,19 @@ interface.</p>
 
 <h3>Cross-referencing</h3>
 
-<p><dfn>Cross-referencing</dfn> has two essential parts: <dfn
-title="term">terms</dfn> that define what something is, and <dfn
-title="instance">instances</dfn> of those terms.</p>
+<p><dfn>Cross-referencing</dfn> has three essential parts: <dfn
+title="definition">definitions</dfn> that define <dfn title="term">terms</dfn>,
+and <dfn title="instance">instances</dfn> of those
+<span title="term">terms</span>.</p>
 
-<p><span title="term">Terms</span> are marked-up using the <code>dfn</code>
-element: the <span>term</span> itself is taken from the <code>title</code>
-attribute if it is present, otherwise it is taken from the
+<p><span title="definition">Definitions</span> are marked-up using the
+<code>dfn</code> element: the <span>definition</span> itself is taken from the
+<code>title</code> attribute if it is present, otherwise it is taken from the
 <span>textContent</span> property of the <code>dfn</code> element. By default,
 the spec-gen will throw a <span>fatal error</span> if a <span>term</span> is
 defined more than once: this behaviour can be turned off (causing the final
-definition of the <span>term</span> to be the one that is used) by the
-<dfn><code>--allow-duplicate-terms</code></dfn> option.
+<span>definition</span> of the <span>term</span> to be the one that is used) by
+the <dfn><code>--allow-duplicate-terms</code></dfn> option.
 
 <p><span title="instance">Instances</span> are marked-up with various elements,
 depending on the setting of <dfn><code>--w3c-compat-xref-elements</code></dfn>:
@@ -225,13 +226,13 @@ title="instance">instances</span>. Those that are only there in
 <span>compatibility mode</span> are there because either they should not
 semantically be used for an <span>instance</span>, or because they are not
 present in <a href="http://whatwg.org/html5">HTML 5</a>. Similar to <span
-title="term">terms</span>, the <span>instance</span> is taken from the
-<code>title</code> attribute if it is present, otherwise it is taken from the
-<span>textContent</span> property. An <span>instance</span> is only used if it
-does not have an <code>a</code>, <code>dfn</code>, or <code>datagrid</code>
+title="definition">definitions</span>, the <span>instance</span> is taken from
+the <code>title</code> attribute if it is present, otherwise it is taken from
+the <span>textContent</span> property. An <span>instance</span> is only used if
+it does not have an <code>a</code>, <code>dfn</code>, or <code>datagrid</code>
 element as either a parent or a child.</p>
 
-<p>Both <span title="term">terms</span> and <span
+<p>Both <span title="definition">definitions</span> and <span
 title="instance">instances</span> are <dfn title="cross-reference
 normalization">normalized</dfn> as follows:</p>
 
@@ -251,8 +252,8 @@ LATIN SMALL LETTER Z (a–z) are removed.
 
 <p>If the <span>instance</span> is contained within a <code>span</code> element,
 the <code>span</code> element is turned into an <code>a</code> element, and a
-<code>href</code> attribute is added to link it to the <span>term</span> (e.g.,
-<code>&lt;span>foo&lt;/span></code> becomes <code>&lt;a
+<code>href</code> attribute is added to link it to the <span>definition</span>
+(e.g., <code>&lt;span>foo&lt;/span></code> becomes <code>&lt;a
 href=#foo>foo&lt;/a></code>) — all other attributes are preserved. Otherwise
 (when the <span>instance</span> is not contained within a <code>span</code>
 element), the location of the <code>a</code> element when linking an

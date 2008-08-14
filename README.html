@@ -208,16 +208,18 @@ interface.</p>
 
 <h3 id=cross-referencing-0><span class=secno>4.1 </span>Cross-referencing</h3>
 
-<p><dfn id=cross-referencing>Cross-referencing</dfn> has two essential parts: <dfn id=term title=term>terms</dfn> that define what something is, and <dfn id=instance title=instance>instances</dfn> of those terms.</p>
+<p><dfn id=cross-referencing>Cross-referencing</dfn> has three essential parts: <dfn id=definition title=definition>definitions</dfn> that define <dfn id=term title=term>terms</dfn>,
+and <dfn id=instance title=instance>instances</dfn> of those
+<a href=#term title=term>terms</a>.</p>
 
-<p><a href=#term title=term>Terms</a> are marked-up using the <code>dfn</code>
-element: the <a href=#term>term</a> itself is taken from the <code>title</code>
-attribute if it is present, otherwise it is taken from the
+<p><a href=#definition title=definition>Definitions</a> are marked-up using the
+<code>dfn</code> element: the <a href=#definition>definition</a> itself is taken from the
+<code>title</code> attribute if it is present, otherwise it is taken from the
 <a href=#textcontent>textContent</a> property of the <code>dfn</code> element. By default,
 the spec-gen will throw a <a href=#fatal-error>fatal error</a> if a <a href=#term>term</a> is
 defined more than once: this behaviour can be turned off (causing the final
-definition of the <a href=#term>term</a> to be the one that is used) by the
-<dfn id=allow-duplicate-terms><code>--allow-duplicate-terms</code></dfn> option.
+<a href=#definition>definition</a> of the <a href=#term>term</a> to be the one that is used) by
+the <dfn id=allow-duplicate-terms><code>--allow-duplicate-terms</code></dfn> option.
 
 </p><p><a href=#instance title=instance>Instances</a> are marked-up with various elements,
 depending on the setting of <dfn id=w3c-compat-xref-elements><code>--w3c-compat-xref-elements</code></dfn>:
@@ -232,13 +234,13 @@ if it is disabled (the default), the <code>abbr</code>, <code>code</code>,
 <code>tt</code>, <code>var</code> elements are used for <a href=#instance title=instance>instances</a>. Those that are only there in
 <a href=#compatibility-mode>compatibility mode</a> are there because either they should not
 semantically be used for an <a href=#instance>instance</a>, or because they are not
-present in <a href=http://whatwg.org/html5>HTML 5</a>. Similar to <a href=#term title=term>terms</a>, the <a href=#instance>instance</a> is taken from the
-<code>title</code> attribute if it is present, otherwise it is taken from the
-<a href=#textcontent>textContent</a> property. An <a href=#instance>instance</a> is only used if it
-does not have an <code>a</code>, <code>dfn</code>, or <code>datagrid</code>
+present in <a href=http://whatwg.org/html5>HTML 5</a>. Similar to <a href=#definition title=definition>definitions</a>, the <a href=#instance>instance</a> is taken from
+the <code>title</code> attribute if it is present, otherwise it is taken from
+the <a href=#textcontent>textContent</a> property. An <a href=#instance>instance</a> is only used if
+it does not have an <code>a</code>, <code>dfn</code>, or <code>datagrid</code>
 element as either a parent or a child.</p>
 
-<p>Both <a href=#term title=term>terms</a> and <a href=#instance title=instance>instances</a> are <dfn id=cross-reference-normalization title="cross-reference
+<p>Both <a href=#definition title=definition>definitions</a> and <a href=#instance title=instance>instances</a> are <dfn id=cross-reference-normalization title="cross-reference
 normalization">normalized</dfn> as follows:</p>
 
 <ul>
@@ -257,8 +259,8 @@ LATIN SMALL LETTER Z (a–z) are removed.
 
 <p>If the <a href=#instance>instance</a> is contained within a <code>span</code> element,
 the <code>span</code> element is turned into an <code>a</code> element, and a
-<code>href</code> attribute is added to link it to the <a href=#term>term</a> (e.g.,
-<code>&lt;span&gt;foo&lt;/span&gt;</code> becomes <code>&lt;a
+<code>href</code> attribute is added to link it to the <a href=#definition>definition</a>
+(e.g., <code>&lt;span&gt;foo&lt;/span&gt;</code> becomes <code>&lt;a
 href=#foo&gt;foo&lt;/a&gt;</code>) — all other attributes are preserved. Otherwise
 (when the <a href=#instance>instance</a> is not contained within a <code>span</code>
 element), the location of the <code>a</code> element when linking an

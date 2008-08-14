@@ -25,8 +25,8 @@ from copy import deepcopy
 
 from specGen import utils
 
-term_elements = (u"span", u"abbr", u"code", u"var", u"i")
-w3c_term_elements = (u"abbr", u"acronym", u"b", u"bdo", u"big", u"code", u"del", u"em", u"i", u"ins", u"kbd", u"label", u"legend", u"q", u"samp", u"small", u"span", u"strong", u"sub", u"sup", u"tt", u"var")
+instance_elements = (u"span", u"abbr", u"code", u"var", u"i")
+w3c_instance_elements = (u"abbr", u"acronym", u"b", u"bdo", u"big", u"code", u"del", u"em", u"i", u"ins", u"kbd", u"label", u"legend", u"q", u"samp", u"small", u"span", u"strong", u"sub", u"sup", u"tt", u"var")
 
 # Instances cannot be in the stack with any of these element, or with interactive elements
 instance_not_in_stack_with = (u"dfn",)
@@ -41,13 +41,13 @@ class xref(object):
 		self.buildReferences(ElementTree, **kwargs)
 		self.addReferences(ElementTree, **kwargs)
 	
-	def buildReferences(self, ElementTree, allow_duplicate_terms=False, **kwargs):
+	def buildReferences(self, ElementTree, allow_duplicate_dfns=False, **kwargs):
 		for dfn in ElementTree.iter(u"dfn"):
 			term = self.getTerm(dfn, **kwargs)
 			
 			if len(term) > 0:
-				if not allow_duplicate_terms and term in self.dfns:
-					raise DuplicateTermException, term
+				if not allow_duplicate_dfns and term in self.dfns:
+					raise DuplicateDfnException, term
 				
 				link_to = dfn
 				
@@ -65,7 +65,7 @@ class xref(object):
 	def addReferences(self, ElementTree, w3c_compat = False, w3c_compat_xref_elements = False, w3c_compat_xref_a_placement = False, **kwargs):
 		to_remove = set()
 		for element in ElementTree.iter(tag=etree.Element):
-			if element.tag in term_elements or (w3c_compat or w3c_compat_xref_elements) and element.tag in w3c_term_elements:
+			if element.tag in instance_elements or (w3c_compat or w3c_compat_xref_elements) and element.tag in w3c_instance_elements:
 				term = self.getTerm(element, w3c_compat=w3c_compat, **kwargs)
 				
 				if term in self.dfns:
@@ -116,6 +116,6 @@ class xref(object):
 		
 		return term
 
-class DuplicateTermException(utils.SpecGenException):
+class DuplicateDfnException(utils.SpecGenException):
 	"""Term already defined."""
 	pass
