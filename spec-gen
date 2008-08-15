@@ -73,8 +73,8 @@ def main():
 			
 			# Close the output
 			output.close()
-		except utils.SpecGenException, e:
-			sys.stderr.write(message + u"\n")
+		except (utils.SpecGenException, IOError), e:
+			sys.stderr.write(unicode(e) + u"\n")
 			sys.exit(1)
 	else:
 		sys.stderr.write(u"spec-gen expects two arguments. Use -h for help\n")
