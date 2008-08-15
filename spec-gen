@@ -73,7 +73,7 @@ def main():
 			
 			# Close the output
 			output.close()
-		except (utils.SpecGenException, IOError), e:
+		except (utils.SpecGenException, IOError, etree.XMLSyntaxError), e:
 			sys.stderr.write(unicode(e) + u"\n")
 			sys.exit(1)
 	else:
