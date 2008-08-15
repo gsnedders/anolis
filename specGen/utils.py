@@ -134,7 +134,7 @@ def removeInteractiveContentChildren(element):
 		element.getparent().remove(element)
 
 def isInteractiveContent(element):
-	if element.tag in (u"a", u"bb", u"details") \
+	if element.tag in (u"a", u"bb", u"details", u"datagrid") \
 	or element.tag in (u"audio", u"video") and element.get(u"controls") is not None \
 	or element.tag == u"menu" and element.get(u"type") is not None and element.get(u"type").lower() == u"toolbar":
 		return True
