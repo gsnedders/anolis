@@ -12,7 +12,7 @@ from html5lib import treebuilders, treewalkers, serializer
 import lxml.html
 from lxml import etree
 
-from specGen import generator
+from specGen import generator, utils
 
 def main():
 	# Create the options parser
@@ -21,60 +21,64 @@ def main():
 	
 	# Check we have enough arguments
 	if len(args) >= 2:
-		# Get input
-		input = file(args[0], "r")
-		
-		# Parse as XML:
-		#if opts.xml:
-		if False:
-			tree = etree.parse(input)
-		# Parse as HTML using lmxl.html
-		elif opts.lxml_html:
-			tree = lxml.html.parse(input)
-		# Parse as HTML using html5lib
-		else:
-			parser = html5lib.HTMLParser(tree=treebuilders.getTreeBuilder("lxml", etree))
-			tree = parser.parse(input)
-		
-		# Close the input file
-		input.close()
-		
-		# Create the generator
-		gen = generator.generator()
-		
-		# Turn the options into a dict
-		kwargs = vars(opts)
-		
-		# Run the generator, and profile, or not, as the case may be
-		if kwargs["profile"]:
-			cProfile.runctx("gen.process(tree, **kwargs)", {}, {"gen": gen, "tree": tree, "kwargs": kwargs})
-		else:
-			gen.process(tree, **kwargs)
-		
-		# Serialize to XML
-		#if opts.xml:
-		if False:
-			rendered = etree.tostring(tree, encoding="utf-8")
-		# Serialize to HTML using lxml.html
-		elif opts.lxml_html:
-			rendered = lxml.html.tostring(tree, encoding="utf-8")
-		# Serialize to HTML using html5lib
-		else:
-			walker = treewalkers.getTreeWalker("lxml")
-			s = serializer.htmlserializer.HTMLSerializer(**kwargs)
-			rendered = s.render(walker(tree), encoding="utf-8")
-		
-		# Get the output
-		output = file(args[1], "w")
-		
-		# Write to the output
-		output.write(rendered)
-		
-		# Close the output
-		output.close()
+		try:
+			# Get input
+			input = file(args[0], "r")
+			
+			# Parse as XML:
+			#if opts.xml:
+			if False:
+				tree = etree.parse(input)
+			# Parse as HTML using lmxl.html
+			elif opts.lxml_html:
+				tree = lxml.html.parse(input)
+			# Parse as HTML using html5lib
+			else:
+				parser = html5lib.HTMLParser(tree=treebuilders.getTreeBuilder("lxml", etree))
+				tree = parser.parse(input)
+			
+			# Close the input file
+			input.close()
+			
+			# Create the generator
+			gen = generator.generator()
+			
+			# Turn the options into a dict
+			kwargs = vars(opts)
+			
+			# Run the generator, and profile, or not, as the case may be
+			if kwargs["profile"]:
+				cProfile.runctx("gen.process(tree, **kwargs)", {}, {"gen": gen, "tree": tree, "kwargs": kwargs})
+			else:
+				gen.process(tree, **kwargs)
+			
+			# Serialize to XML
+			#if opts.xml:
+			if False:
+				rendered = etree.tostring(tree, encoding="utf-8")
+			# Serialize to HTML using lxml.html
+			elif opts.lxml_html:
+				rendered = lxml.html.tostring(tree, encoding="utf-8")
+			# Serialize to HTML using html5lib
+			else:
+				walker = treewalkers.getTreeWalker("lxml")
+				s = serializer.htmlserializer.HTMLSerializer(**kwargs)
+				rendered = s.render(walker(tree), encoding="utf-8")
+			
+			# Get the output
+			output = file(args[1], "w")
+			
+			# Write to the output
+			output.write(rendered)
+			
+			# Close the output
+			output.close()
+		except utils.SpecGenException, e:
+			sys.stderr.write(message + u"\n")
+			sys.exit(1)
 	else:
-		sys.stderr.write("spec-gen expects two arguments. Use -h for help\n")
-		sys.exit(1)
+		sys.stderr.write(u"spec-gen expects two arguments. Use -h for help\n")
+		sys.exit(2)
 
 def getOptParser():
 	parser = OptionParser(usage = __doc__, version="%prog 1.0RC1-dev")
