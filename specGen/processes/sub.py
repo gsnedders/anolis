@@ -138,7 +138,7 @@ class sub(object):
 			if in_link:
 				if node.tag is etree.Comment and node.text.strip(utils.spaceCharacters) == u"end-link":
 					if node.getparent() is not link_parent:
-						raise DifferentParentException
+						raise DifferentParentException, u"begin-link and end-link have different parents"
 					utils.removeInteractiveContentChildren(link)
 					link.set(u"href", utils.textContent(link))
 					in_link = False
@@ -163,7 +163,7 @@ class sub(object):
 				if in_sub:
 					if node.tag is etree.Comment and node.text.strip(utils.spaceCharacters) == end_sub:
 						if node.getparent() is not sub_parent:
-							raise DifferentParentException
+							raise DifferentParentException, u"%s and %s have different parents" % begin_sub, end_sub
 						in_sub = False
 					else:
 						to_remove.add(node)

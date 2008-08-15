@@ -200,7 +200,7 @@ class toc(object):
 			if in_toc:
 				if node.tag is etree.Comment and node.text.strip(utils.spaceCharacters) == u"end-toc":
 					if node.getparent() is not toc_parent:
-						raise DifferentParentException
+						raise DifferentParentException, u"begin-toc and end-toc have different parents"
 					in_toc = False
 				else:
 					to_remove.add(node)

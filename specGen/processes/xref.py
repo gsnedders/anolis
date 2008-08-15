@@ -47,7 +47,7 @@ class xref(object):
 			
 			if len(term) > 0:
 				if not allow_duplicate_dfns and term in self.dfns:
-					raise DuplicateDfnException, term
+					raise DuplicateDfnException, u'The term "%s" is defined more than once' % term
 				
 				link_to = dfn
 				
