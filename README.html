@@ -104,8 +104,19 @@ tracker</a></dfn>.</p>
 <dfn id=help><code>--help</code></dfn> (or <dfn id=h><code>-h</code></dfn>) option gives some
 basic help.</p>
 
-<p>The most basic options alter what is used to parse and serialize the
-document: by default, html5lib is used to parse the document; passing the
+<p>The <dfn id=enable><code>--enable</code></dfn> and <dfn id=disable><code>--disable</code></dfn>
+options enable/disable respectively the process given as the option value (e.g.,
+<code>--disable=toc</code> disables building the <a href=#table-of-contents/section-numbering title="table of
+contents/section numbering">table of contents and numbering sections</a>).
+The default processes are <code>sub</code> (<a href=#substitution>substitution</a>),
+<code>toc</code> (<a href=#table-of-contents/section-numbering>table of contents/section numbering</a>), and
+<code>xref</code> (<a href=#cross-referencing>cross-referencing</a>). Any enabled process loaded
+via <code>from processes import foo</code>, and if that fails <code>import
+foo</code> (where <code>foo</code> is the process), and is then called as
+<code>foo.foo(ElementTree, **kwargs)</code>.</p>
+
+<p>Some options alter what is used to parse and serialize the document: by
+default, html5lib is used to parse the document; passing the
 <dfn id=lxml.html><code>--lxml.html</code></dfn> option uses libxml2's HTML parser and
 serializer instead (this is quicker, but does not comply to the <a href=http://whatwg.org/html5>HTML 5</a> standard, and sometimes results in a
 <a href=#fatal-error>fatal error</a>)<!--; passing the XXX: need double hyphen
@@ -128,6 +139,16 @@ do not have to be a single character) respecively. They default to U+000A LINE
 FEED (LF) and U+0009 CHARACTER TABULATION (tab) respectively. These are only
 used when generating large trees of generated markup, such as the table of
 contents.</p>
+
+<p>Upon a <dfn id=fatal-error>fatal error</dfn>, processing of the document is terminated and
+the output file is left unchanged.</p>
+
+<p>The <dfn id=textcontent>textContent</dfn> property is the same as that defined in <a href=http://w3.org/TR/DOM-Level-3-Core/>DOM Level 3 Core</a> on the Node
+interface.</p>
+
+<p><dfn id=whitespace>Whitespace</dfn> is as defined in <a href=http://whatwg.org/html5>HTML
+5</a>: <q>U+0020 SPACE, U+0009 CHARACTER TABULATION (tab), U+000A LINE FEED
+(LF), U+000C FORM FEED (FF), and U+000D CARRIAGE RETURN (CR)</q>.</p>
 
 <p><dfn id=id-generation title="id generation">When an <code>id</code> attribute is needed, it is
 created as follows</dfn>:
@@ -196,21 +217,12 @@ under the <a href=#processes title=processes>process</a> to which they belong.</
 are the local name of the element <!--either--> in null namespace<!-- or in the
 <dfn>HTML namespace</dfn> (<code>http://www.w3.org/1999/xhtml</code>)-->.</p>
 
-<p>Upon a <dfn id=fatal-error>fatal error</dfn> processing of the document is terminated and
-nothing is written to the output file.</p>
+<h3 id=cross-referencing><span class=secno>4.1 </span><dfn>Cross-referencing</dfn></h3>
 
-<p>The <dfn id=textcontent>textContent</dfn> property is the same as that defined in <a href=http://w3.org/TR/DOM-Level-3-Core/>DOM Level 3 Core</a> on the Node
-interface.</p>
-
-<p><dfn id=whitespace>Whitespace</dfn> is as defined in <a href=http://whatwg.org/html5>HTML
-5</a>: <q>U+0020 SPACE, U+0009 CHARACTER TABULATION (tab), U+000A LINE FEED
-(LF), U+000C FORM FEED (FF), and U+000D CARRIAGE RETURN (CR)</q>.</p>
-
-<h3 id=cross-referencing><span class=secno>4.1 </span>Cross-referencing</h3>
-
-<p><dfn id=cross-referencing-0>Cross-referencing</dfn> has three essential parts: <dfn id=definition title=definition>definitions</dfn> that define <dfn id=term title=term>terms</dfn>,
-and <dfn id=instance title=instance>instances</dfn> of those
-<a href=#term title=term>terms</a>.</p>
+<p>Cross-referencing has three essential parts:
+<dfn id=definition title=definition>definitions</dfn> that define
+<dfn id=term title=term>terms</dfn>, and <dfn id=instance title=instance>instances</dfn> of
+those <a href=#term title=term>terms</a>.</p>
 
 <p><a href=#definition title=definition>Definitions</a> are marked-up using the
 <code>dfn</code> element: the <a href=#definition>definition</a> itself is taken from the
@@ -274,7 +286,7 @@ the <code>a</code> element goes within the element containing the
 <code>&lt;i&gt;foo&lt;/i&gt;</code> becomes <code>&lt;i&gt;&lt;a
 href=#foo&gt;foo&lt;/a&gt;&lt;/i&gt;</code>).</p>
 
-<h3 id=table-of-contents/section-numbering><span class=secno>4.2 </span>Table of contents/section numbering</h3>
+<h3 id=table-of-contents/section-numbering><span class=secno>4.2 </span><dfn>Table of contents/section numbering</dfn></h3>
 
 <p>To create a table of contents, and to number the <a href=#section title=section>sections</a> of the document, an <dfn id=outline>outline</dfn> is
 created (this is a list of <a href=#section title=section>sections</a>, which can each
@@ -330,7 +342,7 @@ removed.</p>
 <var>sub_identifier</var> equal to <code>toc</code>, and the table of contents
 as the replacement.</p>
 
-<h3 id=substitution><span class=secno>4.3 </span>Substitution</h3>
+<h3 id=substitution><span class=secno>4.3 </span><dfn>Substitution</dfn></h3>
 
 <p>The <dfn id=w3c-status>W3C status</dfn> is found, when needed by one of the substitutions,
 by iterating all text nodes in document order (i.e., attribute values and

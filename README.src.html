@@ -89,8 +89,19 @@ tracker</a></dfn>.</p>
 <dfn><code>--help</code></dfn> (or <dfn><code>-h</code></dfn>) option gives some
 basic help.</p>
 
-<p>The most basic options alter what is used to parse and serialize the
-document: by default, html5lib is used to parse the document; passing the
+<p>The <dfn><code>--enable</code></dfn> and <dfn><code>--disable</code></dfn>
+options enable/disable respectively the process given as the option value (e.g.,
+<code>--disable=toc</code> disables building the <span title="table of
+contents/section numbering">table of contents and numbering sections</span>).
+The default processes are <code>sub</code> (<span>substitution</span>),
+<code>toc</code> (<span>table of contents/section numbering</span>), and
+<code>xref</code> (<span>cross-referencing</span>). Any enabled process loaded
+via <code>from processes import foo</code>, and if that fails <code>import
+foo</code> (where <code>foo</code> is the process), and is then called as
+<code>foo.foo(ElementTree, **kwargs)</code>.</p>
+
+<p>Some options alter what is used to parse and serialize the document: by
+default, html5lib is used to parse the document; passing the
 <dfn><code>--lxml.html</code></dfn> option uses libxml2's HTML parser and
 serializer instead (this is quicker, but does not comply to the <a
 href="http://whatwg.org/html5">HTML 5</a> standard, and sometimes results in a
@@ -116,6 +127,17 @@ do not have to be a single character) respecively. They default to U+000A LINE
 FEED (LF) and U+0009 CHARACTER TABULATION (tab) respectively. These are only
 used when generating large trees of generated markup, such as the table of
 contents.</p>
+
+<p>Upon a <dfn>fatal error</dfn>, processing of the document is terminated and
+the output file is left unchanged.</p>
+
+<p>The <dfn>textContent</dfn> property is the same as that defined in <a
+href="http://w3.org/TR/DOM-Level-3-Core/">DOM Level 3 Core</a> on the Node
+interface.</p>
+
+<p><dfn>Whitespace</dfn> is as defined in <a href="http://whatwg.org/html5">HTML
+5</a>: <q>U+0020 SPACE, U+0009 CHARACTER TABULATION (tab), U+000A LINE FEED
+(LF), U+000C FORM FEED (FF), and U+000D CARRIAGE RETURN (CR)</q>.</p>
 
 <p><dfn title="id generation">When an <code>id</code> attribute is needed, it is
 created as follows</dfn>:
@@ -184,23 +206,12 @@ under the <span title="processes">process</span> to which they belong.</p>
 are the local name of the element <!--either--> in null namespace<!-- or in the
 <dfn>HTML namespace</dfn> (<code>http://www.w3.org/1999/xhtml</code>)-->.</p>
 
-<p>Upon a <dfn>fatal error</dfn> processing of the document is terminated and
-nothing is written to the output file.</p>
+<h3><dfn>Cross-referencing</dfn></h3>
 
-<p>The <dfn>textContent</dfn> property is the same as that defined in <a
-href="http://w3.org/TR/DOM-Level-3-Core/">DOM Level 3 Core</a> on the Node
-interface.</p>
-
-<p><dfn>Whitespace</dfn> is as defined in <a href="http://whatwg.org/html5">HTML
-5</a>: <q>U+0020 SPACE, U+0009 CHARACTER TABULATION (tab), U+000A LINE FEED
-(LF), U+000C FORM FEED (FF), and U+000D CARRIAGE RETURN (CR)</q>.</p>
-
-<h3>Cross-referencing</h3>
-
-<p><dfn>Cross-referencing</dfn> has three essential parts: <dfn
-title="definition">definitions</dfn> that define <dfn title="term">terms</dfn>,
-and <dfn title="instance">instances</dfn> of those
-<span title="term">terms</span>.</p>
+<p>Cross-referencing has three essential parts:
+<dfn title="definition">definitions</dfn> that define
+<dfn title="term">terms</dfn>, and <dfn title="instance">instances</dfn> of
+those <span title="term">terms</span>.</p>
 
 <p><span title="definition">Definitions</span> are marked-up using the
 <code>dfn</code> element: the <span>definition</span> itself is taken from the
@@ -267,7 +278,7 @@ the <code>a</code> element goes within the element containing the
 <code>&lt;i>foo&lt;/i></code> becomes <code>&lt;i>&lt;a
 href=#foo>foo&lt;/a>&lt;/i></code>).</p>
 
-<h3>Table of contents/section numbering</h3>
+<h3><dfn>Table of contents/section numbering</dfn></h3>
 
 <p>To create a table of contents, and to number the <span
 title="section">sections</span> of the document, an <dfn>outline</dfn> is
@@ -326,7 +337,7 @@ removed.</p>
 <var>sub_identifier</var> equal to <code>toc</code>, and the table of contents
 as the replacement.</p>
 
-<h3>Substitution</h3>
+<h3><dfn>Substitution</dfn></h3>
 
 <p>The <dfn>W3C status</dfn> is found, when needed by one of the substitutions,
 by iterating all text nodes in document order (i.e., attribute values and
