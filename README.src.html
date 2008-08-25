@@ -32,7 +32,7 @@ changing the numbering of many others, leading to it being advantageous to do it
 programmatically.</p>
 
 <p>The spec-gen does this on HTML documents, as a number of sequential
-processes. Currently cross- referencing, section numbering, table of contents
+processes. Currently cross-referencing, section numbering, table of contents
 creation, and a number of substitutions are done (mainly relating to the current
 date).</p>
 
@@ -339,6 +339,28 @@ as the replacement.</p>
 
 <h3><dfn>Substitution</dfn></h3>
 
+<p>Various strings are replaced in magic ways: a <dfn>normal string
+substitution</dfn> takes the form of <code>[xxx]</code> where xxx is
+case-sensitively the replacement, which may be followed by any characters apart
+from U+005D RIGHT SQUARE BRACKET (]) before the final U+005D RIGHT SQUARE
+BRACKET character — these extra characters are effectively a comment, and
+carry absolutely no meaning, and vanish into some as-of-yet unknown abyss when
+the string replacement is done. The entire string must be contained within a
+single text node.</p>
+
+<p>A <dfn>normal comment substitution</dfn> is one where there is a string,
+<var>sub_identifier</var>, that identifies the comment for the substitution, and
+the replacement. All nodes between a comment with a value equal to (with leading
+and trailing <span>whitespace</span> removed) <code>begin-</code> followed by
+<var>sub_identifier</var> and one with q value equal to (with leading and
+trailing <span>whitespace</span> removed) <code>end-</code> followed by
+<var>sub_identifier</var> are removed, and replaced with the replacement.
+Additionally, any comment (with leading and trailing <span>whitespace</span>
+removed) with a value equal to <var>sub_identifier</var> is replaced with a
+comment with a value of <code>begin-</code> followed by
+<var>sub_identifier</var>, the replacement, and then a comment with a value of
+<code>end-</code> followed by <var>sub_identifier</var>.</p>
+
 <p>The <dfn>W3C status</dfn> is found, when needed by one of the substitutions,
 by iterating all text nodes in document order (i.e., attribute values and
 comments have no effect), and for each node, the following is done (in this
@@ -400,17 +422,6 @@ status</span> under the following mapping:</p>
 		<td>W3C Working Group Note
 </table>
 
-<h4>String substitutions</h4>
-
-<p>Various strings are replaced in magic ways: a <dfn>normal string
-substitution</dfn> takes the form of <code>[xxx]</code> where xxx is
-case-sensitively the replacement, which may be followed by any characters apart
-from U+005D RIGHT SQUARE BRACKET (]) before the final U+005D RIGHT SQUARE
-BRACKET character — these extra characters are effectively a comment, and
-carry absolutely no meaning, and vanish into some as-of-yet unknown abyss when
-the string replacement is done. The entire string must be contained within a
-single text node.</p>
-
 <p>By default, the <span title="normal string substitution">normal string
 substitutions</span> are:</p>
 
@@ -438,45 +449,6 @@ document, or an empty string if such a <code>title</code> element does not
 exist.
 </dl>
 
-<p>If <dfn><code>--w3c-compat-substitutions</code></dfn> is enabled, the
-following <span title="normal string substitution">normal string
-substitutions</span> are done in addition to those above (also see the extra
-comment substitutions that are done below):</p>
-
-<dl>
-	<dt><code>[STATUS]</code>
-	<dd>This is replaced with the <span>W3C status</span>.
-	<dt><code>[LONGSTATUS]</code>
-	<dd>This is replaced with the <span>long W3C status</span>.
-</dl>
-
-<p>There is one further string substitution, and this is only done when
-<dfn><code>--w3c-compat-crazy-substitutions</code></dfn> is enabled (note that
-this is not included in <code>--w3c-compat</code>). A string of
-<code>http://www.w3.org/StyleSheets/TR/W3C-</code> followed by one or more
-characters in the range U+0041 LATIN CAPITAL LETTER A to U+005A LATIN CAPITAL
-LETTER Z (A–Z) is replaced with whatever
-<code>http://www.w3.org/StyleSheets/TR/W3C-[STATUS]</code> would evaluate to be.
-Like the <span title="normal string substitution">normal string
-substitutions</span>, this string must be contained in a single text node.</p>
-
-<!-- Is that crazy enough to justify the option name? -->
-
-<h4>Comment substitutions</h4>
-
-<p>A <dfn>normal comment substitution</dfn> is one where there is a string,
-<var>sub_identifier</var>, that identifies the comment for the substitution, and
-the replacement. All nodes between a comment with a value equal to (with leading
-and trailing <span>whitespace</span> removed) <code>begin-</code> followed by
-<var>sub_identifier</var> and one with q value equal to (with leading and
-trailing <span>whitespace</span> removed) <code>end-</code> followed by
-<var>sub_identifier</var> are removed, and replaced with the replacement.
-Additionally, any comment (with leading and trailing <span>whitespace</span>
-removed) with a value equal to <var>sub_identifier</var> is replaced with a
-comment with a value of <code>begin-</code> followed by
-<var>sub_identifier</var>, the replacement, and then a comment with a value of
-<code>end-</code> followed by <var>sub_identifier</var>.</p>
-
 <p>There is one comment substitution by default. Any nodes between a comment
 with a value equal to (with leading and trailing <span>whitespace</span>
 removed) <code>begin-link</code> and one with a value equal to
@@ -485,9 +457,19 @@ a <code>href</code> attribute equal to the <code>textContent</code> of all the
 nodes between the two comments concatenated in document order. The two comments
 must have the same parent, otherwise a <span>fatal error</span> occurs.</p>
 
-<p>If <code>--w3c-compat-substitutions</code> is enabled, the following <span
-title="normal comment substitution">normal comment substitutions</span> are
-done:</p>
+<p>If <dfn><code>--w3c-compat-substitutions</code></dfn> is enabled, the
+following <span title="normal string substitution">normal string
+substitutions</span> are done in addition to those above:</p>
+
+<dl>
+	<dt><code>[STATUS]</code>
+	<dd>This is replaced with the <span>W3C status</span>.
+	<dt><code>[LONGSTATUS]</code>
+	<dd>This is replaced with the <span>long W3C status</span>.
+</dl>
+
+<p>Additionally, the following <span title="normal comment substitution">normal
+comment substitutions</span> are done:</p>
 
 <dl>
 	<dt><var>sub_identifier</var> equal to <code>logo</code>
@@ -513,6 +495,18 @@ and &lt;a href="http://www.w3.org/Consortium/Legal/copyright-documents">document
 use&lt;/a> rules apply.&lt;/p></code> (parsed as an XML fragment, and serialized
 into the output document in the needed format).
 </dl>
+
+<p>There is one further string substitution, and this is only done when
+<dfn><code>--w3c-compat-crazy-substitutions</code></dfn> is enabled (note that
+this is not included in <code>--w3c-compat</code>). A string of
+<code>http://www.w3.org/StyleSheets/TR/W3C-</code> followed by one or more
+characters in the range U+0041 LATIN CAPITAL LETTER A to U+005A LATIN CAPITAL
+LETTER Z (A–Z) is replaced with whatever
+<code>http://www.w3.org/StyleSheets/TR/W3C-[STATUS]</code> would evaluate to be.
+Like the <span title="normal string substitution">normal string
+substitutions</span>, this string must be contained in a single text node.</p>
+
+<!-- Is that crazy enough to justify the option name? -->
 
 <h2 class="no-num">Acknowledgements</h2>
 
