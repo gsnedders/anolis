@@ -29,7 +29,7 @@ def main():
 			#if opts.xml:
 			if False:
 				tree = etree.parse(input)
-			# Parse as HTML using lmxl.html
+			# Parse as HTML using lxml.html
 			elif opts.lxml_html:
 				tree = lxml.html.parse(input)
 			# Parse as HTML using html5lib
