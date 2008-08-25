@@ -87,9 +87,11 @@ def main():
 def getOptParser():
 	parser = OptionParser(usage = __doc__, version="%prog 1.0RC1-dev")
 	
-	parser.add_option("", "--enable", action="callback", callback=enable, type="string", dest="processes")
+	parser.add_option("", "--enable", action="callback", callback=enable,
+		type="string", dest="processes", help="Enable the process given as the option value")
 	
-	parser.add_option("", "--disable", action="callback", callback=disable, type="string")
+	parser.add_option("", "--disable", action="callback", callback=disable,
+		type="string", help="Disable the process given as the option value")
 	
 	#parser.add_option("", "", action="store_true",
 	#	dest="xml", help="Use an XML parser/serializer.")
