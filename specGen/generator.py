@@ -24,9 +24,14 @@ from processes import xref, toc, sub
 class generator(object):
 	""" This oversees all the actual work done """
 	
-	def process(self, tree, processes = [xref.xref, toc.toc, sub.sub], **kwargs):
+	def process(self, tree, processes, **kwargs):
 		""" Process the given tree. """
 		
 		# Find number of passes to do
 		for process in processes:
-			process(tree, **kwargs)
+			try:
+				process_module = getattr(__import__('processes', globals(), locals(), [process], -1), process)
+			except ImportError:
+				process_module = __import__(process, globals(), locals(), [], -1)
+			
+			getattr(process_module, process)(tree, **kwargs)
