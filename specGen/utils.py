@@ -155,7 +155,7 @@ def copyContentForRemoval(node):
 			else:
 				node.getparent().text += node.text
 	# Re-parent all the children of the element we're removing
-	for child in node.iterchildren():
+	for child in node:
 		node.addprevious(child)
 	# Preserve the element tail
 	if node.tail is not None:
