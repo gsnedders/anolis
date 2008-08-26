@@ -26,9 +26,9 @@ from specGen import utils
 from specGen.processes import outliner
 
 # These are just the non-interactive elements to be removed
-remove_elements_from_toc = (u"dfn",)
+remove_elements_from_toc = frozenset([u"dfn",])
 # These are, however, all the attributes to be removed
-remove_attributes_from_toc = (u"id",)
+remove_attributes_from_toc = frozenset([u"id",])
 
 class toc(object):
 	"""Build and add TOC."""
