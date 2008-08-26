@@ -25,11 +25,11 @@ from copy import deepcopy
 
 from specGen import utils
 
-instance_elements = (u"span", u"abbr", u"code", u"var", u"i")
-w3c_instance_elements = (u"abbr", u"acronym", u"b", u"bdo", u"big", u"code", u"del", u"em", u"i", u"ins", u"kbd", u"label", u"legend", u"q", u"samp", u"small", u"span", u"strong", u"sub", u"sup", u"tt", u"var")
+instance_elements = frozenset([u"span", u"abbr", u"code", u"var", u"i"])
+w3c_instance_elements = frozenset([u"abbr", u"acronym", u"b", u"bdo", u"big", u"code", u"del", u"em", u"i", u"ins", u"kbd", u"label", u"legend", u"q", u"samp", u"small", u"span", u"strong", u"sub", u"sup", u"tt", u"var"])
 
 # Instances cannot be in the stack with any of these element, or with interactive elements
-instance_not_in_stack_with = (u"dfn",)
+instance_not_in_stack_with = frozenset([u"dfn",])
 
 non_alphanumeric_spaces = re.compile(r"[^a-zA-Z0-9 \-]+")
 
