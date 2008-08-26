@@ -52,7 +52,7 @@ def buildTestSuite():
 				
 				# Run the spec-gen
 				gen = generator.generator()
-				gen.process(tree)
+				gen.process(tree, set(["sub", "xref", "toc"]))
 				
 				# Get the output
 				walker = treewalkers.getTreeWalker("lxml")
