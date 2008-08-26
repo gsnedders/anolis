@@ -462,10 +462,12 @@ exist.
 <p>There is one comment substitution by default. Any nodes between a comment
 with a value equal to (with leading and trailing <span>whitespace</span>
 removed) <code>begin-link</code> and one with a value equal to
-<code>end-link</code> are effectively wrapped in an <code>a</code> element, with
-a <code>href</code> attribute equal to the <code>textContent</code> of all the
-nodes between the two comments concatenated in document order. The two comments
-must have the same parent, otherwise a <span>fatal error</span> occurs.</p>
+<code>end-link</code>, with <span>interactive content</span> elements removed
+(though children of those elements preserved), are effectively wrapped in an
+<code>a</code> element which has a <code>href</code> attribute equal to the
+<code>textContent</code> of all the nodes between the two comments concatenated
+in document order. The two comments must have the same parent, otherwise a
+<span>fatal error</span> occurs.</p>
 
 <p>If <dfn><code>--w3c-compat-substitutions</code></dfn> is enabled, the
 following <span title="normal string substitution">normal string
