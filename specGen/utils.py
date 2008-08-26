@@ -34,6 +34,9 @@ heading_content = frozenset([u"h1", u"h2", u"h3", u"h4", u"h5", u"h6", u"header"
 sectioning_content = frozenset([u"body", u"section", u"nav", u"article", u"aside"])
 sectioning_root = frozenset([u"blockquote", u"figure", u"td", u"datagrid"])
 
+always_interactive_content = frozenset([u"a", u"bb", u"details", u"datagrid"])
+media_elements = frozenset([u"audio", u"video"])
+
 non_sgml_name = re.compile("[^A-Za-z0-9_:.]+")
 
 if sys.maxunicode == 0xFFFF:
@@ -134,8 +137,8 @@ def removeInteractiveContentChildren(element):
 		element.getparent().remove(element)
 
 def isInteractiveContent(element):
-	if element.tag in (u"a", u"bb", u"details", u"datagrid") \
-	or element.tag in (u"audio", u"video") and element.get(u"controls") is not None \
+	if element.tag in always_interactive_content \
+	or element.tag in media_elements and element.get(u"controls") is not None \
 	or element.tag == u"menu" and element.get(u"type") is not None and element.get(u"type").lower() == u"toolbar":
 		return True
 	else:
