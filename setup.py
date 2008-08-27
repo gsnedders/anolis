@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(name = "specGen",
 	license="""MIT""",
-	version = "1.0RC1-dev",
+	version = "1.0",
 	author = "Geoffrey Sneddon",
 	author_email = "geoffers@gmail.com",
 	packages = ["specGen", "specGen/processes"],

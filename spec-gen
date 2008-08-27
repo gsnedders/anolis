@@ -82,7 +82,7 @@ def main():
 		sys.exit(2)
 
 def getOptParser():
-	parser = OptionParser(usage = __doc__, version="%prog 1.0RC1-dev")
+	parser = OptionParser(usage = __doc__, version="%prog 1.0")
 	
 	parser.add_option("", "--enable", action="callback", callback=enable,
 		type="string", dest="processes", help="Enable the process given as the option value")
