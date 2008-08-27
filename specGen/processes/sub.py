@@ -26,6 +26,8 @@ from copy import deepcopy
 
 from specGen import utils
 
+latest_version = re.compile(u"latest[%s]+version" % utils.spaceCharacters, re.IGNORECASE)
+
 w3c_tr_url_status = re.compile(r"http://www\.w3\.org/TR/[^/]*/(MO|WD|CR|PR|REC|PER|NOTE)-")
 
 year = re.compile(r"\[YEAR[^\]]*\]")
@@ -186,8 +188,8 @@ class sub(object):
 	
 	def getW3CStatus(self, ElementTree, **kwargs):
 		# Get all text nodes that contain case-insensitively "latest version" with any amount of whitespace inside the phrase, or contain http://www.w3.org/TR/
-		for text in ElementTree.xpath(u"//text()[contains(normalize-space(translate(., 'AEILNORSTV', 'aeilnorstv')), 'latest version') or contains(., 'http://www.w3.org/TR/')]"):
-			if u"latest version" in text.lower():
+		for text in ElementTree.xpath(u"//text()[contains(translate(., 'LATEST', 'latest'), 'latest') and contains(translate(., 'VERSION', 'version'), 'version') or contains(., 'http://www.w3.org/TR/')]"):
+			if latest_version.search(text):
 				return u"ED"
 			elif w3c_tr_url_status.search(text):
 				return w3c_tr_url_status.search(text).group(1)

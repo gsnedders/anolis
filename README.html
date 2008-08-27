@@ -14,7 +14,7 @@ color: #fff;
 
 </head><body><header>
 	<h1>spec-gen 1.0RC1-dev</h1>
-	<h2 class="no-num no-toc">Documentation — 26 August 2008</h2>
+	<h2 class="no-num no-toc">Documentation — 27 August 2008</h2>
 </header>
 
 <h2 class="no-num no-toc" id=contents>Contents</h2>
@@ -377,10 +377,9 @@ comments have no effect), and for each node, the following is done (in this
 order):</p>
 
 <ol>
-	<li>If the node contains, case-insensitively, "latest version" (where the
-middle space is one or more U+0020 SPACE, U+0009 CHARACTER TABULATION (tab),
-U+000A LINE FEED (LF), or U+000D CARRIAGE RETURN (CR) characters — a difference from the normal definition of <a href=#whitespace>whitespace</a>, as it does not include
-U+000C FORM FEED (FF)), searching stops, and the default is used (ED).
+	<li>If the node contains, case-insensitively, "latest", followed by one or
+more <a href=#whitespace>whitespace</a> characters, followed by "version", searching stops,
+and the default is used (ED).
 	</li><li>Otherwise, if the node, case-sensitively, contains
 "http://www.w3.org/TR/" followed by one of "MO", "WD", "CR", "PR", "REC", "PER",
 or "NOTE", which in turn is followed by U+002D HYPHEN-MINUS (-), then searching
