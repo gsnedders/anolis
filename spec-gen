@@ -40,9 +40,6 @@ def main():
 			# Close the input file
 			input.close()
 			
-			# Create the generator
-			gen = generator.generator()
-			
 			# Remove the option we pass as an argument
 			processes = opts.processes
 			del opts.processes
@@ -52,9 +49,9 @@ def main():
 			
 			# Run the generator, and profile, or not, as the case may be
 			if kwargs["profile"]:
-				cProfile.runctx("gen.process(tree, processes, **kwargs)", {}, {"gen": gen, "tree": tree, "processes": processes, "kwargs": kwargs})
+				cProfile.runctx("gen.process(tree, processes, **kwargs)", {}, {"gen": generator, "tree": tree, "processes": processes, "kwargs": kwargs})
 			else:
-				gen.process(tree, processes, **kwargs)
+				generator.process(tree, processes, **kwargs)
 			
 			# Serialize to XML
 			#if opts.xml:

@@ -19,17 +19,14 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-class generator(object):
-	""" This oversees all the actual work done """
+def process(tree, processes=set(["sub", "toc", "xref"]), **kwargs):
+	""" Process the given tree. """
 	
-	def process(self, tree, processes=set(["sub", "toc", "xref"]), **kwargs):
-		""" Process the given tree. """
+	# Find number of passes to do
+	for process in processes:
+		try:
+			process_module = getattr(__import__('processes', globals(), locals(), [process], -1), process)
+		except ImportError:
+			process_module = __import__(process, globals(), locals(), [], -1)
 		
-		# Find number of passes to do
-		for process in processes:
-			try:
-				process_module = getattr(__import__('processes', globals(), locals(), [process], -1), process)
-			except ImportError:
-				process_module = __import__(process, globals(), locals(), [], -1)
-			
-			getattr(process_module, process)(tree, **kwargs)
+		getattr(process_module, process)(tree, **kwargs)

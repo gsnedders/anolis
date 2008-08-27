@@ -51,8 +51,7 @@ def buildTestSuite():
 				expected = open(file_name[:-9] + ".html", "r")
 				
 				# Run the spec-gen
-				gen = generator.generator()
-				gen.process(tree, set(["sub", "xref", "toc"]))
+				generator.process(tree)
 				
 				# Get the output
 				walker = treewalkers.getTreeWalker("lxml")
