@@ -19,12 +19,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-from processes import xref, toc, sub
-
 class generator(object):
 	""" This oversees all the actual work done """
 	
-	def process(self, tree, processes, **kwargs):
+	def process(self, tree, processes=set(["sub", "toc", "xref"]), **kwargs):
 		""" Process the given tree. """
 		
 		# Find number of passes to do
