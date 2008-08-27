@@ -153,10 +153,10 @@ created as follows</dfn>:
 <ol>
 	<li>If the element already has an <code>id</code> attribute, its value is
 used, and this algorithm stops; otherwise:
-	<li>If the <code>title</code> attribute's value is not empty, and does not
-consist of <span>whitespace</span> only, let <var>generated_id</var> be equal to
-its value; otherwise, let <var>generated_id</var> be equal to
-<span>textContent</span>.
+	<li>If the <code>title</code> attribute is present and its value is not
+empty and does not consist of <span>whitespace</span> only, let
+<var>generated_id</var> be equal to its value; otherwise, let
+<var>generated_id</var> be equal to <span>textContent</span>.
 	<li>The <var>generated_id</var> is stripped of leading/trailing
 <span>whitespace</span> and converted to lowercase (behaviour of this is
 dependent on the current locale setting of Python).

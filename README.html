@@ -161,10 +161,10 @@ created as follows</dfn>:
 </p><ol>
 	<li>If the element already has an <code>id</code> attribute, its value is
 used, and this algorithm stops; otherwise:
-	</li><li>If the <code>title</code> attribute's value is not empty, and does not
-consist of <a href=#whitespace>whitespace</a> only, let <var>generated_id</var> be equal to
-its value; otherwise, let <var>generated_id</var> be equal to
-<a href=#textcontent>textContent</a>.
+	</li><li>If the <code>title</code> attribute is present and its value is not
+empty and does not consist of <a href=#whitespace>whitespace</a> only, let
+<var>generated_id</var> be equal to its value; otherwise, let
+<var>generated_id</var> be equal to <a href=#textcontent>textContent</a>.
 	</li><li>The <var>generated_id</var> is stripped of leading/trailing
 <a href=#whitespace>whitespace</a> and converted to lowercase (behaviour of this is
 dependent on the current locale setting of Python).
