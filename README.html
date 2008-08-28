@@ -1,5 +1,5 @@
 <!DOCTYPE html><html lang=en-gb-x-sneddy><head><meta charset=utf-8>
-<title>spec-gen 1.0</title>
+<title>anolis 1.0</title>
 <link href=style.css rel=stylesheet>
 <style>
 a:not([href]) {
@@ -13,8 +13,8 @@ color: #fff;
 </style>
 
 </head><body><header>
-	<h1>spec-gen 1.0</h1>
-	<h2 class="no-num no-toc">Documentation — 27 August 2008</h2>
+	<h1>anolis 1.0</h1>
+	<h2 class="no-num no-toc">Documentation — 28 August 2008</h2>
 </header>
 
 <h2 class="no-num no-toc" id=contents>Contents</h2>
@@ -22,13 +22,13 @@ color: #fff;
 <!--begin-toc-->
 <ol class=toc>
 	<li><a href=#introduction><span class=secno>1 </span>Introduction</a></li>
-	<li><a href=#installing-the-spec-gen><span class=secno>2 </span>Installing the spec-gen</a>
+	<li><a href=#installing-anolis><span class=secno>2 </span>Installing anolis</a>
 		<ol>
 			<li><a href=#requirements><span class=secno>2.1 </span>Requirements</a></li>
 			<li><a href=#obtaining-a-copy><span class=secno>2.2 </span>Obtaining a copy</a></li>
 			<li><a href=#installation><span class=secno>2.3 </span>Installation</a></li>
 			<li><a href=#running-the-test-suite><span class=secno>2.4 </span>Running the test suite</a></li></ol></li>
-	<li><a href=#using-the-spec-gen><span class=secno>3 </span>Using the spec-gen</a></li>
+	<li><a href=#using-anolis><span class=secno>3 </span>Using anolis</a></li>
 	<li><a href=#processes><span class=secno>4 </span>Processes</a>
 		<ol>
 			<li><a href=#cross-referencing><span class=secno>4.1 </span>Cross-referencing</a></li>
@@ -39,19 +39,19 @@ color: #fff;
 
 <h2 id=introduction><span class=secno>1 </span>Introduction</h2>
 
-<p>The need for the spec-gen came from the need for long technical documents to
+<p>The need for anolis came from the need for long technical documents to
 include niceties such as cross-references and a table of contents for the
 purpose of easy navigation — doing this manually can be a great chore
 especially when sections are numbered and a section is added, consequently
 changing the numbering of many others, leading to it being advantageous to do it
 programmatically.</p>
 
-<p>The spec-gen does this on HTML documents, as a number of sequential
-processes. Currently cross-referencing, section numbering, table of contents
-creation, and a number of substitutions are done (mainly relating to the current
+<p>Anolis does this on HTML documents, as a number of sequential processes.
+Currently cross-referencing, section numbering, table of contents creation, and
+a number of substitutions are done (mainly relating to the current
 date).</p>
 
-<h2 id=installing-the-spec-gen><span class=secno>2 </span>Installing the spec-gen</h2>
+<h2 id=installing-anolis><span class=secno>2 </span>Installing anolis</h2>
 
 <h3 id=requirements><span class=secno>2.1 </span>Requirements</h3>
 
@@ -67,12 +67,12 @@ without issue.</p>
 <h3 id=obtaining-a-copy><span class=secno>2.2 </span>Obtaining a copy</h3>
 
 <p>Releases are occasionally made. A link to the latest release can be found
-from the <a href=http://spec-gen.gsnedders.com>spec-gen website</a>.</p>
+from the <a href=http://anolis.gsnedders.com>anolis website</a>.</p>
 
 <p>Alternatively, a copy can be obtained from <dfn id=our-mercurial-repository>our <a href=http://www.selenic.com/mercurial/>Mercurial</a> repository</dfn>: this is
 where our ongoing development occurs, and allows any revision (and therefore any
 release) to be downloaded. Our repository is located at
-<code><!--begin-link--><a href=http://hg.gsnedders.com/spec-gen/>http://hg.gsnedders.com/spec-gen/</a><!--end-link--></code>.
+<code><!--begin-link--><a href=http://hg.gsnedders.com/anolis/>http://hg.gsnedders.com/anolis/</a><!--end-link--></code>.
 
 </p><h3 id=installation><span class=secno>2.3 </span>Installation</h3>
 
@@ -92,12 +92,11 @@ with the following command:</p>
 
 <p><code>python runtests.py</code></p>
 
-<p>Any test failures should be reported at our <dfn id=bug-tracker><a href=http://bugs.gsnedders.com/projects/show/spec-gen>bug
-tracker</a></dfn>.</p>
+<p>Any test failures should be reported at our <dfn id=bug-tracker><a href=http://bugs.gsnedders.com/projects/show/anolis>bug tracker</a></dfn>.</p>
 
-<h2 id=using-the-spec-gen><span class=secno>3 </span>Using the spec-gen</h2>
+<h2 id=using-anolis><span class=secno>3 </span>Using anolis</h2>
 
-<p>The spec-gen is invoked through the <code>spec-gen</code> command. The
+<p>Anolis is invoked through the <code>anolis</code> command. The
 <dfn id=help><code>--help</code></dfn> (or <dfn id=h><code>-h</code></dfn>) option gives some
 basic help.</p>
 
@@ -119,10 +118,10 @@ serializer instead (this is quicker, but does not comply to the <a href=http://w
 <a href=#fatal-error>fatal error</a>)<!--; passing the XXX: need double hyphen
 <dfn><code>xml</code></dfn> option uses libxml2's XML parser instead-->.</p>
 
-<p>The spec-gen offers a <dfn id=compatibility-mode>compatibility mode</dfn>, which aims to be
-compatible with the <a href=http://www.w3.org/Style/Group/css3-src/bin/postprocess>CSS3 module
-postprocessor</a> (within reason). This is mainly provided for the sake of
-pre-existing <a href=http://w3.org/>W3C</a> documents. The
+<p>anolis offers a <dfn id=compatibility-mode>compatibility mode</dfn>, which aims to be compatible
+with the <a href=http://www.w3.org/Style/Group/css3-src/bin/postprocess>CSS3
+module postprocessor</a> (within reason). This is mainly provided for the sake
+of pre-existing <a href=http://w3.org/>W3C</a> documents. The
 <dfn id=w3c-compat><code>--w3c-compat</code></dfn> option turns on this compatibility mode,
 although specific options that turn on just one compatibility feature at a time
 are also available (and are documented below under each <a href=#processes title=processes>process</a>) — these are all implied by the
@@ -233,8 +232,8 @@ those <a href=#term title=term>terms</a>.</p>
 <code>dfn</code> element: the <a href=#definition>definition</a> itself is taken from the
 <code>title</code> attribute if it is present, otherwise it is taken from the
 <a href=#textcontent>textContent</a> property of the <code>dfn</code> element. By default,
-the spec-gen will throw a <a href=#fatal-error>fatal error</a> if a <a href=#term>term</a> is
-defined more than once: this behaviour can be turned off (causing the final
+anolis will throw a <a href=#fatal-error>fatal error</a> if a <a href=#term>term</a> is defined
+more than once: this behaviour can be turned off (causing the final
 <a href=#definition>definition</a> of the <a href=#term>term</a> to be the one that is used) by
 the <dfn id=allow-duplicate-dfns><code>--allow-duplicate-dfns</code></dfn> option.
 
@@ -529,6 +528,6 @@ Taylor for their ever needed help.</p>
 which this is partially based, and (with <a href=#w3c-compat><code>--w3c-compat</code></a>) claims to be
 partially compatible with. Further special thanks to Bert Bos for creating a
 number of things (especially as the algorithm for finding the <a href=#w3c-status>W3C
-status</a>) that took the author of the spec-gen many hours to reverse
+status</a>) that took the author of anolis many hours to reverse
 engineer.</p>
 </body></html>

@@ -1,10 +1,10 @@
 from distutils.core import setup
 
-setup(name = "specGen",
+setup(name = "anolislib",
 	license="""MIT""",
 	version = "1.0",
 	author = "Geoffrey Sneddon",
 	author_email = "geoffers@gmail.com",
-	packages = ["specGen", "specGen/processes"],
-	scripts = ["spec-gen"],
+	packages = ["anolislib", "anolislib/processes"],
+	scripts = ["anolis"],
 	)

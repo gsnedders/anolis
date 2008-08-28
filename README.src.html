@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en-gb-x-sneddy">
 <meta charset="utf-8">
-<title>spec-gen 1.0</title>
+<title>anolis 1.0</title>
 <link rel="stylesheet" href="style.css">
 <style>
 a:not([href]) {
@@ -24,19 +24,19 @@ color: #fff;
 
 <h2>Introduction</h2>
 
-<p>The need for the spec-gen came from the need for long technical documents to
+<p>The need for anolis came from the need for long technical documents to
 include niceties such as cross-references and a table of contents for the
 purpose of easy navigation — doing this manually can be a great chore
 especially when sections are numbered and a section is added, consequently
 changing the numbering of many others, leading to it being advantageous to do it
 programmatically.</p>
 
-<p>The spec-gen does this on HTML documents, as a number of sequential
-processes. Currently cross-referencing, section numbering, table of contents
-creation, and a number of substitutions are done (mainly relating to the current
+<p>Anolis does this on HTML documents, as a number of sequential processes.
+Currently cross-referencing, section numbering, table of contents creation, and
+a number of substitutions are done (mainly relating to the current
 date).</p>
 
-<h2>Installing the spec-gen</h2>
+<h2>Installing anolis</h2>
 
 <h3>Requirements</h3>
 
@@ -52,13 +52,13 @@ without issue.</p>
 <h3>Obtaining a copy</h3>
 
 <p>Releases are occasionally made. A link to the latest release can be found
-from the <a href="http://spec-gen.gsnedders.com">spec-gen website</a>.</p>
+from the <a href="http://anolis.gsnedders.com">anolis website</a>.</p>
 
 <p>Alternatively, a copy can be obtained from <dfn>our <a
 href="http://www.selenic.com/mercurial/">Mercurial</a> repository</dfn>: this is
 where our ongoing development occurs, and allows any revision (and therefore any
 release) to be downloaded. Our repository is located at
-<code><!--begin-link-->http://hg.gsnedders.com/spec-gen/<!--end-link--></code>.
+<code><!--begin-link-->http://hg.gsnedders.com/anolis/<!--end-link--></code>.
 
 <h3>Installation</h3>
 
@@ -80,12 +80,11 @@ with the following command:</p>
 <p><code>python runtests.py</code></p>
 
 <p>Any test failures should be reported at our <dfn><a
-href="http://bugs.gsnedders.com/projects/show/spec-gen">bug
-tracker</a></dfn>.</p>
+href="http://bugs.gsnedders.com/projects/show/anolis">bug tracker</a></dfn>.</p>
 
-<h2>Using the spec-gen</h2>
+<h2>Using anolis</h2>
 
-<p>The spec-gen is invoked through the <code>spec-gen</code> command. The
+<p>Anolis is invoked through the <code>anolis</code> command. The
 <dfn><code>--help</code></dfn> (or <dfn><code>-h</code></dfn>) option gives some
 basic help.</p>
 
@@ -108,11 +107,10 @@ href="http://whatwg.org/html5">HTML 5</a> standard, and sometimes results in a
 <span>fatal error</span>)<!--; passing the XXX: need double hyphen
 <dfn><code>xml</code></dfn> option uses libxml2's XML parser instead-->.</p>
 
-<p>The spec-gen offers a <dfn>compatibility mode</dfn>, which aims to be
-compatible with the <a
-href="http://www.w3.org/Style/Group/css3-src/bin/postprocess">CSS3 module
-postprocessor</a> (within reason). This is mainly provided for the sake of
-pre-existing <a href="http://w3.org/">W3C</a> documents. The
+<p>anolis offers a <dfn>compatibility mode</dfn>, which aims to be compatible
+with the <a href="http://www.w3.org/Style/Group/css3-src/bin/postprocess">CSS3
+module postprocessor</a> (within reason). This is mainly provided for the sake
+of pre-existing <a href="http://w3.org/">W3C</a> documents. The
 <dfn><code>--w3c-compat</code></dfn> option turns on this compatibility mode,
 although specific options that turn on just one compatibility feature at a time
 are also available (and are documented below under each <span
@@ -225,8 +223,8 @@ those <span title="term">terms</span>.</p>
 <code>dfn</code> element: the <span>definition</span> itself is taken from the
 <code>title</code> attribute if it is present, otherwise it is taken from the
 <span>textContent</span> property of the <code>dfn</code> element. By default,
-the spec-gen will throw a <span>fatal error</span> if a <span>term</span> is
-defined more than once: this behaviour can be turned off (causing the final
+anolis will throw a <span>fatal error</span> if a <span>term</span> is defined
+more than once: this behaviour can be turned off (causing the final
 <span>definition</span> of the <span>term</span> to be the one that is used) by
 the <dfn><code>--allow-duplicate-dfns</code></dfn> option.
 
@@ -528,6 +526,6 @@ Taylor for their ever needed help.</p>
 <p>Special thanks to Bert Bos for creating the CSS3 Module Postprocessor, on
 which this is partially based, and (with <code>--w3c-compat</code>) claims to be
 partially compatible with. Further special thanks to Bert Bos for creating a
-number of things (especially as the algorithm for finding the <span>W3C
-status</span>) that took the author of the spec-gen many hours to reverse
+number of things (especially the algorithm for finding the <span>W3C
+status</span>) that took the author of anolis many hours to reverse
 engineer.</p>

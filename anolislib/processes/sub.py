@@ -24,7 +24,7 @@ import time
 from lxml import etree
 from copy import deepcopy
 
-from specGen import utils
+from anolislib import utils
 
 latest_version = re.compile(u"latest[%s]+version" % utils.spaceCharacters, re.IGNORECASE)
 
@@ -197,6 +197,6 @@ class sub(object):
 		else:
 			return u"ED"
 
-class DifferentParentException(utils.SpecGenException):
+class DifferentParentException(utils.AnolisException):
 	"""begin-link and end-link do not have the same parent."""
 	pass

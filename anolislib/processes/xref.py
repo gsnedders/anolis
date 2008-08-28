@@ -23,7 +23,7 @@ import re
 from lxml import etree
 from copy import deepcopy
 
-from specGen import utils
+from anolislib import utils
 
 instance_elements = frozenset([u"span", u"abbr", u"code", u"var", u"i"])
 w3c_instance_elements = frozenset([u"abbr", u"acronym", u"b", u"bdo", u"big", u"code", u"del", u"em", u"i", u"ins", u"kbd", u"label", u"legend", u"q", u"samp", u"small", u"span", u"strong", u"sub", u"sup", u"tt", u"var"])
@@ -113,6 +113,6 @@ class xref(object):
 		
 		return term
 
-class DuplicateDfnException(utils.SpecGenException):
+class DuplicateDfnException(utils.AnolisException):
 	"""Term already defined."""
 	pass

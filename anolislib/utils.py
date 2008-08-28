@@ -173,6 +173,6 @@ def copyContentForRemoval(node):
 			else:
 				node.getparent().text += node.tail
 						
-class SpecGenException(Exception):
-	"""Generic spec-gen error."""
+class AnolisException(Exception):
+	"""Generic anolis error."""
 	pass

@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""usage: spec-gen [options] input output
+"""usage: anolis [options] input output
 
 Post-process a document, adding cross-references, table of contents, etc.
 """
@@ -12,7 +12,7 @@ from html5lib import treebuilders, treewalkers, serializer
 import lxml.html
 from lxml import etree
 
-from specGen import generator, utils
+from anolislib import generator, utils
 
 def main():
 	# Create the options parser
@@ -74,11 +74,11 @@ def main():
 			
 			# Close the output
 			output.close()
-		except (utils.SpecGenException, IOError, etree.XMLSyntaxError), e:
+		except (utils.AnolisException, IOError, etree.XMLSyntaxError), e:
 			sys.stderr.write(unicode(e) + u"\n")
 			sys.exit(1)
 	else:
-		sys.stderr.write(u"spec-gen expects two arguments. Use -h for help\n")
+		sys.stderr.write(u"anolis expects two arguments. Use -h for help\n")
 		sys.exit(2)
 
 def getOptParser():

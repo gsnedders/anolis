@@ -22,8 +22,8 @@
 from lxml import etree
 from copy import deepcopy
 
-from specGen import utils
-from specGen.processes import outliner
+from anolislib import utils
+from anolislib.processes import outliner
 
 # These are just the non-interactive elements to be removed
 remove_elements_from_toc = frozenset([u"dfn",])
@@ -236,6 +236,6 @@ class toc(object):
 			else:
 				node.getparent().text += whitespace
 
-class DifferentParentException(utils.SpecGenException):
+class DifferentParentException(utils.AnolisException):
 	"""begin-toc and end-toc do not have the same parent."""
 	pass

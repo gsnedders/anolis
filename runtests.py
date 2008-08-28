@@ -30,7 +30,7 @@ from html5lib import treebuilders, treewalkers, serializer
 
 from lxml import etree
 
-from specGen import generator
+from anolislib import generator
 
 def get_files(*args):
 	return glob.glob(os.path.join(*args))
@@ -50,7 +50,7 @@ def buildTestSuite():
 				# Get the expected result
 				expected = open(file_name[:-9] + ".html", "r")
 				
-				# Run the spec-gen
+				# Run anolis
 				generator.process(tree)
 				
 				# Get the output
