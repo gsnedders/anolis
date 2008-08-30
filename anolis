@@ -4,13 +4,8 @@
 Post-process a document, adding cross-references, table of contents, etc.
 """
 
-import cProfile
 from optparse import OptionParser, SUPPRESS_HELP
 import sys
-import html5lib
-from html5lib import treebuilders, treewalkers, serializer
-import lxml.html
-from lxml import etree
 
 from anolislib import generator, utils
 
@@ -22,57 +17,17 @@ def main():
 	# Check we have enough arguments
 	if len(args) >= 2:
 		try:
-			# Get input
-			input = file(args[0], "r")
-			
-			# Parse as XML:
-			#if opts.xml:
-			if False:
-				tree = etree.parse(input)
-			# Parse as HTML using lxml.html
-			elif opts.lxml_html:
-				tree = lxml.html.parse(input)
-			# Parse as HTML using html5lib
-			else:
-				parser = html5lib.HTMLParser(tree=treebuilders.getTreeBuilder("lxml", etree))
-				tree = parser.parse(input)
-			
-			# Close the input file
-			input.close()
-			
-			# Remove the option we pass as an argument
-			processes = opts.processes
-			del opts.processes
-			
-			# Turn the options into a dict
+			# Get options
 			kwargs = vars(opts)
 			
-			# Run the generator, and profile, or not, as the case may be
-			if kwargs["profile"]:
-				cProfile.runctx("gen.process(tree, processes, **kwargs)", {}, {"gen": generator, "tree": tree, "processes": processes, "kwargs": kwargs})
-			else:
-				generator.process(tree, processes, **kwargs)
+			# Get input and generate
+			input = open(args[0], "rb")
+			tree = generator.fromFile(input, **kwargs)
+			input.close()
 			
-			# Serialize to XML
-			#if opts.xml:
-			if False:
-				rendered = etree.tostring(tree, encoding="utf-8")
-			# Serialize to HTML using lxml.html
-			elif opts.lxml_html:
-				rendered = lxml.html.tostring(tree, encoding="utf-8")
-			# Serialize to HTML using html5lib
-			else:
-				walker = treewalkers.getTreeWalker("lxml")
-				s = serializer.htmlserializer.HTMLSerializer(**kwargs)
-				rendered = s.render(walker(tree), encoding="utf-8")
-			
-			# Get the output
-			output = file(args[1], "w")
-			
-			# Write to the output
-			output.write(rendered)
-			
-			# Close the output
+			# Write output
+			output = open(args[1], "wb")
+			generator.toFile(tree, output, **kwargs)
 			output.close()
 		except (utils.AnolisException, IOError, etree.XMLSyntaxError), e:
 			sys.stderr.write(unicode(e) + u"\n")

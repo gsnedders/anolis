@@ -20,15 +20,9 @@
 # THE SOFTWARE.
 
 import glob
-import re
 import StringIO
 import os
 import unittest
-
-import html5lib
-from html5lib import treebuilders, treewalkers, serializer
-
-from lxml import etree
 
 from anolislib import generator
 
@@ -43,26 +37,22 @@ def buildTestSuite():
 		def testFunc(self, file_name=file_name):
 			try:
 				# Get the input
-				input = open(file_name, "r")
-				parser = html5lib.HTMLParser(tree=treebuilders.getTreeBuilder("lxml", etree))
-				tree = parser.parse(input)
-				
-				# Get the expected result
-				expected = open(file_name[:-9] + ".html", "r")
-				
-				# Run anolis
-				generator.process(tree)
+				input = open(file_name, "rb")
+				tree = generator.fromFile(input)
+				input.close()
 				
 				# Get the output
-				walker = treewalkers.getTreeWalker("lxml")
-				s = serializer.htmlserializer.HTMLSerializer()
-				output = s.render(walker(tree), encoding="utf-8")
+				output = StringIO.StringIO()
+				generator.toFile(tree, output)
+				
+				# Get the expected result
+				expected = open(file_name[:-9] + ".html", "rb")
 				
 				# Run the test
-				self.assertEquals(output, expected.read())
+				self.assertEquals(output.getvalue(), expected.read())
 				
 				# Close the files
-				input.close()
+				output.close()
 				expected.close()
 			except IOError, err:
 				self.fail(err)
