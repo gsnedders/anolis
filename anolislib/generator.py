@@ -19,11 +19,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-import hotshot
-import hotshot.stats
-import os
-import tempfile
-
 import html5lib
 from html5lib import treebuilders, treewalkers, serializer
 import lxml.html
@@ -59,6 +54,10 @@ def fromFile(input, processes=set(["sub", "toc", "xref"]), xml=False, lxml_html=
 	
 	# Run the generator, and profile, or not, as the case may be
 	if profile:
+		import hotshot
+		import hotshot.stats
+		import os
+		import tempfile
 		statfile = tempfile.mkstemp()[1]
 		prof = hotshot.Profile(statfile)
 		prof.runcall(process, tree, processes, **kwargs)
