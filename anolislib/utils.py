@@ -172,6 +172,18 @@ def copyContentForRemoval(node):
 				node.getparent().text = node.tail
 			else:
 				node.getparent().text += node.tail
+
+global reversed
+try:
+	reversed
+except NameError:
+	def reversed(x):
+		if hasattr(x, 'keys'):
+			raise ValueError("mappings do not support reverse iteration")
+		i = len(x)
+		while i > 0:
+			i -= 1
+			yield x[i]
 						
 class AnolisException(Exception):
 	"""Generic anolis error."""
