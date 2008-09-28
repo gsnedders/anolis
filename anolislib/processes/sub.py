@@ -51,14 +51,14 @@ status_identifier = u"[STATUS"
 longstatus = re.compile(r"\[LONGSTATUS[^\]]*\]")
 longstatus_identifier = u"[LONGSTATUS"
 longstatus_map = {
-	u"MO": u"W3C Member-only Draft",
-	u"ED": u"Editor's Draft",
-	u"WD": u"W3C Working Draft",
-	u"CR": u"W3C Candidate Recommendation",
-	u"PR": u"W3C Proposed Recommendation",
-	u"REC": u"W3C Recommendation",
-	u"PER": u"W3C Proposed Edited Recommendation",
-	u"NOTE": u"W3C Working Group Note"
+    u"MO": u"W3C Member-only Draft",
+    u"ED": u"Editor's Draft",
+    u"WD": u"W3C Working Draft",
+    u"CR": u"W3C Candidate Recommendation",
+    u"PR": u"W3C Proposed Recommendation",
+    u"REC": u"W3C Recommendation",
+    u"PER": u"W3C Proposed Edited Recommendation",
+    u"NOTE": u"W3C Working Group Note"
 }
 
 w3c_stylesheet = re.compile(r"http://www\.w3\.org/StyleSheets/TR/W3C-[A-Z]+")
@@ -77,126 +77,126 @@ copyright_sub = etree.fromstring(u'<p class="copyright"><a href="http://www.w3.o
 basic_comment_subs = ()
 
 class sub(object):
-	"""Perform substitutions."""
-	
-	def __init__(self, ElementTree, w3c_compat=False, w3c_compat_substitutions=False, w3c_compat_crazy_substitutions=False, **kwargs):
-		if w3c_compat or w3c_compat_substitutions or w3c_compat_crazy_substitutions:
-			self.w3c_status = self.getW3CStatus(ElementTree, **kwargs)
-		self.stringSubstitutions(ElementTree, w3c_compat, w3c_compat_substitutions, w3c_compat_crazy_substitutions, **kwargs)
-		self.commentSubstitutions(ElementTree, w3c_compat, w3c_compat_substitutions, w3c_compat_crazy_substitutions, **kwargs)
-	
-	def stringSubstitutions(self, ElementTree, w3c_compat=False, w3c_compat_substitutions=False, w3c_compat_crazy_substitutions=False, **kwargs):
-		# Get doc_title from the title element
-		try:
-			doc_title = utils.textContent(ElementTree.getroot().find(u"head").find(u"title"))
-		except (AttributeError, TypeError):
-			doc_title = u""
-		
-		if w3c_compat or w3c_compat_substitutions:
-			# Get the right long status
-			doc_longstatus = longstatus_map[self.w3c_status]
-		
-		if w3c_compat_crazy_substitutions:
-			# Get the right stylesheet
-			doc_w3c_stylesheet = u"http://www.w3.org/StyleSheets/TR/W3C-" + self.w3c_status
-		
-		# Get all the subs we want
-		instance_string_subs = string_subs + ((title, doc_title, title_identifier),)
-		
-		# And even more in compat. mode
-		if w3c_compat or w3c_compat_substitutions:
-			instance_string_subs += ((status, self.w3c_status, status_identifier),
-			                         (longstatus, doc_longstatus, longstatus_identifier))
-		
-		# And more that aren't even enabled by default in compat. mode
-		if w3c_compat_crazy_substitutions:
-			instance_string_subs += ((w3c_stylesheet, doc_w3c_stylesheet, w3c_stylesheet_identifier),)
-		
-		for node in ElementTree.iter():
-			for regex, sub, identifier in instance_string_subs:
-				if node.text is not None and identifier in node.text:
-					node.text = regex.sub(sub, node.text)
-				if node.tail is not None and identifier in node.tail:
-					node.tail = regex.sub(sub, node.tail)
-				for name, value in node.attrib.items():
-					if identifier in value:
-						node.attrib[name] = regex.sub(sub, value)
-	
-	def commentSubstitutions(self, ElementTree, w3c_compat=False, w3c_compat_substitutions=False, w3c_compat_crazy_substitutions=False, **kwargs):
-		# Basic substitutions
-		instance_basic_comment_subs = basic_comment_subs
-		
-		# Add more basic substitutions in compat. mode
-		if w3c_compat or w3c_compat_substitutions:
-			instance_basic_comment_subs += ((logo, logo_sub),
-			                                (copyright, copyright_sub))
-		
-		# Set of nodes to remove
-		to_remove = set()
-		
-		# Link
-		in_link = False
-		for node in ElementTree.iter():
-			if in_link:
-				if node.tag is etree.Comment and node.text.strip(utils.spaceCharacters) == u"end-link":
-					if node.getparent() is not link_parent:
-						raise DifferentParentException, u"begin-link and end-link have different parents"
-					utils.removeInteractiveContentChildren(link)
-					link.set(u"href", utils.textContent(link))
-					in_link = False
-				else:
-					if node.getparent() is link_parent:
-						link.append(deepcopy(node))
-					to_remove.add(node)
-			elif node.tag is etree.Comment and node.text.strip(utils.spaceCharacters) == u"begin-link":
-				link_parent = node.getparent()
-				in_link = True
-				link = etree.Element(u"a")
-				link.text = node.tail
-				node.tail = None
-				node.addnext(link)
-		
-		# Basic substitutions
-		for comment, sub in instance_basic_comment_subs:
-			begin_sub = u"begin-" + comment
-			end_sub = u"end-" + comment
-			in_sub = False
-			for node in ElementTree.iter():
-				if in_sub:
-					if node.tag is etree.Comment and node.text.strip(utils.spaceCharacters) == end_sub:
-						if node.getparent() is not sub_parent:
-							raise DifferentParentException, u"%s and %s have different parents" % begin_sub, end_sub
-						in_sub = False
-					else:
-						to_remove.add(node)
-				elif node.tag is etree.Comment:
-					if node.text.strip(utils.spaceCharacters) == begin_sub:
-						sub_parent = node.getparent()
-						in_sub = True
-						node.tail = None
-						node.addnext(deepcopy(sub))
-					elif node.text.strip(utils.spaceCharacters) == comment:
-						node.addprevious(etree.Comment(begin_sub))
-						node.addprevious(deepcopy(sub))
-						node.addprevious(etree.Comment(end_sub))
-						node.getprevious().tail = node.tail
-						to_remove.add(node)
-		
-		# Remove nodes
-		for node in to_remove:
-			node.getparent().remove(node)
-	
-	def getW3CStatus(self, ElementTree, **kwargs):
-		# Get all text nodes that contain case-insensitively "latest version" with any amount of whitespace inside the phrase, or contain http://www.w3.org/TR/
-		for text in ElementTree.xpath(u"//text()[contains(translate(., 'LATEST', 'latest'), 'latest') and contains(translate(., 'VERSION', 'version'), 'version') or contains(., 'http://www.w3.org/TR/')]"):
-			if latest_version.search(text):
-				return u"ED"
-			elif w3c_tr_url_status.search(text):
-				return w3c_tr_url_status.search(text).group(1)
-		# Didn't find any status, return the default (ED)
-		else:
-			return u"ED"
+    """Perform substitutions."""
+    
+    def __init__(self, ElementTree, w3c_compat=False, w3c_compat_substitutions=False, w3c_compat_crazy_substitutions=False, **kwargs):
+        if w3c_compat or w3c_compat_substitutions or w3c_compat_crazy_substitutions:
+            self.w3c_status = self.getW3CStatus(ElementTree, **kwargs)
+        self.stringSubstitutions(ElementTree, w3c_compat, w3c_compat_substitutions, w3c_compat_crazy_substitutions, **kwargs)
+        self.commentSubstitutions(ElementTree, w3c_compat, w3c_compat_substitutions, w3c_compat_crazy_substitutions, **kwargs)
+    
+    def stringSubstitutions(self, ElementTree, w3c_compat=False, w3c_compat_substitutions=False, w3c_compat_crazy_substitutions=False, **kwargs):
+        # Get doc_title from the title element
+        try:
+            doc_title = utils.textContent(ElementTree.getroot().find(u"head").find(u"title"))
+        except (AttributeError, TypeError):
+            doc_title = u""
+        
+        if w3c_compat or w3c_compat_substitutions:
+            # Get the right long status
+            doc_longstatus = longstatus_map[self.w3c_status]
+        
+        if w3c_compat_crazy_substitutions:
+            # Get the right stylesheet
+            doc_w3c_stylesheet = u"http://www.w3.org/StyleSheets/TR/W3C-" + self.w3c_status
+        
+        # Get all the subs we want
+        instance_string_subs = string_subs + ((title, doc_title, title_identifier),)
+        
+        # And even more in compat. mode
+        if w3c_compat or w3c_compat_substitutions:
+            instance_string_subs += ((status, self.w3c_status, status_identifier),
+                                     (longstatus, doc_longstatus, longstatus_identifier))
+        
+        # And more that aren't even enabled by default in compat. mode
+        if w3c_compat_crazy_substitutions:
+            instance_string_subs += ((w3c_stylesheet, doc_w3c_stylesheet, w3c_stylesheet_identifier),)
+        
+        for node in ElementTree.iter():
+            for regex, sub, identifier in instance_string_subs:
+                if node.text is not None and identifier in node.text:
+                    node.text = regex.sub(sub, node.text)
+                if node.tail is not None and identifier in node.tail:
+                    node.tail = regex.sub(sub, node.tail)
+                for name, value in node.attrib.items():
+                    if identifier in value:
+                        node.attrib[name] = regex.sub(sub, value)
+    
+    def commentSubstitutions(self, ElementTree, w3c_compat=False, w3c_compat_substitutions=False, w3c_compat_crazy_substitutions=False, **kwargs):
+        # Basic substitutions
+        instance_basic_comment_subs = basic_comment_subs
+        
+        # Add more basic substitutions in compat. mode
+        if w3c_compat or w3c_compat_substitutions:
+            instance_basic_comment_subs += ((logo, logo_sub),
+                                            (copyright, copyright_sub))
+        
+        # Set of nodes to remove
+        to_remove = set()
+        
+        # Link
+        in_link = False
+        for node in ElementTree.iter():
+            if in_link:
+                if node.tag is etree.Comment and node.text.strip(utils.spaceCharacters) == u"end-link":
+                    if node.getparent() is not link_parent:
+                        raise DifferentParentException, u"begin-link and end-link have different parents"
+                    utils.removeInteractiveContentChildren(link)
+                    link.set(u"href", utils.textContent(link))
+                    in_link = False
+                else:
+                    if node.getparent() is link_parent:
+                        link.append(deepcopy(node))
+                    to_remove.add(node)
+            elif node.tag is etree.Comment and node.text.strip(utils.spaceCharacters) == u"begin-link":
+                link_parent = node.getparent()
+                in_link = True
+                link = etree.Element(u"a")
+                link.text = node.tail
+                node.tail = None
+                node.addnext(link)
+        
+        # Basic substitutions
+        for comment, sub in instance_basic_comment_subs:
+            begin_sub = u"begin-" + comment
+            end_sub = u"end-" + comment
+            in_sub = False
+            for node in ElementTree.iter():
+                if in_sub:
+                    if node.tag is etree.Comment and node.text.strip(utils.spaceCharacters) == end_sub:
+                        if node.getparent() is not sub_parent:
+                            raise DifferentParentException, u"%s and %s have different parents" % begin_sub, end_sub
+                        in_sub = False
+                    else:
+                        to_remove.add(node)
+                elif node.tag is etree.Comment:
+                    if node.text.strip(utils.spaceCharacters) == begin_sub:
+                        sub_parent = node.getparent()
+                        in_sub = True
+                        node.tail = None
+                        node.addnext(deepcopy(sub))
+                    elif node.text.strip(utils.spaceCharacters) == comment:
+                        node.addprevious(etree.Comment(begin_sub))
+                        node.addprevious(deepcopy(sub))
+                        node.addprevious(etree.Comment(end_sub))
+                        node.getprevious().tail = node.tail
+                        to_remove.add(node)
+        
+        # Remove nodes
+        for node in to_remove:
+            node.getparent().remove(node)
+    
+    def getW3CStatus(self, ElementTree, **kwargs):
+        # Get all text nodes that contain case-insensitively "latest version" with any amount of whitespace inside the phrase, or contain http://www.w3.org/TR/
+        for text in ElementTree.xpath(u"//text()[contains(translate(., 'LATEST', 'latest'), 'latest') and contains(translate(., 'VERSION', 'version'), 'version') or contains(., 'http://www.w3.org/TR/')]"):
+            if latest_version.search(text):
+                return u"ED"
+            elif w3c_tr_url_status.search(text):
+                return w3c_tr_url_status.search(text).group(1)
+        # Didn't find any status, return the default (ED)
+        else:
+            return u"ED"
 
 class DifferentParentException(utils.AnolisException):
-	"""begin-link and end-link do not have the same parent."""
-	pass
+    """begin-link and end-link do not have the same parent."""
+    pass
