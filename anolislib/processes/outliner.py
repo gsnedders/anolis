@@ -27,6 +27,7 @@ from anolislib import utils
 rank = {u"h1": -1, u"h2": -2, u"h3": -3, u"h4": -4, u"h5": -5, u"h6": -6,
         u"header": -1}
 
+
 class section(list):
     """Represents the section of a document."""
 
@@ -43,6 +44,7 @@ class section(list):
         list.extend(self, children)
         for child in children:
             child.parent = self
+
 
 class Outliner:
     """Build the outline of an HTML document."""
@@ -176,19 +178,24 @@ class Outliner:
                         # this new section. Let the element being entered be
                         # the new heading for the current section. Abort these
                         # substeps.
-                        if rank[element.tag] < rank[candidate_section.header.tag]:
+                        if rank[element.tag] < \
+                           rank[candidate_section.header.tag]:
                             self.current_section = section()
                             candidate_section.append(self.current_section)
                             self.current_section.header = element
                             break
-                        # Let new candidate section be the section that contains candidate section in the outline of current outlinee.
+                        # Let new candidate section be the section that
+                        # contains candidate section in the outline of current
+                        # outlinee.
                         # Let candidate section be new candidate section.
                         candidate_section = candidate_section.parent
                         # Return to step 2.
-                # Push the element being entered onto the stack. (This causes the algorithm to skip any descendants of the element.)
+                # Push the element being entered onto the stack. (This causes
+                # the algorithm to skip any descendants of the element.)
                 self.stack.append(element)
 
-        # If the current outlinee is null, then there was no sectioning content element or sectioning root element in the DOM. There is no outline.
+        # If the current outlinee is null, then there was no sectioning content
+        # element or sectioning root element in the DOM. There is no outline.
         try:
             return self.outlines[self.current_outlinee]
         except KeyError:
