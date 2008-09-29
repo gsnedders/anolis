@@ -95,11 +95,11 @@ def getOptParser():
                       help="Force the ID generation algorithm to create HTML 4 compliant IDs regardless of the DOCTYPE.")
 
     parser.add_option("", "--min-depth", action="store", type="int",
-                      default=2, dest="min_depth",
+                      dest="min_depth",
                       help="Highest ranking header to number/insert into TOC.")
 
     parser.add_option("", "--max-depth", action="store", type="int",
-                      default=6, dest="max_depth",
+                      dest="max_depth",
                       help="Lowest ranking header to number/insert into TOC.")
 
     parser.add_option("", "--allow-duplicate-dfns", action="store_true",
@@ -158,14 +158,14 @@ def getOptParser():
                       dest="use_best_quote_char", help=SUPPRESS_HELP)
 
     parser.add_option("", "--no-minimize-boolean-attributes",
-                      action="store_false", default=True,
+                      action="store_false",
                       dest="minimize_boolean_attributes", help=SUPPRESS_HELP)
 
     parser.add_option("", "--use-trailing-solidus", action="store_true",
                       dest="use_trailing_solidus", help=SUPPRESS_HELP)
 
     parser.add_option("", "--space-before-trailing-solidus",
-                      action="store_true", default=False,
+                      action="store_true",
                       dest="space_before_trailing_solidus", help=SUPPRESS_HELP)
 
     parser.add_option("", "--escape-lt-in-attrs", action="store_true",
