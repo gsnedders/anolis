@@ -179,7 +179,7 @@ def getOptParser():
         xml=False,
         lxml_html=False,
         newline_char=u"\n",
-        indent_char=u"\t",
+        indent_char=u" ",
         force_html4_id=False,
         min_depth=2,
         max_depth=6,

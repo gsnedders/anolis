@@ -249,7 +249,7 @@ class toc(object):
         for node in to_remove:
             node.getparent().remove(node)
 
-    def indentNode(self, node, indent=0, newline_char=u"\n", indent_char=u"\t",
+    def indentNode(self, node, indent=0, newline_char=u"\n", indent_char=u" ",
                    **kwargs):
         whitespace = newline_char + indent_char * indent
         if node.getprevious() is not None:
