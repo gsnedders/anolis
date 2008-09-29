@@ -68,8 +68,7 @@ class toc(object):
                 if section.header.tag == u"header":
                     i = 1
                     while i <= 6:
-                        header_text = section.header \
-                                                      .find(u"h" + unicode(i))
+                        header_text = section.header.find(u"h" + unicode(i))
                         if header_text is not None:
                             break
                     else:
