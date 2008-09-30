@@ -27,6 +27,8 @@ Post-process a document, adding cross-references, table of contents, etc.
 from optparse import OptionParser, SUPPRESS_HELP
 import sys
 
+from lxml import etree
+
 from anolislib import generator, utils
 
 
