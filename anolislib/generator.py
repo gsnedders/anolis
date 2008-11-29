@@ -66,7 +66,8 @@ def fromFile(input, processes=set(["sub", "toc", "xref"]), xml=False,
         try:
             import cProfile
             import pstats
-            cProfile.run("process(tree, processes, **kwargs)", statfile)
+            cProfile.runctx("process(tree, processes, **kwargs)", globals(),
+                            locals(), statfile)
             stats = pstats.Stats(statfile)
         except None:
             import hotshot
