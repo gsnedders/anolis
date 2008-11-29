@@ -95,6 +95,8 @@ def generateID(Element, force_html4_id=False, **kwargs):
             source = u"generatedID"
     else:
         source = non_ifragment.sub(u"-", source).strip(u"-")
+        if source == u"":
+            source = u"generatedID"
 
     # Initally set the id to the source
     id = source
