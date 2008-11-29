@@ -53,10 +53,6 @@ class toc(object):
         # Numbering
         num = []
 
-        # Set of elements to remove (removing elements being iterated over is
-        # undefined).
-        to_remove = set()
-
         # Loop over all sections in a DFS
         while sections:
             # Get the section and depth at the end of list
@@ -81,22 +77,15 @@ class toc(object):
             # If we have a section heading text element, regardless of depth
             if header_text is not None:
                 # Remove any existing number
-                for element in header_text.iter(u"span"):
+                for element in header_text.findall(u".//span"):
                     if utils.elementHasClass(element, u"secno"):
-                        # Preserve the element tail
-                        if element.tail is not None:
-                            if element.getprevious() is not None:
-                                if element.getprevious().tail is None:
-                                    element.getprevious().tail = element.tail
-                                else:
-                                    element.getprevious().tail += element.tail
-                            else:
-                                if element.getparent().text is None:
-                                    element.getparent().text = element.tail
-                                else:
-                                    element.getparent().text += element.tail
-                        # Remove the element
-                        to_remove.add(element)
+                        # Copy content, to prepare for the node being
+                        # removed
+                        utils.copyContentForRemoval(element, text=False,
+                                                    children=False)
+                        # Remove the element (we can do this as we're not
+                        # iterating over the elements, but over a list)
+                        element.getparent().remove(element)
 
             # Check we're in the valid depth range (min/max_depth are 1 based,
             # depth is 0 based)
@@ -161,13 +150,6 @@ class toc(object):
 
                 # If we have a header
                 if header_text is not None:
-                    # Remove all the elements in the list of nodes to remove
-                    # (so that the removal of existing numbers doesn't lead to
-                    # crazy IDs)
-                    for element in to_remove:
-                        element.getparent().remove(element)
-                    to_remove = set()
-
                     # Add ID to header
                     id = utils.generateID(header_text, **kwargs)
                     if header_text.get(u"id") is not None:
@@ -195,13 +177,14 @@ class toc(object):
                         for element_name in remove_elements_from_toc:
                             # Iterate over all the desendants of the new link
                             # with that element name
-                            for element in link.iterdescendants(element_name):
+                            for element in link.findall(u".//" + element_name):
                                 # Copy content, to prepare for the node being
                                 # removed
                                 utils.copyContentForRemoval(element)
-                                # Add the element of the list of elements to
-                                # remove
-                                to_remove.add(element)
+                                # Remove the element (we can do this as we're
+                                # not iterating over the elements, but over a
+                                # list)
+                                element.getparent().remove(element)
                         # Remove unwanted attributes
                         for element in link.iter(tag=etree.Element):
                             for attribute_name in remove_attributes_from_toc:
@@ -213,9 +196,6 @@ class toc(object):
             # next) with a higher depth value
             sections.extend([(child_section, depth + 1)
                              for child_section in reversed(section)])
-        # Remove all the elements in the list of nodes to remove
-        for element in to_remove:
-            element.getparent().remove(element)
 
     def addToc(self, ElementTree, **kwargs):
         to_remove = set()

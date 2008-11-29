@@ -133,20 +133,13 @@ def escapeXPathString(string):
 
 
 def removeInteractiveContentChildren(element):
-    # Set of elements to remove
-    to_remove = set()
-
-    # Iter over decendants of element
-    for child in element.iterdescendants(etree.Element):
+    # Iter over list of decendants of element
+    for child in element.findall(u".//*"):
         if isInteractiveContent(child):
             # Copy content, to prepare for the node being removed
             copyContentForRemoval(child)
-            # Add the element of the list of elements to remove
-            to_remove.add(child)
-
-    # Remove all elements to be removed
-    for element in to_remove:
-        element.getparent().remove(element)
+            # Remove element
+            child.getparent().remove(child)
 
 
 def isInteractiveContent(element):
@@ -159,9 +152,9 @@ def isInteractiveContent(element):
         return False
 
 
-def copyContentForRemoval(node):
+def copyContentForRemoval(node, text=True, children=True, tail=True):
     # Preserve the text, if it is an element
-    if isinstance(node.tag, basestring) and node.text is not None:
+    if isinstance(node.tag, basestring) and node.text is not None and text:
         if node.getprevious() is not None:
             if node.getprevious().tail is None:
                 node.getprevious().tail = node.text
@@ -173,10 +166,11 @@ def copyContentForRemoval(node):
             else:
                 node.getparent().text += node.text
     # Re-parent all the children of the element we're removing
-    for child in node:
-        node.addprevious(child)
+    if children:
+        for child in node:
+            node.addprevious(child)
     # Preserve the element tail
-    if node.tail is not None:
+    if node.tail is not None and tail:
         if node.getprevious() is not None:
             if node.getprevious().tail is None:
                 node.getprevious().tail = node.tail
