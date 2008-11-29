@@ -136,13 +136,20 @@ def getOptParser():
                       dest="w3c_compat_crazy_substitutions",
                       help="Do crazy W3C specific substitutions, which may cause unexpected behaviour (i.e., replacing random strings within the document with no special marker).")
 
+    profile = True
     try:
-        import hotshot
-        import hotshot.stats
+        import cProfile
+        import pstats
+    except ImportError:
+        try:
+            import hotshot
+            import hotshot.stats
+        except ImportError:
+            profile = False
+    
+    if profile:
         parser.add_option("", "--profile", action="store_true",
             dest="profile", help=SUPPRESS_HELP)
-    except ImportError:
-        pass
 
     parser.add_option("", "--inject-meta-charset", action="store_true",
                       dest="inject_meta_charset", help=SUPPRESS_HELP)

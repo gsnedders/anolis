@@ -60,15 +60,21 @@ def fromFile(input, processes=set(["sub", "toc", "xref"]), xml=False,
 
     # Run the generator, and profile, or not, as the case may be
     if profile:
-        import hotshot
-        import hotshot.stats
         import os
         import tempfile
         statfile = tempfile.mkstemp()[1]
-        prof = hotshot.Profile(statfile)
-        prof.runcall(process, tree, processes, **kwargs)
-        prof.close()
-        stats = hotshot.stats.load(statfile)
+        try:
+            import cProfile
+            import pstats
+            cProfile.run("process(tree, processes, **kwargs)", statfile)
+            stats = pstats.Stats(statfile)
+        except None:
+            import hotshot
+            import hotshot.stats
+            prof = hotshot.Profile(statfile)
+            prof.runcall(process, tree, processes, **kwargs)
+            prof.close()
+            stats = hotshot.stats.load(statfile)
         stats.strip_dirs()
         stats.sort_stats('time')
         stats.print_stats()
