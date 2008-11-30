@@ -62,10 +62,10 @@ def main():
 
 def getOptParser():
     def enable(option, opt_str, value, parser, *args, **kwargs):
-        parser.values.processes.add(opt_str)
+        parser.values.processes.add(value)
 
     def disable(option, opt_str, value, parser, *args, **kwargs):
-        parser.values.processes.discard(opt_str)
+        parser.values.processes.discard(value)
 
     parser = OptionParser(usage = __doc__, version="%prog 1.0")
 

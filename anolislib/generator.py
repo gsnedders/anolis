@@ -34,7 +34,7 @@ def process(tree, processes=set(["sub", "toc", "xref"]), **kwargs):
             process_module = getattr(__import__('processes', globals(),
                                                 locals(), [process], -1),
                                     process)
-        except ImportError:
+        except AttributeError:
             process_module = __import__(process, globals(), locals(), [], -1)
 
         getattr(process_module, process)(tree, **kwargs)
