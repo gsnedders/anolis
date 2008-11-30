@@ -192,6 +192,9 @@ class toc(object):
                                     del element.attrib[attribute_name]
                         # We don't want the old tail
                         link.tail = None
+                        # Check we haven't changed the content in all of that
+                        assert utils.textContent(header_text) == \
+                               utils.textContent(link)
             # Add subsections in reverse order (so the next one is executed
             # next) with a higher depth value
             sections.extend([(child_section, depth + 1)
