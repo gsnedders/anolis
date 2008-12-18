@@ -67,7 +67,7 @@ def getOptParser():
     def disable(option, opt_str, value, parser, *args, **kwargs):
         parser.values.processes.discard(value)
 
-    parser = OptionParser(usage = __doc__, version="%prog 1.0")
+    parser = OptionParser(usage = __doc__, version="%prog 1.1dev")
 
     parser.add_option("", "--enable", action="callback", callback=enable,
                       type="string", dest="processes",

@@ -28,7 +28,7 @@ from setuptools import setup, find_packages
 setup(
     # Basic project info
     name = "anolis",
-    version = "1.0",
+    version = "1.1dev",
     packages = find_packages(),
     scripts = ["anolis"],
     install_requires = ["html5lib>=0.10", "lxml>=2"],
