@@ -32,9 +32,9 @@ spacesRegex = re.compile(u"[%s]+" % spaceCharacters)
 
 heading_content = frozenset([u"h1", u"h2", u"h3", u"h4", u"h5", u"h6",
                              u"header"])
-sectioning_content = frozenset([u"body", u"section", u"nav", u"article",
-                                u"aside"])
-sectioning_root = frozenset([u"blockquote", u"figure", u"td", u"datagrid"])
+sectioning_content = frozenset([u"section", u"nav", u"article", u"aside"])
+sectioning_root = frozenset([u"body", u"blockquote", u"figure", u"td",
+                             u"datagrid"])
 
 always_interactive_content = frozenset([u"a", u"bb", u"details", u"datagrid"])
 media_elements = frozenset([u"audio", u"video"])
