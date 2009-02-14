@@ -80,9 +80,12 @@ def getOptParser():
     #parser.add_option("", "", action="store_true",
     #                  dest="xml", help="Use an XML parser/serializer.")
 
-    parser.add_option("", "--lxml.html", action="store_true",
-                      dest="lxml_html",
-                      help="Use lxml's HTML parser/serializer.")
+    parser.add_option("", "--parser", type="choice",
+                      choices=("html5lib", "lxml"))
+
+    parser.add_option("", "--serializer", type="choice",
+                      choices=("html5lib", "lxml"))
+
 
     parser.add_option("", "--newline-char", action="store", type="string",
                       dest="newline_char",
@@ -183,10 +186,14 @@ def getOptParser():
     parser.add_option("", "--escape-rcdata", action="store_true",
                       dest="escape_rcdata", help=SUPPRESS_HELP)
 
+    parser.add_option("", "--encoding", action="store", type=str,
+                      dest="encoding", help="Output encoding")
+
     parser.set_defaults(
         processes=set(["sub", "xref", "toc"]),
         xml=False,
-        lxml_html=False,
+        parser="html5lib",
+        serializer="html5lib",
         newline_char=u"\n",
         indent_char=u" ",
         force_html4_id=False,
@@ -209,7 +216,8 @@ def getOptParser():
         use_trailing_solidus=False,
         space_before_trailing_solidus=False,
         escape_lt_in_attrs=False,
-        escape_rcdata=False
+        escape_rcdata=False,
+        encoding="utf-8"
     )
 
     return parser

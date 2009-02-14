@@ -20,7 +20,9 @@
 # THE SOFTWARE.
 
 import html5lib
-from html5lib import treebuilders, treewalkers, serializer
+from html5lib import treebuilders, treewalkers
+from html5lib.serializer import htmlserializer
+
 import lxml.html
 from lxml import etree
 
@@ -40,20 +42,18 @@ def process(tree, processes=set(["sub", "toc", "xref"]), **kwargs):
         getattr(process_module, process)(tree, **kwargs)
 
 
-def fromFile(input, processes=set(["sub", "toc", "xref"]), xml=False,
-             lxml_html=False, profile=False, **kwargs):
+def fromFile(input, processes=set(["sub", "toc", "xref"]), parser="html5lib",
+             profile=False, **kwargs):
     # Parse as XML:
     #if xml:
     if False:
         tree = etree.parse(input)
     # Parse as HTML using lxml.html
-    elif lxml_html:
+    elif parser == "lxml":
         tree = lxml.html.parse(input)
     # Parse as HTML using html5lib
     else:
-        parser = html5lib.HTMLParser(tree=treebuilders.getTreeBuilder("lxml",
-                                                                      etree))
-        tree = parser.parse(input)
+        tree = html5lib.parse(input, treebuilder="lxml")
 
     # Close the input file
     input.close()
@@ -87,19 +87,25 @@ def fromFile(input, processes=set(["sub", "toc", "xref"]), xml=False,
     return tree
 
 
-def toFile(tree, output, xml=False, lxml_html=False, **kwargs):
+def toString(tree, encoding="utf-8", serializer="html5lib", **kwargs):
     # Serialize to XML
     #if xml:
     if False:
-        rendered = etree.tostring(tree, encoding="utf-8")
+        rendered = etree.tostring(tree, encoding=encoding)
     # Serialize to HTML using lxml.html
-    elif lxml_html:
-        rendered = lxml.html.tostring(tree, encoding="utf-8")
+    elif serializer == "lxml":
+        rendered = lxml.html.tostring(tree, encoding=encoding)
     # Serialize to HTML using html5lib
     else:
         walker = treewalkers.getTreeWalker("lxml")
-        s = serializer.htmlserializer.HTMLSerializer(**kwargs)
-        rendered = s.render(walker(tree), encoding="utf-8")
+        s = htmlserializer.HTMLSerializer(**kwargs)
+        rendered = s.render(walker(tree), encoding=encoding)
+    return rendered
+
+def toFile(tree, output, encoding="utf-8", serializer="html5lib", **kwargs):
+    
+    rendered = toString(tree, encoding=encoding, serializer=serlializer,
+                        **kwargs)
 
     # Write to the output
     output.write(rendered)
