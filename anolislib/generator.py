@@ -45,11 +45,11 @@ def process(tree, processes=set(["sub", "toc", "xref"]), **kwargs):
 def fromFile(input, processes=set(["sub", "toc", "xref"]), parser="html5lib",
              profile=False, **kwargs):
     # Parse as XML:
-    #if xml:
+    #if parser == "lxml.etree":
     if False:
         tree = etree.parse(input)
     # Parse as HTML using lxml.html
-    elif parser == "lxml":
+    elif parser == "lxml.html":
         tree = lxml.html.parse(input)
     # Parse as HTML using html5lib
     else:
@@ -87,13 +87,13 @@ def fromFile(input, processes=set(["sub", "toc", "xref"]), parser="html5lib",
     return tree
 
 
-def toString(tree, encoding="utf-8", serializer="html5lib", **kwargs):
+def toString(tree, output_encoding="utf-8", serializer="html5lib", **kwargs):
     # Serialize to XML
-    #if xml:
+    #if serializer == "lxml.etree":
     if False:
         rendered = etree.tostring(tree, encoding=encoding)
     # Serialize to HTML using lxml.html
-    elif serializer == "lxml":
+    elif serializer == "lxml.html":
         rendered = lxml.html.tostring(tree, encoding=encoding)
     # Serialize to HTML using html5lib
     else:

@@ -77,15 +77,11 @@ def getOptParser():
                       type="string",
                       help="Disable the process given as the option value")
 
-    #parser.add_option("", "", action="store_true",
-    #                  dest="xml", help="Use an XML parser/serializer.")
-
     parser.add_option("", "--parser", type="choice",
-                      choices=("html5lib", "lxml"))
+                      choices=("html5lib", "lxml.html"))
 
     parser.add_option("", "--serializer", type="choice",
-                      choices=("html5lib", "lxml"))
-
+                      choices=("html5lib", "lxml.html"))
 
     parser.add_option("", "--newline-char", action="store", type="string",
                       dest="newline_char",
@@ -186,12 +182,11 @@ def getOptParser():
     parser.add_option("", "--escape-rcdata", action="store_true",
                       dest="escape_rcdata", help=SUPPRESS_HELP)
 
-    parser.add_option("", "--encoding", action="store", type=str,
-                      dest="encoding", help="Output encoding")
+    parser.add_option("", "--output-encoding", action="store", type=str,
+                      dest="output_encoding", help="Output encoding")
 
     parser.set_defaults(
         processes=set(["sub", "xref", "toc"]),
-        xml=False,
         parser="html5lib",
         serializer="html5lib",
         newline_char=u"\n",
