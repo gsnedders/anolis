@@ -78,10 +78,12 @@ def getOptParser():
                       help="Disable the process given as the option value")
 
     parser.add_option("", "--parser", type="choice",
-                      choices=("html5lib", "lxml.html"))
+                      choices=("html5lib", "lxml.html"),
+                      help="Choose what parser to use. Valid options: html5lib, lxml.html")
 
     parser.add_option("", "--serializer", type="choice",
-                      choices=("html5lib", "lxml.html"))
+                      choices=("html5lib", "lxml.html"),
+                      help="Choose what serializer to use. Valid options: html5lib, lxml.html")
 
     parser.add_option("", "--newline-char", action="store", type="string",
                       dest="newline_char",
