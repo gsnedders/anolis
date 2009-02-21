@@ -117,7 +117,9 @@ class xref(object):
 
     def getTerm(self, element, w3c_compat=False,
                 w3c_compat_xref_normalization=False, **kwargs):
-        if element.get(u"title") is not None:
+        if element.get(u"data-anolis-xref") is not None:
+            term = element.get(u"data-anolis-xref")
+        elif element.get(u"title") is not None:
             term = element.get(u"title")
         else:
             term = utils.textContent(element)
