@@ -53,7 +53,9 @@ def fromFile(input, processes=set(["sub", "toc", "xref"]), parser="html5lib",
         tree = lxml.html.parse(input)
     # Parse as HTML using html5lib
     else:
-        tree = html5lib.parse(input, treebuilder="lxml")
+        builder = treebuilders.getTreeBuilder("lxml", etree)
+        parser = html5lib.HTMLParser(tree=builder)
+        tree = parser.parse(input)
 
     # Close the input file
     input.close()
