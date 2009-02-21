@@ -214,7 +214,7 @@ def getOptParser():
         space_before_trailing_solidus=False,
         escape_lt_in_attrs=False,
         escape_rcdata=False,
-        encoding="utf-8"
+        output_encoding="utf-8"
     )
 
     return parser

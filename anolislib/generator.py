@@ -91,20 +91,20 @@ def toString(tree, output_encoding="utf-8", serializer="html5lib", **kwargs):
     # Serialize to XML
     #if serializer == "lxml.etree":
     if False:
-        rendered = etree.tostring(tree, encoding=encoding)
+        rendered = etree.tostring(tree, encoding=output_encoding)
     # Serialize to HTML using lxml.html
     elif serializer == "lxml.html":
-        rendered = lxml.html.tostring(tree, encoding=encoding)
+        rendered = lxml.html.tostring(tree, encoding=output_encoding)
     # Serialize to HTML using html5lib
     else:
         walker = treewalkers.getTreeWalker("lxml")
         s = htmlserializer.HTMLSerializer(**kwargs)
-        rendered = s.render(walker(tree), encoding=encoding)
+        rendered = s.render(walker(tree), encoding=output_encoding)
     return rendered
 
-def toFile(tree, output, encoding="utf-8", serializer="html5lib", **kwargs):
-    
-    rendered = toString(tree, encoding=encoding, serializer=serlializer,
+def toFile(tree, output, output_encoding="utf-8", serializer="html5lib",
+           **kwargs):
+    rendered = toString(tree, encoding=output_encoding, serializer=serlializer,
                         **kwargs)
 
     # Write to the output
