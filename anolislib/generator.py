@@ -106,7 +106,7 @@ def toString(tree, output_encoding="utf-8", serializer="html5lib", **kwargs):
 
 def toFile(tree, output, output_encoding="utf-8", serializer="html5lib",
            **kwargs):
-    rendered = toString(tree, encoding=output_encoding, serializer=serlializer,
+    rendered = toString(tree, encoding=output_encoding, serializer=serializer,
                         **kwargs)
 
     # Write to the output
