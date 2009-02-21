@@ -14,7 +14,7 @@ color: #fff;
 
 </head><body><header>
     <h1>Anolis 1.1dev</h1>
-    <h2 class="no-num no-toc">Documentation — 18 December 2008</h2>
+    <h2 class="no-num no-toc">Documentation — 21 February 2009</h2>
 </header>
 
 <h2 class="no-num no-toc" id=contents>Contents</h2>
@@ -110,12 +110,20 @@ via <code>from processes import foo</code>, and if that fails <code>import
 foo</code> (where <code>foo</code> is the process), and is then called as
 <code>foo.foo(ElementTree, **kwargs)</code>.
 
-</p><p>Some options alter what is used to parse and serialize the document: by
-default, html5lib is used to parse the document; passing the
-<dfn id=lxml.html><code>--lxml.html</code></dfn> option uses libxml2's HTML parser and
-serializer instead (this is quicker, but does not comply to the <a href=http://whatwg.org/html5>HTML 5</a> standard, and sometimes results in a
-<a href=#fatal-error>fatal error</a>)<!--; passing the XXX: need double hyphen
-<dfn><code>xml</code></dfn> option uses libxml2's XML parser instead-->.
+</p><p>Some options alter what is used to parse and serialize the document: the
+<dfn id=parser><kbd>--parser</kbd></dfn> option allows either <kbd>html5lib</kbd> (the
+default) or <kbd>lxml.html</kbd> (this is quicker, but does not comply to the
+<a href=http://whatwg.org/html5>HTML 5</a> specification) to be used to parse
+the input file, and the <dfn id=serialzier><kbd>--serialzier</kbd></dfn> option allows the
+same two values, but controls the serializer used for output (note that
+lxml.html has some rather severe issues as a serializer)<!--; passing the XXX:
+need double hyphen <dfn><code>xml</code></dfn> option uses libxml2's XML parser
+instead-->.
+
+</p><p>The <dfn id=output-encoding><kbd>--output-encoding</kbd></dfn> option sets the character
+encoding used for output — this defaults to UTF-8. Treatment of characters that
+cannot be represented in the set output encoding is dependant on the serializer
+selected via the <a href=#serialzier>--serialzier</a> option.
 
 </p><p>Anolis offers a <dfn id=compatibility-mode>compatibility mode</dfn>, which aims to be compatible
 with the <a href=http://www.w3.org/Style/Group/css3-src/bin/postprocess>CSS3
