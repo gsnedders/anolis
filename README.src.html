@@ -238,14 +238,17 @@ title="definition">definitions</dfn> that define <dfn title="term">terms</dfn>,
 and <dfn title="instance">instances</dfn> of those <span
 title="term">terms</span>.
 
-<p><span title="definition">Definitions</span> are marked-up using the
-<code>dfn</code> element: the <span>definition</span> itself is taken from the
-<code>title</code> attribute if it is present, otherwise it is taken from the
+<p><span title="term">Terms</span> are taken from the
+<code>data-anolis-xref</code> attribute if present, failing that the
+<code>title</code> attribute if that is present, otherwise from the
 <span>textContent</span> property of the <code>dfn</code> element. By default,
 Anolis will throw a <span>fatal error</span> if a <span>term</span> is defined
 more than once: this behaviour can be turned off (causing the final
 <span>definition</span> of the <span>term</span> to be the one that is used) by
 the <dfn><code>--allow-duplicate-dfns</code></dfn> option.
+
+<p><span title="definition">Definitions</span> are marked-up with the
+<code>dfn</code> element.
 
 <p><span title="instance">Instances</span> are marked-up with various elements,
 depending on the setting of <dfn><code>--w3c-compat-xref-elements</code></dfn>:
@@ -261,12 +264,9 @@ if it is disabled (the default), the <code>abbr</code>, <code>code</code>,
 title="instance">instances</span>. Those that are only there in
 <span>compatibility mode</span> are there because either they should not
 semantically be used for an <span>instance</span>, or because they are not
-present in <a href="http://whatwg.org/html5">HTML 5</a>. Similar to <span
-title="definition">definitions</span>, the <span>instance</span> is taken from
-the <code>title</code> attribute if it is present, otherwise it is taken from
-the <span>textContent</span> property. An <span>instance</span> is only used if
-it does not have an <span>interactive content</span> or <code>dfn</code>
-element as either a parent or a child.
+present in <a href="http://whatwg.org/html5">HTML 5</a>. An
+<span>instance</span> is only used if it does not have an <span>interactive
+content</span> or <code>dfn</code> element as either a parent or a child.
 
 <p>Both <span title="definition">definitions</span> and <span
 title="instance">instances</span> are <dfn title="cross-reference

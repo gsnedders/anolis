@@ -14,7 +14,7 @@ color: #fff;
 
 </head><body><header>
     <h1>Anolis 1.1dev</h1>
-    <h2 class="no-num no-toc">Documentation — 21 February 2009</h2>
+    <h2 class="no-num no-toc">Documentation — 22 February 2009</h2>
 </header>
 
 <h2 class="no-num no-toc" id=contents>Contents</h2>
@@ -243,14 +243,17 @@ are the local name of the element <!--either--> in null namespace<!-- or in the
 <p>Cross-referencing has three essential parts: <dfn id=definition title=definition>definitions</dfn> that define <dfn id=term title=term>terms</dfn>,
 and <dfn id=instance title=instance>instances</dfn> of those <a href=#term title=term>terms</a>.
 
-</p><p><a href=#definition title=definition>Definitions</a> are marked-up using the
-<code>dfn</code> element: the <a href=#definition>definition</a> itself is taken from the
-<code>title</code> attribute if it is present, otherwise it is taken from the
+</p><p><a href=#term title=term>Terms</a> are taken from the
+<code>data-anolis-xref</code> attribute if present, failing that the
+<code>title</code> attribute if that is present, otherwise from the
 <a href=#textcontent>textContent</a> property of the <code>dfn</code> element. By default,
 Anolis will throw a <a href=#fatal-error>fatal error</a> if a <a href=#term>term</a> is defined
 more than once: this behaviour can be turned off (causing the final
 <a href=#definition>definition</a> of the <a href=#term>term</a> to be the one that is used) by
 the <dfn id=allow-duplicate-dfns><code>--allow-duplicate-dfns</code></dfn> option.
+
+</p><p><a href=#definition title=definition>Definitions</a> are marked-up with the
+<code>dfn</code> element.
 
 </p><p><a href=#instance title=instance>Instances</a> are marked-up with various elements,
 depending on the setting of <dfn id=w3c-compat-xref-elements><code>--w3c-compat-xref-elements</code></dfn>:
@@ -265,11 +268,9 @@ if it is disabled (the default), the <code>abbr</code>, <code>code</code>,
 <code>tt</code>, <code>var</code> elements are used for <a href=#instance title=instance>instances</a>. Those that are only there in
 <a href=#compatibility-mode>compatibility mode</a> are there because either they should not
 semantically be used for an <a href=#instance>instance</a>, or because they are not
-present in <a href=http://whatwg.org/html5>HTML 5</a>. Similar to <a href=#definition title=definition>definitions</a>, the <a href=#instance>instance</a> is taken from
-the <code>title</code> attribute if it is present, otherwise it is taken from
-the <a href=#textcontent>textContent</a> property. An <a href=#instance>instance</a> is only used if
-it does not have an <a href=#interactive-content>interactive content</a> or <code>dfn</code>
-element as either a parent or a child.
+present in <a href=http://whatwg.org/html5>HTML 5</a>. An
+<a href=#instance>instance</a> is only used if it does not have an <a href=#interactive-content>interactive
+content</a> or <code>dfn</code> element as either a parent or a child.
 
 </p><p>Both <a href=#definition title=definition>definitions</a> and <a href=#instance title=instance>instances</a> are <dfn id=cross-reference-normalization title="cross-reference
 normalization">normalized</dfn> as follows:
