@@ -8,7 +8,7 @@ a:not([href]) {
 background-color: #00f;
 color: #fff;
 }
-span:not([title=""]):not(.secno) {
+span:not([data-anolis-xref=""]):not(.secno) {
 background-color: #a00;
 color: #fff;
 }
@@ -73,7 +73,7 @@ following command:
 <h3>Running the test suite</h3>
 
 <p>The source distribution and the current development copy (in <span
-title="our mercurial repository">Mercurial</span>) both contain a test suite.
+data-anolis-xref="our mercurial repository">Mercurial</span>) both contain a test suite.
 It can be run with the following command:
 
 <p><code>python runtests.py</code>
@@ -90,14 +90,14 @@ some basic help.
 
 <p>The <dfn><code>--enable</code></dfn> and <dfn><code>--disable</code></dfn>
 options enable/disable respectively the process given as the option value
-(e.g., <code>--disable=toc</code> disables building the <span title="table of
-contents/section numbering">table of contents and numbering sections</span>).
-The default processes are <code>sub</code> (<span>substitution</span>),
-<code>toc</code> (<span>table of contents/section numbering</span>), and
-<code>xref</code> (<span>cross-referencing</span>). Any enabled process loaded
-via <code>from processes import foo</code>, and if that fails <code>import
-foo</code> (where <code>foo</code> is the process), and is then called as
-<code>foo.foo(ElementTree, **kwargs)</code>.
+(e.g., <code>--disable=toc</code> disables building the <span
+data-anolis-xref="table of contents/section numbering">table of contents and
+numbering sections</span>). The default processes are <code>sub</code>
+(<span>substitution</span>), <code>toc</code> (<span>table of contents/section
+numbering</span>), and <code>xref</code> (<span>cross-referencing</span>). Any
+enabled process loaded via <code>from processes import foo</code>, and if that
+fails <code>import foo</code> (where <code>foo</code> is the process), and is
+then called as <code>foo.foo(ElementTree, **kwargs)</code>.
 
 <p>Some options alter what is used to parse and serialize the document: the
 <dfn><kbd>--parser</kbd></dfn> option allows either <kbd>html5lib</kbd> (the
@@ -121,19 +121,20 @@ of pre-existing <a href="http://w3.org/">W3C</a> documents. The
 <dfn><code>--w3c-compat</code></dfn> option turns on this compatibility mode,
 although specific options that turn on just one compatibility feature at a time
 are also available (and are documented below under each <span
-title="processes">process</span>) — these are all implied by the
+data-anolis-xref="processes">process</span>) — these are all implied by the
 <code>--w3c-compat</code> options, with one exception:
 <code>--w3c-compat-crazy-substitutions</code>, as it can lead to undesirable
 results.
 
 <p>The options <dfn><code>--newline-char</code></dfn> and
 <dfn><code>--indent-char</code></dfn> set the newline and indent strings (they
-do not have to be a single character) respecively. They default to U+000A LINE
+do not have to be a single character) respectively. They default to U+000A LINE
 FEED (LF) and U+0020 SPACE respectively. These are only used when generating
 large trees of generated markup, such as the table of contents.
 
-<p>Other <span title="processes">process</span> specific options are documented
-under the <span title="processes">process</span> to which they belong.
+<p>Other <span data-anolis-xref="processes">process</span> specific options are
+documented under the <span data-anolis-xref="processes">process</span> to which
+they belong.
 
 <p>Upon a <dfn>fatal error</dfn>, processing of the document is terminated and
 the output file is left unchanged.
@@ -155,8 +156,8 @@ href="http://whatwg.org/html5">HTML 5</a>: the <code>a</code>, <code>bb</code>,
 <code>type</code> attribute is case-insensitively equal to
 <code>toolbar</code>.
 
-<p><dfn title="id generation">When an <code>id</code> attribute is needed, it
-is created as follows</dfn>:
+<p><dfn data-anolis-xref="id generation">When an <code>id</code> attribute is
+needed, it is created as follows</dfn>:
 
 <ol>
     <li>Let <var>i</var> be equal to 0.
@@ -234,11 +235,12 @@ are the local name of the element <!--either--> in null namespace<!-- or in the
 <h3><dfn>Cross-referencing</dfn></h3>
 
 <p>Cross-referencing has three essential parts: <dfn
-title="definition">definitions</dfn> that define <dfn title="term">terms</dfn>,
-and <dfn title="instance">instances</dfn> of those <span
-title="term">terms</span>.
+data-anolis-xref="definition">definitions</dfn> that define <dfn
+data-anolis-xref="term">terms</dfn>, and <dfn
+data-anolis-xref="instance">instances</dfn> of those <span
+data-anolis-xref="term">terms</span>.
 
-<p><span title="term">Terms</span> are taken from the
+<p><span data-anolis-xref="term">Terms</span> are taken from the
 <code>data-anolis-xref</code> attribute if present, failing that the
 <code>title</code> attribute if that is present, otherwise from the
 <span>textContent</span> property of the <code>dfn</code> element. By default,
@@ -247,30 +249,31 @@ more than once: this behaviour can be turned off (causing the final
 <span>definition</span> of the <span>term</span> to be the one that is used) by
 the <dfn><code>--allow-duplicate-dfns</code></dfn> option.
 
-<p><span title="definition">Definitions</span> are marked-up with the
-<code>dfn</code> element.
+<p><span data-anolis-xref="definition">Definitions</span> are marked-up with
+the <code>dfn</code> element.
 
-<p><span title="instance">Instances</span> are marked-up with various elements,
-depending on the setting of <dfn><code>--w3c-compat-xref-elements</code></dfn>:
-if it is disabled (the default), the <code>abbr</code>, <code>code</code>,
-<code>i</code>, <code>span</code>, and <code>var</code> elements are used for
-<span title="instance">instances</span>; if it is enabled, the
+<p><span data-anolis-xref="instance">Instances</span> are marked-up with
+various elements, depending on the setting of
+<dfn><code>--w3c-compat-xref-elements</code></dfn>: if it is disabled (the
+default), the <code>abbr</code>, <code>code</code>, <code>i</code>,
+<code>span</code>, and <code>var</code> elements are used for <span
+data-anolis-xref="instance">instances</span>; if it is enabled, the
 <code>abbr</code>, <code>acronym</code>, <code>b</code>, <code>bdo</code>,
 <code>big</code>, <code>code</code>, <code>del</code>, <code>em</code>,
 <code>i</code>, <code>ins</code>, <code>kbd</code>, <code>label</code>,
 <code>legend</code>, <code>q</code>, <code>samp</code>, <code>small</code>,
 <code>span</code>, <code>strong</code>, <code>sub</code>, <code>sup</code>,
 <code>tt</code>, <code>var</code> elements are used for <span
-title="instance">instances</span>. Those that are only there in
+data-anolis-xref="instance">instances</span>. Those that are only there in
 <span>compatibility mode</span> are there because either they should not
 semantically be used for an <span>instance</span>, or because they are not
 present in <a href="http://whatwg.org/html5">HTML 5</a>. An
 <span>instance</span> is only used if it does not have an <span>interactive
 content</span> or <code>dfn</code> element as either a parent or a child.
 
-<p>Both <span title="definition">definitions</span> and <span
-title="instance">instances</span> are <dfn title="cross-reference
-normalization">normalized</dfn> as follows:
+<p>Both <span data-anolis-xref="definition">definitions</span> and <span
+data-anolis-xref="instance">instances</span> are <dfn
+data-anolis-xref="cross-reference normalization">normalized</dfn> as follows:
 
 <ul>
     <li>Leading and trailing <span>whitespace</span> is stripped,
@@ -306,26 +309,28 @@ href=#foo>foo&lt;/a>&lt;/i></code>).
 <h3><dfn>Table of contents/section numbering</dfn></h3>
 
 <p>To create a table of contents, and to number the <span
-title="section">sections</span> of the document, an <dfn>outline</dfn> is
-created (this is a list of <span title="section">sections</span>, which can
-each contain more <span title="section">sections</span>, where a
-<dfn>section</dfn> represents a part of the document, and often has a <dfn
-title="section heading">heading</dfn> associated with it — for more detailed
-definitions see <a href="http://whatwg.org/html5">HTML 5</a>). This means not
-only are the <code>h1</code>–<code>h6</code> elements supported, but also
-elements such as <code title="">section</code> are used to create the
-<span>outline</span>. After creating the <span>outline</span>, every
+data-anolis-xref="section">sections</span> of the document, an
+<dfn>outline</dfn> is created (this is a list of <span
+data-anolis-xref="section">sections</span>, which can each contain more <span
+data-anolis-xref="section">sections</span>, where a <dfn>section</dfn>
+represents a part of the document, and often has a <dfn
+data-anolis-xref="section heading">heading</dfn> associated with it — for more
+detailed definitions see <a href="http://whatwg.org/html5">HTML 5</a>). This
+means not only are the <code>h1</code>–<code>h6</code> elements supported, but
+also elements such as <code data-anolis-xref="">section</code> are used to
+create the <span>outline</span>. After creating the <span>outline</span>, every
 <span>section</span> with a depth between those provided by
 <dfn><code>--min-depth</code></dfn> and <dfn><code>--max-depth</code></dfn>
-(defaulting to two and six respectively), and which has a <span title="section
-heading">heading</span>, is numbered if it does not have <code>no-num</code> as
-a class, and is added to the table of contents if it does not have
-<code>no-toc</code> as a class. <span title="section">Sections</span> without a
-<span title="section heading">heading</span> are treated as if they did not
-exist, unless they have children, in which they will appear to exist while not
-existing all at once (e.g., they increment the <span>section</span> numbering,
-though that is not output anywhere; and they get a list item in the table of
-contents, with only the children within it, and no link to the
+(defaulting to two and six respectively), and which has a <span
+data-anolis-xref="section heading">heading</span>, is numbered if it does not
+have <code>no-num</code> as a class, and is added to the table of contents if
+it does not have <code>no-toc</code> as a class. <span
+data-anolis-xref="section">Sections</span> without a <span
+data-anolis-xref="section heading">heading</span> are treated as if they did
+not exist, unless they have children, in which they will appear to exist while
+not existing all at once (e.g., they increment the <span>section</span>
+numbering, though that is not output anywhere; and they get a list item in the
+table of contents, with only the children within it, and no link to the
 <span>section</span> itself).
 
 <p>The format of <span>section</span> numbers should comply with <a
@@ -341,17 +346,17 @@ U+002E FULL STOP character.
 table of contents.
 
 <p>Pre-existing <code>span</code> elements with a class of <code>secno</code>
-are removed from all <span title="section heading">section headings</span>,
-regardless of whether their depth falls within the range given by
-<code>--min-depth</code> and <code>--max-depth</code>.
+are removed from all <span data-anolis-xref="section heading">section
+headings</span>, regardless of whether their depth falls within the range given
+by <code>--min-depth</code> and <code>--max-depth</code>.
 
 <p>The table of contents is built up as an ordered list (an <code>ol</code>
 element), with each <span>section</span> marked up as a <code>li</code>
-element, and child <span title="section">sections</span> are marked up with an
-<code>ol</code> within that <code>li</code> (and this continues recursively, ad
-infinitum). By default, the root element of the table of contents (an
-<code>ol</code> element) is given a <code>class</code> attribute set to
-<code>toc</code>; however, with the
+element, and child <span data-anolis-xref="section">sections</span> are marked
+up with an <code>ol</code> within that <code>li</code> (and this continues
+recursively, ad infinitum). By default, the root element of the table of
+contents (an <code>ol</code> element) is given a <code>class</code> attribute
+set to <code>toc</code>; however, with the
 <dfn><code>--w3c-compat-class-toc</code></dfn> option this is placed on every
 <code>ol</code> within the table of contents. The entire <span>section
 heading</span> is copied to be the content of the list item, with all
@@ -449,8 +454,8 @@ exact behaviour, and thus it cannot be changed. -->
         <td>W3C Working Group Note
 </table>
 
-<p>By default, the <span title="normal string substitution">normal string
-substitutions</span> are:
+<p>By default, the <span data-anolis-xref="normal string substitution">normal
+string substitutions</span> are:
 
 <dl>
     <dt><code>[<!---->DATE]</code>
@@ -489,7 +494,7 @@ in document order. The two comments must have the same parent, otherwise a
 <span>fatal error</span> occurs.
 
 <p>If <dfn><code>--w3c-compat-substitutions</code></dfn> is enabled, the
-following <span title="normal string substitution">normal string
+following <span data-anolis-xref="normal string substitution">normal string
 substitutions</span> are done in addition to those above:
 
 <dl>
@@ -500,8 +505,8 @@ substitutions</span> are done in addition to those above:
     <dd>This is replaced with the <span>long W3C status</span>.
 </dl>
 
-<p>Additionally, the following <span title="normal comment substitution">normal
-comment substitutions</span> are done:
+<p>Additionally, the following <span data-anolis-xref="normal comment
+substitution">normal comment substitutions</span> are done:
 
 <dl>
     <dt><var>sub_identifier</var> equal to <code>logo</code>
@@ -513,11 +518,11 @@ fragment, and serialized into the output document in the needed format).
     <dt><var>sub_identifier</var> equal to <code>copyright</code> 
     <dd>Replacement is equal to: <code>&lt;p class="copyright">&lt;a
 href="http://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright&lt;/a>
-&#xA9; [<!---->YEAR] &lt;a href="http://www.w3.org/">&lt;acronym title="World
+&#xA9; [<!---->YEAR] &lt;a href="http://www.w3.org/">&lt;acronym data-anolis-xref="World
 Wide Web Consortium">W3C&lt;/acronym>&lt;/a>&lt;sup>&#xAE;&lt;/sup> (&lt;a
-href="http://www.csail.mit.edu/">&lt;acronym title="Massachusetts Institute of
+href="http://www.csail.mit.edu/">&lt;acronym data-anolis-xref="Massachusetts Institute of
 Technology">MIT&lt;/acronym>&lt;/a>, &lt;a
-href="http://www.ercim.org/">&lt;acronym title="European Research Consortium
+href="http://www.ercim.org/">&lt;acronym data-anolis-xref="European Research Consortium
 for Informatics and Mathematics">ERCIM&lt;/acronym>&lt;/a>, &lt;a
 href="http://www.keio.ac.jp/">Keio&lt;/a>), All Rights Reserved. W3C &lt;a
 href="http://www.w3.org/Consortium/Legal/ipr-notice#Legal_Disclaimer">liability&lt;/a>,
@@ -536,7 +541,7 @@ this is not included in <code>--w3c-compat</code>). A string of
 characters in the range U+0041 LATIN CAPITAL LETTER A to U+005A LATIN CAPITAL
 LETTER Z (A–Z) is replaced with whatever
 <code>http://www.w3.org/StyleSheets/TR/W3C-[STATUS]</code> would evaluate to
-be. Like the <span title="normal string substitution">normal string
+be. Like the <span data-anolis-xref="normal string substitution">normal string
 substitutions</span>, this string must be contained in a single text node.
 
 <!-- Is that crazy enough to justify the option name? -->
