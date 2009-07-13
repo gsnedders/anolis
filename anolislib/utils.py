@@ -19,6 +19,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+from copy import deepcopy
 import re
 import sys
 from lxml import etree
@@ -112,6 +113,44 @@ def generateID(Element, force_html4_id=False, **kwargs):
 
 
 def textContent(Element):
+    # Copy the element and get ready for removals
+    Element = deepcopy(Element)
+    to_remove = set()
+    
+    # Replace img with its alt attribute
+    for child in Element.iter(u"img"):
+        # Add alt in its place
+        if child.has("alt"):
+            if child.getprevious() is not None:
+                if child.getprevious().tail is None:
+                    child.getprevious().tail = child.get(u"alt")
+                else:
+                    child.getprevious().tail += child.get(u"alt")
+            else:
+                if child.getparent().text is None:
+                    child.getparent().text = child.get(u"alt")
+                else:
+                    child.getparent().text += child.get(u"alt")
+        # Preserve the element tail
+        if child.tail is not None:
+            if child.getprevious() is not None:
+                if child.getprevious().tail is None:
+                    child.getprevious().tail = child.tail
+                else:
+                    child.getprevious().tail += child.tail
+            else:
+                if child.getparent().text is None:
+                    child.getparent().text = child.tail
+                else:
+                    child.getparent().text += child.tail
+        # Get ready to remove the element
+        to_remove.add(element)
+        
+    # Remove to_remove nodes
+    for node in to_remove:
+        node.getparent().remove(node)
+    
+    # Then just use tostring
     return etree.tostring(Element, encoding=unicode, method='text',
                           with_tail=False)
 
