@@ -144,7 +144,7 @@ def textContent(Element):
                 else:
                     child.getparent().text += child.tail
         # Get ready to remove the element
-        to_remove.add(element)
+        to_remove.add(child)
         
     # Remove to_remove nodes
     for node in to_remove:
