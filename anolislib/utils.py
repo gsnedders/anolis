@@ -118,7 +118,7 @@ def textContent(Element):
     to_remove = set()
     
     # Replace img with its alt attribute
-    for child in Element.iter(u"img"):
+    for child in Element.iter(tag=u"img"):
         # Add alt in its place
         if child.has("alt"):
             if child.getprevious() is not None:
