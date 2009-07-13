@@ -120,7 +120,7 @@ def textContent(Element):
     # Replace img with its alt attribute
     for child in Element.iter(tag=u"img"):
         # Add alt in its place
-        if child.has("alt"):
+        if child.get("alt") is not None:
             if child.getprevious() is not None:
                 if child.getprevious().tail is None:
                     child.getprevious().tail = child.get(u"alt")
