@@ -24,8 +24,7 @@ from lxml import etree
 from anolislib import utils
 
 # Rank of heading elements (these are negative so h1 > h6)
-rank = {u"h1": -1, u"h2": -2, u"h3": -3, u"h4": -4, u"h5": -5, u"h6": -6,
-        u"header": -1}
+fixedRank = {u"h1": -1, u"h2": -2, u"h3": -3, u"h4": -4, u"h5": -5, u"h6": -6}
 
 
 class section(list):
@@ -55,6 +54,22 @@ class Outliner:
         self.outlines = {}
         self.current_outlinee = None
         self.current_section = None
+    
+    def _rank(self, element):
+        if element.tag in fixedRank:
+            return fixedRank[element.tag]
+        # The rank of an hgroup element is the rank of the highest-ranked
+        # h1–h6 element descendant of the hgroup element, if there are any such
+        # elements, or otherwise the same as for an h1 element (the highest
+        # rank).
+        elif element.tag == u"hgroup":
+            for i in range(1, 6):
+                if element.find(u".//h" + unicode(i)) is not None:
+                    return -i
+            else:
+                return -1
+        else:
+            raise ValueError, "Only h1–h6 and hgroup elements have a rank"
 
     def build(self, **kwargs):
         for action, element in etree.iterwalk(self.ElementTree,
@@ -158,8 +173,8 @@ class Outliner:
                 # outline. Let current section be that new section. Let the
                 # element being entered be the new heading for the current
                 # section.
-                elif rank[element.tag] >= \
-                     rank[self.outlines[self.current_outlinee][-1].header.tag]:
+                elif self._rank(element) >= \
+                     self._rank(self.outlines[self.current_outlinee][-1].header):
                     self.current_section = section()
                     self.outlines[self.current_outlinee] \
                         .append(self.current_section)
@@ -178,8 +193,8 @@ class Outliner:
                         # this new section. Let the element being entered be
                         # the new heading for the current section. Abort these
                         # substeps.
-                        if rank[element.tag] < \
-                           rank[candidate_section.header.tag]:
+                        if self._rank(element) < \
+                           self._rank(candidate_section.header):
                             self.current_section = section()
                             candidate_section.append(self.current_section)
                             self.current_section.header = element

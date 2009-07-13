@@ -31,7 +31,7 @@ spaceCharacters = u"".join(spaceCharacters)
 spacesRegex = re.compile(u"[%s]+" % spaceCharacters)
 
 heading_content = frozenset([u"h1", u"h2", u"h3", u"h4", u"h5", u"h6",
-                             u"header"])
+                             u"hgroup"])
 sectioning_content = frozenset([u"section", u"nav", u"article", u"aside"])
 sectioning_root = frozenset([u"body", u"blockquote", u"figure", u"td",
                              u"datagrid"])

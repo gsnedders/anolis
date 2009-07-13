@@ -61,7 +61,7 @@ class toc(object):
             # If we have a header, regardless of how deep we are
             if section.header is not None:
                 # Get the element that represents the section header's text
-                if section.header.tag == u"header":
+                if section.header.tag == u"hgroup":
                     i = 1
                     while i <= 6:
                         header_text = section.header.find(u".//h" + unicode(i))
