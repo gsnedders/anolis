@@ -32,6 +32,7 @@ def process(tree, processes=set(["sub", "toc", "xref"]), **kwargs):
 
     # Find number of passes to do
     for process in processes:
+        print process
         try:
             process_module = getattr(__import__('processes', globals(),
                                                 locals(), [process], -1),

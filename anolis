@@ -188,7 +188,7 @@ def getOptParser():
                       dest="output_encoding", help="Output encoding")
 
     parser.set_defaults(
-        processes=set(["sub", "xref", "toc"]),
+        processes=["sub", "toc", "xref", "annotate"],
         parser="html5lib",
         serializer="html5lib",
         newline_char=u"\n",
