@@ -33,13 +33,13 @@ class annotate(object):
    
         for element in ElementTree.getroot().iterdescendants():
             if "id" in element.attrib and element.attrib["id"] in entries:
-                print element.attrib["id"]
                 entry = entries[element.attrib["id"]]
                 annotation = self.make_annotation(entry)
                 element.addnext(annotation)
                 used_entries.add(element.attrib["id"])
-        print "Missed %i of %i"%(len(set(entries.keys()) - used_entries),
-                                 len(entries))
+#        print "Missed %i of %i"%(len(set(entries.keys()) - used_entries),
+#                                 len(entries))
+
 
     def make_annotation(self, entry):
         p = etree.Element("p")
