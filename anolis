@@ -93,6 +93,12 @@ def getOptParser():
                       dest="indent_char",
                       help="Set the character/string used when creating indenting new blocks of (X)HTML. This should match the rest of the indentation in the document.")
 
+    parser.add_option("", "--filter", action="store", dest="filter",
+                      help="CSS selector that matches elements to be removed from the document before processing")
+
+    parser.add_option("", "--annotations", action="store", dest="annotation",
+                      help="Path or URI of an annotations file containing status annotations that should be added to sections")
+
     parser.add_option("", "--force-html4-id", action="store_true",
                       dest="force_html4_id",
                       help="Force the ID generation algorithm to create HTML 4 compliant IDs regardless of the DOCTYPE.")
@@ -188,11 +194,13 @@ def getOptParser():
                       dest="output_encoding", help="Output encoding")
 
     parser.set_defaults(
-        processes=["sub", "toc", "xref", "annotate"],
+        processes=["filter", "sub", "toc", "xref", "annotate"],
         parser="html5lib",
         serializer="html5lib",
         newline_char=u"\n",
         indent_char=u" ",
+        filter=None,
+        annotation=None,
         force_html4_id=False,
         min_depth=2,
         max_depth=6,
