@@ -18,6 +18,7 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
+import sys
 
 import html5lib
 from html5lib import treebuilders, treewalkers
@@ -27,12 +28,11 @@ import lxml.html
 from lxml import etree
 
 
-def process(tree, processes=set(["sub", "toc", "xref"]), **kwargs):
+def process(tree, processes=["sub", "toc", "xref"], **kwargs):
     """ Process the given tree. """
 
     # Find number of passes to do
     for process in processes:
-        print process
         try:
             process_module = getattr(__import__('processes', globals(),
                                                 locals(), [process], -1),
