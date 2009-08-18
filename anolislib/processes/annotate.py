@@ -1,6 +1,8 @@
 from lxml import etree
 import urlparse
 import urllib2
+from collections import defaultdict
+import sys
 
 statuses =   {"UNKNOWN": "Section",
               "TBW": "Idea; yet to be specified",
@@ -19,11 +21,13 @@ statuses =   {"UNKNOWN": "Section",
 
 url = 'http://www.whatwg.org/specs/web-apps/current-work/status.cgi?action=get-all-annotations'
 
-w3c_statuses = {"WD":"Working Draft",
-                "LC":"Last Call",
-                "CR":"Candidate Recommendation",
-                "PR":"Proposed Recommendation",
-                "REC":"W3C Recommendation"}
+w3c_statuses = ["WD", "LC", "CR", "PR", "REC"]
+
+w3c_status_names = {"WD":"Working Draft",
+                    "LC":"Last Call",
+                    "CR":"Candidate Recommendation",
+                    "PR":"Proposed Recommendation",
+                    "REC":"W3C Recommendation"}
 
 
 def annotate(ElementTree, **kwargs):
@@ -35,7 +39,7 @@ def annotate(ElementTree, **kwargs):
     if urlparse.urlsplit(annotation_location)[0]:
         annotations_data = urllib2.urlopen(annotation_location)
     else:
-        annotations_data = open(annotations_data)
+        annotations_data = open(annotation_location)
 
     annotations = etree.parse(annotations_data)
     entries = {}
@@ -47,18 +51,22 @@ def annotate(ElementTree, **kwargs):
     add_w3c_issues = ("annotate_w3c_issues" in kwargs and 
                       kwargs["annotate_w3c_issues"])
 
-    issues = {}
+    issues = defaultdict(list)
+    spec_status = None
     if add_w3c_issues:
-        for issue in annotations.xpath("//issues/issue"):
-            entries[issue.getparent().getparent().attrib["section"]] = entry
+        spec_status = annotations.getroot().attrib["status"]
+        assert spec_status in w3c_statuses
+
+        for entry in annotations.xpath("//entry[issue]"):
+            for issue in entry.xpath("./issue"):
+                issues[entry.attrib["section"]].append(issue)
    
     for element in ElementTree.getroot().iterdescendants():
         if ("id" in element.attrib and 
-            element.attrib["id"] in entries or
-            ):    
+            element.attrib["id"] in entries):    
             entry = entries.get(element.attrib["id"], None)
-            issue = issues.get(element.attrib["id"], None)
-            annotation = make_annotation(entry, issue)
+            issue_list = issues.get(element.attrib["id"], None)
+            annotation = make_annotation(entry, issue_list, spec_status)
             element.addnext(annotation)
             used_entries.add(element.attrib["id"])
 
@@ -68,13 +76,39 @@ def annotate(ElementTree, **kwargs):
 #                                 len(entries))
 
 
-def make_annotation(entry, issue):
-    p = etree.Element("p")
-    p.attrib["class"] = "status"
+def make_annotation(entry, issues, spec_status):
+
+    container = etree.Element("p")
+    container.attrib["class"] = "XXX"
+    
     status = etree.Element("b")
     status.text = "Status: "
     status_text = etree.Element("i")
     status_text.text = statuses[entry.attrib["status"]]
-    p.append(status)
-    p.append(status_text)
-    return p
+    container.append(status)
+    container.append(status_text)
+
+    if issues:
+        status_text.text += ". "
+        span_issue = etree.Element("span")
+        multiple_issues = len(issues) > 1
+
+        for i, issue in enumerate(issues):
+            a = etree.Element("a", attrib={"href":issue.attrib["url"]})
+            a.text = issue.attrib["name"]
+            if multiple_issues and i == len(issues) - 2:
+                a.tail = " and "
+            elif i < len(issues) - 1:
+                a.tail = ", "
+            else:
+                a.tail = " "
+            span_issue.append(a)
+        next_status_name = w3c_status_names[w3c_statuses[
+                w3c_statuses.index(spec_status)+1]]
+        if multiple_issues:
+            span_issue[-1].tail += "block progress to %s"%next_status_name
+        else:
+            span_issue[-1].tail += "blocks progress to %s"%next_status_name
+        container.append(span_issue)
+
+    return container
