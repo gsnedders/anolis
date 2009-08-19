@@ -4,7 +4,7 @@ import urllib2
 from collections import defaultdict
 import sys
 
-statuses =   {"UNKNOWN": "Section",
+statuses =   {"UNKNOWN": "Unknown",
               "TBW": "Idea; yet to be specified",
               "WIP": "Being edited right now",
               "OCBE": "Overcome by events",
@@ -81,27 +81,30 @@ def make_annotation(entry, issues, spec_status):
     container = etree.Element("p")
     container.attrib["class"] = "XXX"
     
-    status = etree.Element("b")
-    status.text = "Status: "
-    status_text = etree.Element("i")
-    status_text.text = statuses[entry.attrib["status"]]
-    container.append(status)
-    container.append(status_text)
+    if entry.attrib["status"] != "UNKNOWN":
+        status = etree.Element("b")
+        status.text = "Status: "
+        status_text = etree.Element("i")
+        status_text.text = statuses[entry.attrib["status"]]
+        container.append(status)
+        container.append(status_text)
+        if issues:
+            status_text.text += ". "
 
     if issues:
-        status_text.text += ". "
         span_issue = etree.Element("span")
         multiple_issues = len(issues) > 1
 
         for i, issue in enumerate(issues):
             a = etree.Element("a", attrib={"href":issue.attrib["url"]})
             a.text = issue.attrib["name"]
+            a.tail = " (%s)"%issue.attrib["shortname"]
             if multiple_issues and i == len(issues) - 2:
-                a.tail = " and "
+                a.tail += " and "
             elif i < len(issues) - 1:
-                a.tail = ", "
+                a.tail += ", "
             else:
-                a.tail = " "
+                a.tail += " "
             span_issue.append(a)
         next_status_name = w3c_status_names[w3c_statuses[
                 w3c_statuses.index(spec_status)+1]]
