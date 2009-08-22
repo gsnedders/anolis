@@ -60,7 +60,7 @@ def annotate(ElementTree, **kwargs):
         for entry in annotations.xpath("//entry[issue]"):
             for issue in entry.xpath("./issue"):
                 issues[entry.attrib["section"]].append(issue)
-   
+
     for element in ElementTree.getroot().iterdescendants():
         if ("id" in element.attrib and 
             element.attrib["id"] in entries):    
@@ -69,12 +69,6 @@ def annotate(ElementTree, **kwargs):
             annotation = make_annotation(entry, issue_list, spec_status)
             element.addnext(annotation)
             used_entries.add(element.attrib["id"])
-
-            
-
-#        print "Missed %i of %i"%(len(set(entries.keys()) - used_entries),
-#                                 len(entries))
-
 
 def make_annotation(entry, issues, spec_status):
 
@@ -95,7 +89,7 @@ def make_annotation(entry, issues, spec_status):
         span_issue = etree.Element("span")
         multiple_issues = len(issues) > 1
 
-        for i, issue in enumerate(issues):
+        for i, issue in enumerate(sorted(issues)):
             a = etree.Element("a", attrib={"href":issue.attrib["url"]})
             a.text = issue.attrib["name"]
             a.tail = " (%s)"%issue.attrib["shortname"]
