@@ -61,9 +61,11 @@ def annotate(ElementTree, **kwargs):
             for issue in entry.xpath("./issue"):
                 issues[entry.attrib["section"]].append(issue)
 
+    heading_elements = set(["h1", "h2", "h3", "h4", "h5", "h6"])
     for element in ElementTree.getroot().iterdescendants():
         if ("id" in element.attrib and 
-            element.attrib["id"] in entries):    
+            element.attrib["id"] in entries  and           
+            element.tag in heading_elements):    
             entry = entries.get(element.attrib["id"], None)
             issue_list = issues.get(element.attrib["id"], None)
             annotation = make_annotation(entry, issue_list, spec_status)
@@ -73,7 +75,7 @@ def annotate(ElementTree, **kwargs):
 def make_annotation(entry, issues, spec_status):
 
     container = etree.Element("p")
-    container.attrib["class"] = "XXX"
+    container.attrib["class"] = "XXX annotation"
     
     if entry.attrib["status"] != "UNKNOWN":
         status = etree.Element("b")
