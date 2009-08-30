@@ -91,7 +91,14 @@ def make_annotation(entry, issues, spec_status):
         span_issue = etree.Element("span")
         multiple_issues = len(issues) > 1
 
-        for i, issue in enumerate(sorted(issues)):
+        def cmp_issues(a,b):
+            args = tuple([int(item.attrib["name"].split("-")[1])
+                          for item in (a,b)])
+            return cmp(*args)
+
+        issues.sort(cmp_issues)
+
+        for i, issue in enumerate(issues):
             a = etree.Element("a", attrib={"href":issue.attrib["url"]})
             a.text = issue.attrib["name"]
             a.tail = " (%s)"%issue.attrib["shortname"]
