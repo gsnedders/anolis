@@ -84,7 +84,7 @@ class xref(object):
         for dfn in tree.iter(u"{http://www.w3.org/1999/xhtml}dfn"):
             term = self.getTerm(dfn, **kwargs)
 
-            if len(term) > 0:
+            if term:
                 if not allow_duplicate_dfns and term in self.dfns:
                     raise DuplicateDfnException(u'The term "%s" is defined more than once' % term)
 
