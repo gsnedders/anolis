@@ -59,7 +59,7 @@ w3c_instance_elements = frozenset([u"{http://www.w3.org/1999/xhtml}abbr",
 non_alphanumeric_spaces = re.compile(r"[^a-zA-Z0-9 \-]+")
 
 
-class xref(object):
+class Process(object):
     """Add cross-references."""
     
     passes = 2
