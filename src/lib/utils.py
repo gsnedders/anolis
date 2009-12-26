@@ -1,5 +1,5 @@
 # coding=UTF-8
-# Copyright (c) 2008 Geoffrey Sneddon
+# Copyright (c) 2008-2009 Geoffrey Sneddon
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -30,16 +30,46 @@ ids = {}
 spaceCharacters = u"".join(spaceCharacters)
 spacesRegex = re.compile(u"[%s]+" % spaceCharacters)
 
-heading_content = frozenset([u"h1", u"h2", u"h3", u"h4", u"h5", u"h6",
-                             u"header"])
-sectioning_content = frozenset([u"section", u"nav", u"article", u"aside"])
-sectioning_root = frozenset([u"body", u"blockquote", u"figure", u"td",
-                             u"datagrid"])
+heading_content = frozenset([u"{http://www.w3.org/1999/xhtml}h1",
+                             u"{http://www.w3.org/1999/xhtml}h2",
+                             u"{http://www.w3.org/1999/xhtml}h3",
+                             u"{http://www.w3.org/1999/xhtml}h4",
+                             u"{http://www.w3.org/1999/xhtml}h5",
+                             u"{http://www.w3.org/1999/xhtml}h6",
+                             u"{http://www.w3.org/1999/xhtml}header"])
+                             
+sectioning_content = frozenset([u"{http://www.w3.org/1999/xhtml}section",
+                                u"{http://www.w3.org/1999/xhtml}nav",
+                                u"{http://www.w3.org/1999/xhtml}article",
+                                u"{http://www.w3.org/1999/xhtml}aside"])
+                                
+sectioning_root = frozenset([u"{http://www.w3.org/1999/xhtml}body",
+                             u"{http://www.w3.org/1999/xhtml}blockquote",
+                             u"{http://www.w3.org/1999/xhtml}figure",
+                             u"{http://www.w3.org/1999/xhtml}td",
+                             u"{http://www.w3.org/1999/xhtml}datagrid"])
 
-always_interactive_content = frozenset([u"a", u"bb", u"details", u"datagrid"])
-media_elements = frozenset([u"audio", u"video"])
+always_interactive_content = frozenset([u"{http://www.w3.org/1999/xhtml}a",
+                                        u"{http://www.w3.org/1999/xhtml}bb",
+                                        u"{http://www.w3.org/1999/xhtml}details",
+                                        u"{http://www.w3.org/1999/xhtml}datagrid"])
+media_elements = frozenset([u"{http://www.w3.org/1999/xhtml}audio",
+                            u"{http://www.w3.org/1999/xhtml}video"])
 
 non_sgml_name = re.compile("[^A-Za-z0-9_:.]+")
+
+html4ish_dtd = frozenset([u"-//W3C//DTD HTML 4.0//EN",
+                          u"-//W3C//DTD HTML 4.0 Transitional//EN",
+                          u"-//W3C//DTD HTML 4.0 Frameset//EN",
+                          u"-//W3C//DTD HTML 4.01//EN",
+                          u"-//W3C//DTD HTML 4.01 Transitional//EN",
+                          u"-//W3C//DTD HTML 4.01 Frameset//EN",
+                          u"ISO/IEC 15445:2000//DTD HyperText Markup Language//EN",
+                          u"ISO/IEC 15445:2000//DTD HTML//EN",
+                          u"-//W3C//DTD XHTML 1.0 Strict//EN",
+                          u"-//W3C//DTD XHTML 1.0 Transitional//EN",
+                          u"-//W3C//DTD XHTML 1.0 Frameset//EN",
+                          u"-//W3C//DTD XHTML 1.1//EN"])
 
 if sys.maxunicode == 0xFFFF:
     # UTF-16 Python
@@ -53,102 +83,64 @@ def splitOnSpaces(string):
     return spacesRegex.split(string)
 
 
-def elementHasClass(Element, class_name):
-    if Element.get(u"class") and \
-       class_name in splitOnSpaces(Element.get(u"class")):
+def elementHasClass(element, class_name):
+    if (element.get(u"class") and
+        class_name in splitOnSpaces(element.get(u"class"))):
         return True
     else:
         return False
 
 
-def generateID(Element, force_html4_id=False, **kwargs):
-    if Element.get(u"id") is not None:
-        return Element.get(u"id")
-    elif Element.get(u"title") is not None and \
-         Element.get(u"title").strip(spaceCharacters) is not u"":
-        source = Element.get(u"title")
+def generateID(element, force_html4_id=False, **kwargs):
+    if element.get(u"id") is not None:
+        return element.get(u"id")
+    elif (element.get(u"title") is not None and
+          element.get(u"title").strip(spaceCharacters)):
+        source = element.get(u"title")
     else:
-        source = textContent(Element)
+        source = textContent(element)
 
     source = source.strip(spaceCharacters).lower()
 
-    if source == u"":
+    if not source:
         source = u"generatedID"
-    elif force_html4_id or Element.getroottree().docinfo.public_id in \
-        (u"-//W3C//DTD HTML 4.0//EN",
-         u"-//W3C//DTD HTML 4.0 Transitional//EN",
-         u"-//W3C//DTD HTML 4.0 Frameset//EN",
-         u"-//W3C//DTD HTML 4.01//EN",
-         u"-//W3C//DTD HTML 4.01 Transitional//EN",
-         u"-//W3C//DTD HTML 4.01 Frameset//EN",
-         u"ISO/IEC 15445:2000//DTD HyperText Markup Language//EN",
-         u"ISO/IEC 15445:2000//DTD HTML//EN",
-         u"-//W3C//DTD XHTML 1.0 Strict//EN",
-         u"-//W3C//DTD XHTML 1.0 Transitional//EN",
-         u"-//W3C//DTD XHTML 1.0 Frameset//EN",
-         u"-//W3C//DTD XHTML 1.1//EN"):
+    elif (force_html4_id or
+          element.getroottree().docinfo.public_id in html4ish_dtd):
         source = non_sgml_name.sub(u"-", source).strip(u"-")
         try:
             if not source[0].isalpha():
-                source = u"x" + source
+                source = u"x%s" % source
         except IndexError:
             source = u"generatedID"
     else:
         source = non_ifragment.sub(u"-", source).strip(u"-")
-        if source == u"":
+        if not source:
             source = u"generatedID"
 
-    # Initally set the id to the source
-    id = source
-
-    i = 0
-    while getElementById(Element.getroottree().getroot(), id) is not None:
-        id = source + u"-" + unicode(i)
-        i += 1
-
-    ids[Element.getroottree().getroot()][id] = Element
-
-    return id
+    return source
 
 
-def textContent(Element):
-    return etree.tostring(Element, encoding=unicode, method='text',
+def textContent(element):
+    return etree.tostring(element, encoding=unicode, method='text',
                           with_tail=False)
 
 
-def getElementById(base, id):
-    if base in ids:
-        try:
-            return ids[base][id]
-        except KeyError:
-            return None
-    else:
-        ids[base] = {}
-        for element in base.iter(tag=etree.Element):
-            if element.get(u"id"):
-                ids[base][element.get(u"id")] = element
-        return getElementById(base, id)
-
-
-def escapeXPathString(string):
-    return u"concat('', '%s')" % string.replace(u"'", u"', \"'\", '")
-
-
 def removeInteractiveContentChildren(element):
-    # Iter over list of decendants of element
-    for child in element.findall(u".//*"):
+    to_remove = set()
+    for child in element.iterdescendants():
         if isInteractiveContent(child):
-            # Copy content, to prepare for the node being removed
             copyContentForRemoval(child)
-            # Remove element
-            child.getparent().remove(child)
+            to_remove.add(child)
+    for node in to_remove:
+        node.getparent().remove(node)
 
 
 def isInteractiveContent(element):
-    if element.tag in always_interactive_content \
-    or element.tag in media_elements and element.get(u"controls") is not None \
-    or element.tag == u"menu" and element.get(u"type") is not None and \
-       element.get(u"type").lower() == u"toolbar":
+    if (element.tag in always_interactive_content or
+        element.tag in media_elements and element.get(u"controls") is not None or
+        element.tag is u"{http://www.w3.org/1999/xhtml}menu" and 
+            element.get(u"type") is not None and
+            element.get(u"type").lower() is u"toolbar"):
         return True
     else:
         return False
@@ -183,19 +175,6 @@ def copyContentForRemoval(node, text=True, children=True, tail=True):
                 node.getparent().text = node.tail
             else:
                 node.getparent().text += node.tail
-
-
-global reversed
-try:
-    reversed
-except NameError:
-    def reversed(x):
-        if hasattr(x, 'keys'):
-            raise ValueError("mappings do not support reverse iteration")
-        i = len(x)
-        while i > 0:
-            i -= 1
-            yield x[i]
 
 
 class AnolisException(Exception):
