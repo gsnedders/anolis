@@ -28,31 +28,47 @@ def process(trees, processes, **kwargs):
             for tree, url in trees:
                 current(tree, url, **kwargs)
 
-
-def file(files, processes, **kwargs):
-    trees = []
-    for input, output, parser, serializer, output_encoding, url in files:
-        if parser == "xml":
-            tree = etree.parse(input)
-        elif parser == "lxml.html":
-            tree = lxml.html.parse(input)
-        else:
-            tree = html5lib.parse(input, treebuilder="lxml")
+class File(object):
+    def __init__(self, input, output, url, parser = u"html5lib",
+                 serializer = u"html5lib", input_encoding = u"utf-8",
+                 output_encoding = u"utf-8"):
+        self._input = input
+        self._output = output
+        self._url = url
+        self._parser = parser
+        self._serializer = serializer
+        self._input_encoding = input_encoding
+        self._output_encoding = output_encoding
         
-        trees.append((tree, url))
+        if parser == "xml":
+            self._tree = etree.parse(input)
+        elif parser == "lxml.html":
+            self._tree = lxml.html.parse(input)
+        elif parser == "html5lib":
+            self._tree = html5lib.parse(input, treebuilder="lxml")
+        else:
+            raise Exception("Unknown parser!")
+    
+    def __getattr__(self, name):
+        return getattr(self, u"_%s" % name)
+
+def files(files, processes, **kwargs):
+    trees = []
+    for file in files:
+        trees.append((file.tree, file.url))
     
     process(trees, processes, **kwargs)
     
-    for atree, afile in zip(trees, files):
-        tree = atree[0]
-        input, output, parser, serializer, output_encoding, url = afile
-        
-        if serializer == "xml":
-            output.write(etree.tostring(tree, encoding=output_encoding))
+    for file in files:
+        if file.serializer == "xml":
+            output.write(etree.tostring(file.tree,
+                                        encoding=file.output_encoding))
         elif serializer == "lxml.html":
-            output.write(lxml.html.tostring(tree, encoding=output_encoding))
+            output.write(lxml.html.tostring(file.tree,
+                                            encoding=file.output_encoding))
         else:
             walker = treewalkers.getTreeWalker("lxml")
             s = htmlserializer.HTMLSerializer(**kwargs)
-            for n in s.serialize(walker(tree), encoding=output_encoding):
+            for n in s.serialize(walker(file.tree),
+                                 encoding=file.output_encoding):
                 output.write(n)
