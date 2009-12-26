@@ -26,10 +26,10 @@ import html5lib
 
 def process(trees, processes, **kwargs):
     for processObject in processes:
-        process = processObject(**kwargs)
-        if isinstance(process, types.FunctionType):
-            passes = (process,)
+        if isinstance(processObject, types.FunctionType):
+            passes = (processObject,)
         else:
+            process = processObject(**kwargs)
             passes = [getattr(process, u"pass%i" % i) for i in
                       xrange(1, process.passes + 1)]
         for current in passes:
