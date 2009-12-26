@@ -19,6 +19,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+from lxml import etree
+import lxml.html
+import html5lib
+
 def process(trees, processes, **kwargs):
     for processModule in processes:
         process = processModule.Process(**kwargs)
@@ -30,14 +34,13 @@ def process(trees, processes, **kwargs):
 
 class File(object):
     def __init__(self, input, output, url, parser = u"html5lib",
-                 serializer = u"html5lib", input_encoding = u"utf-8",
+                 serializer = u"html5lib",
                  output_encoding = u"utf-8"):
         self._input = input
         self._output = output
         self._url = url
         self._parser = parser
         self._serializer = serializer
-        self._input_encoding = input_encoding
         self._output_encoding = output_encoding
         
         if parser == "xml":
@@ -63,12 +66,12 @@ def files(files, processes, **kwargs):
         if file.serializer == "xml":
             output.write(etree.tostring(file.tree,
                                         encoding=file.output_encoding))
-        elif serializer == "lxml.html":
+        elif file.serializer == "lxml.html":
             output.write(lxml.html.tostring(file.tree,
                                             encoding=file.output_encoding))
         else:
-            walker = treewalkers.getTreeWalker("lxml")
-            s = htmlserializer.HTMLSerializer(**kwargs)
+            walker = html5lib.treewalkers.getTreeWalker("lxml")
+            s = html5lib.htmlserializer.HTMLSerializer(**kwargs)
             for n in s.serialize(walker(file.tree),
                                  encoding=file.output_encoding):
                 output.write(n)
