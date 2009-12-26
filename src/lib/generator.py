@@ -20,14 +20,18 @@
 # THE SOFTWARE.
 
 from lxml import etree
+import types
 import lxml.html
 import html5lib
 
 def process(trees, processes, **kwargs):
-    for processModule in processes:
-        process = processModule.Process(**kwargs)
-        passes = [getattr(process, u"pass%i" % i) for i in
-                  xrange(1, process.passes + 1)]
+    for processObject in processes:
+        process = processObject(**kwargs)
+        if isinstance(process, types.FunctionType):
+            passes = (process,)
+        else:
+            passes = [getattr(process, u"pass%i" % i) for i in
+                      xrange(1, process.passes + 1)]
         for current in passes:
             for tree, url in trees:
                 current(tree, url, **kwargs)
