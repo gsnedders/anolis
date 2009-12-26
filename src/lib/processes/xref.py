@@ -81,6 +81,11 @@ class Process(object):
 
     def buildReferences(self, tree, url, allow_duplicate_dfns = False,
                         **kwargs):
+        ids = set()
+        for element in tree.iter():
+            if element.get(u"id") is not None:
+                ids.add(element.get(u"id"))
+        
         for dfn in tree.iter(u"{http://www.w3.org/1999/xhtml}dfn"):
             term = self.getTerm(dfn, **kwargs)
 
@@ -95,9 +100,14 @@ class Process(object):
                         link_to = parent_element
                         break
 
-                id = utils.generateID(link_to, **kwargs)
+                base = id = utils.generateID(link_to, **kwargs)
+                i = 0
+                while id in ids:
+                    id = u"%s-%s" % (base, i)
+                    i += 1
 
                 link_to.set(u"id", id)
+                ids.add(id)
 
                 self.dfns[term] = urllib.urljoin(url, u"#%s" % id)
 
