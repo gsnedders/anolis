@@ -24,8 +24,9 @@ from lxml import etree
 from copy import deepcopy
 import html5lib
 import urllib2
+import urlparse
 
-from .. import utils
+import utils
 
 instance_elements = frozenset([u"{http://www.w3.org/1999/xhtml}span",
                                u"{http://www.w3.org/1999/xhtml}abbr",
@@ -68,7 +69,7 @@ class Process(object):
     def __init__(self, externalURLs = [], **kwargs):
         self.dfns = {}
         for url in externalURLs:
-            if urlparse.urlsplit(url).scheme is "":
+            if urlparse.urlsplit(url).scheme == "":
                 raise NonAbsoluteURLException(u"%s is not an absolute URL. All external URLs to load for xref must be absolute." % url)
             fp = urllib2.urlopen(url)
             mimetype = fp.info().get_content_type()
@@ -109,7 +110,7 @@ class Process(object):
                 link_to.set(u"id", id)
                 ids.add(id)
 
-                self.dfns[term] = urllib.urljoin(url, u"#%s" % id)
+                self.dfns[term] = urlparse.urljoin(url, u"#%s" % id)
 
     def addReferences(self, tree, url, w3c_compat=False,
                       w3c_compat_xref_elements=False,
@@ -120,13 +121,13 @@ class Process(object):
             try:
                 while stack[-1] is not element.getparent():
                     parent = stack.pop()
-                    if (parent.tag is "{http://www.w3.org/1999/xhtml}dfn" or
+                    if (parent.tag == "{http://www.w3.org/1999/xhtml}dfn" or
                         utils.isInteractiveContent(parent)):
                         currentIgnoreElements -= 1
             except IndexError:
                 pass
             stack.append(element)
-            if (element.tag is "{http://www.w3.org/1999/xhtml}dfn" or
+            if (element.tag == "{http://www.w3.org/1999/xhtml}dfn" or
                 utils.isInteractiveContent(element)):
                 currentIgnoreElements += 1
             
@@ -141,14 +142,15 @@ class Process(object):
                     goodChildren = True
                     
                     for child_element in element.iterdescendants(tag=etree.Element):
-                        if (child_element.tag is "{http://www.w3.org/1999/xhtml}dfn" or
+                        if (child_element.tag == "{http://www.w3.org/1999/xhtml}dfn" or
                             utils.isInteractiveContent(child_element)):
                             goodChildren = False
                             break
 
                     if goodChildren:
-                        href = urlparse.urljoin(url, self.dfns[term])
-                        if element.tag is u"{http://www.w3.org/1999/xhtml}span":
+                        #href = utils.relativeURL(url, self.dfns[term])
+                        href = self.dfns[term]
+                        if element.tag == u"{http://www.w3.org/1999/xhtml}span":
                             element.tag = u"{http://www.w3.org/1999/xhtml}a"
                             element.set(u"href", href)
                         else:
@@ -160,11 +162,14 @@ class Process(object):
                                 link.text = element.text
                                 element.text = None
                                 element.append(link)
+                                stack.append(link)
                             else:
                                 element.addprevious(link)
                                 link.append(element)
+                                stack.insert(-1, link)
                                 link.tail = link[0].tail
                                 link[0].tail = None
+                        currentIgnoreElements += 1
     
     # Add these merely as an alias for readability's sake
     pass1 = buildReferences

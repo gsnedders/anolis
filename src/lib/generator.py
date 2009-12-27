@@ -51,6 +51,8 @@ class File(object):
             self._tree = etree.parse(input)
         elif parser == "lxml.html":
             self._tree = lxml.html.parse(input)
+            for element in self._tree.iter(etree.Element):
+                element.tag = "{http://www.w3.org/1999/xhtml}%s" % element.tag
         elif parser == "html5lib":
             self._tree = html5lib.parse(input, treebuilder="lxml")
         else:
@@ -64,18 +66,28 @@ def files(files, processes, **kwargs):
     for file in files:
         trees.append((file.tree, file.url))
     
-    process(trees, processes, **kwargs)
+    import cProfile
+    import pstats
+    import os
+    import tempfile
+    statfile = tempfile.mkstemp()[1]
+    cProfile.runctx("process(trees, processes, **kwargs)", globals(), locals(), statfile)
+    stats = pstats.Stats(statfile)
+    #stats.strip_dirs()
+    stats.sort_stats('time')
+    stats.print_stats()
+    os.remove(statfile)
     
     for file in files:
         if file.serializer == "xml":
-            output.write(etree.tostring(file.tree,
+            file.output.write(etree.tostring(file.tree,
                                         encoding=file.output_encoding))
         elif file.serializer == "lxml.html":
-            output.write(lxml.html.tostring(file.tree,
+            file.output.write(lxml.html.tostring(file.tree,
                                             encoding=file.output_encoding))
         else:
             walker = html5lib.treewalkers.getTreeWalker("lxml")
-            s = html5lib.htmlserializer.HTMLSerializer(**kwargs)
+            s = html5lib.serializer.htmlserializer.HTMLSerializer(**kwargs)
             for n in s.serialize(walker(file.tree),
                                  encoding=file.output_encoding):
-                output.write(n)
+                file.output.write(n)

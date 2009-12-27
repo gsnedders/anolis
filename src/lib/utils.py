@@ -22,6 +22,8 @@
 import re
 import sys
 from lxml import etree
+import urlparse
+from collections import deque
 
 from html5lib.constants import spaceCharacters
 
@@ -140,7 +142,7 @@ def isInteractiveContent(element):
         element.tag in media_elements and element.get(u"controls") is not None or
         element.tag is u"{http://www.w3.org/1999/xhtml}menu" and 
             element.get(u"type") is not None and
-            element.get(u"type").lower() is u"toolbar"):
+            element.get(u"type").lower() == u"toolbar"):
         return True
     else:
         return False
@@ -175,6 +177,49 @@ def copyContentForRemoval(node, text=True, children=True, tail=True):
                 node.getparent().text = node.tail
             else:
                 node.getparent().text += node.tail
+
+
+def relativeURL(base, to):
+    base = urlparse.urlsplit(base)
+    to = urlparse.urlsplit(to)
+    result = []
+    if base.scheme == to.scheme:
+        result.append(u"")
+        if base.netloc == to.netloc:
+            result.append(u"")
+            if base.path == to.path:
+                result.append(u"")
+                if base.query == to.query:
+                    result.append(u"")
+                else:
+                    result.append(to.query)
+            else:
+                basesegments = deque(base.path.split(u"/"))
+                tosegments = deque(to.path.split(u"/"))
+                if basesegments[0] != tosegments[0]:
+                    result.extend(to[2:4])
+                else:
+                    basesegments.pop()
+                    try:
+                        while basesegments[0] == tosegments[0]:
+                            basesegments.popleft()
+                            last = tosegments.popleft()
+                    except IndexError:
+                        pass
+                    if not basesegments:
+                        result.append(u"/".join(tosegments))
+                    elif not tosegments:
+                        result.append(u"../" * (len(basesegments) + 1) + last)
+                    else:
+                        result.append(u"../" * len(basesegments) +
+                                      u"/".join(tosegments))
+                result.append(to.query)
+        else:
+            result.extend(to[1:4])
+        result.append(to.fragment)
+    else:
+        result = to
+    return urlparse.urlunsplit(result)
 
 
 class AnolisException(Exception):
