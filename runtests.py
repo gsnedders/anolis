@@ -24,6 +24,10 @@ import StringIO
 import os
 import unittest
 
+import html5lib
+from html5lib import treebuilders, treewalkers
+from lxml import etree
+
 from anolislib import generator
 
 
@@ -40,24 +44,30 @@ def buildTestSuite():
 
         def testFunc(self, file_name=file_name):
             try:
+                output = StringIO.StringIO()
+                expected = StringIO.StringIO()
+                
                 # Get the input
                 input = open(file_name, "rb")
                 tree = generator.fromFile(input)
                 input.close()
-
+                
                 # Get the output
-                output = StringIO.StringIO()
-                generator.toFile(tree, output)
+                tree.write_c14n(output)
 
                 # Get the expected result
-                expected = open(file_name[:-9] + ".html", "rb")
+                expectedfp = open(file_name[:-9] + ".html", "rb")
+                builder = treebuilders.getTreeBuilder("lxml", etree)
+                try:
+                    parser = html5lib.HTMLParser(tree=builder, namespaceHTMLElements=False)
+                except TypeError:
+                    parser = html5lib.HTMLParser(tree=builder)
+                expectedTree = parser.parse(expectedfp)
+                expectedfp.close()
+                expectedTree.write_c14n(expected)
 
                 # Run the test
-                self.assertEquals(output.getvalue(), expected.read())
-
-                # Close the files
-                output.close()
-                expected.close()
+                self.assertEquals(output.getvalue(), expected.getvalue())
             except IOError, err:
                 self.fail(err)
 
