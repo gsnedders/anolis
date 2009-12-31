@@ -25,7 +25,7 @@ from distutils.core import setup
 setup(
     # Basic project info
     name = "anolis",
-    version = "1.1dev",
+    version = "1.1",
     packages = ["anolislib", "anolislib/processes"],
     scripts = ["anolis"],
     
