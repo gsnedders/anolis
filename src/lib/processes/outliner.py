@@ -21,7 +21,7 @@
 
 from lxml import etree
 
-from anolislib import utils
+import utils
 
 # Rank of heading elements (these are negative so h1 > h6)
 fixedRank = {
@@ -70,14 +70,14 @@ class Outliner:
         # elements, or otherwise the same as for an h1 element (the highest
         # rank).
         elif element.tag == u"{http://www.w3.org/1999/xhtml}hgroup":
-            for subelement in element.iterdescendents(etree.Element):
+            for subelement in element.iterdescendants(etree.Element):
                 if (subelement.tag.startswith(u"{http://www.w3.org/1999/xhtml}h") and
                     subelement.tag[31:] in frozenset(map(unicode, xrange(1, 6)))):
                     return -int(subelement.tag[31])
             else:
                 return -1
         else:
-            raise ValueError, "Only h1–h6 and hgroup elements have a rank"
+            raise ValueError, "Only h1–h6 and hgroup elements have a rank, not %s" % element.tag
 
     def build(self, **kwargs):
         for action, element in etree.iterwalk(self.ElementTree,

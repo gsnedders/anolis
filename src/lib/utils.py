@@ -38,7 +38,7 @@ heading_content = frozenset([u"{http://www.w3.org/1999/xhtml}h1",
                              u"{http://www.w3.org/1999/xhtml}h4",
                              u"{http://www.w3.org/1999/xhtml}h5",
                              u"{http://www.w3.org/1999/xhtml}h6",
-                             u"{http://www.w3.org/1999/xhtml}header"])
+                             u"{http://www.w3.org/1999/xhtml}hgroup"])
                              
 sectioning_content = frozenset([u"{http://www.w3.org/1999/xhtml}section",
                                 u"{http://www.w3.org/1999/xhtml}nav",
