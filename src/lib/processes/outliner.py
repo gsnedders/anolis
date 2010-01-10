@@ -36,8 +36,11 @@ fixedRank = {
 
 class section(list):
     """Represents the section of a document."""
-
-    header = None
+    
+    def __init__(self, element=None, header=None, *args, **kwargs):
+        list.__init__(self, *args, **kwargs)
+        self.header = header
+        self.element = element
 
     def __repr__(self):
         return "<section %s>" % (repr(self.header))
@@ -107,7 +110,7 @@ class Outliner:
                 self.current_outlinee = element
                 # Let current section be a newly created section for the
                 # current outlinee element.
-                self.current_section = section()
+                self.current_section = section(element=element)
                 # Let there be a new outline for the new current outlinee,
                 # initialized with just the new current section as the only
                 # section in the outline.
@@ -182,9 +185,9 @@ class Outliner:
                 # section.
                 elif (self._rank(element) >=
                       self._rank(self.outlines[self.current_outlinee][-1].header)):
-                    self.current_section = section()
+                    self.current_section = section(element=element,
+                                                   header=element)
                     self.outlines[self.current_outlinee].append(self.current_section)
-                    self.current_section.header = element
 
                 # Otherwise, run these substeps:
                 else:
@@ -200,9 +203,9 @@ class Outliner:
                         # the new heading for the current section. Abort these
                         # substeps.
                         if self._rank(element) < self._rank(candidate_section.header):
-                            self.current_section = section()
+                            self.current_section = section(element=element,
+                                                           header=element)
                             candidate_section.append(self.current_section)
-                            self.current_section.header = element
                             break
                         # Let new candidate section be the section that
                         # contains candidate section in the outline of current
