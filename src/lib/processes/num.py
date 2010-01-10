@@ -39,8 +39,7 @@ class Process(object):
             self.num = []
         
         # Build the outline of the document
-        outline_creator = outliner.Outliner(tree, **kwargs)
-        outline = outline_creator.build(**kwargs)
+        outline = outliner.outliner(tree)
 
         # Get a list of all the top level sections, and their depth (0)
         sections = [(section, 0) for section in reversed(outline)]
