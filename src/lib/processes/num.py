@@ -54,10 +54,9 @@ class Process(object):
             if section.header is not None:
                 # Get the element that represents the section header's text
                 if section.header.tag == u"{http://www.w3.org/1999/xhtml}hgroup":
-                    for subelement in section.header.iterdescendants(etree.Element):
-                        if (subelement.tag.startswith(u"{http://www.w3.org/1999/xhtml}h") and
-                            subelement.tag[31:] in frozenset(map(unicode, xrange(1, 6)))):
-                            header_text = subelement
+                    for i in xrange(1, 7):
+                        header_text = section.header.find(u".//{http://www.w3.org/1999/xhtml}h%i" % i)
+                        if header_text is not None:
                             break
                     else:
                         header_text = None

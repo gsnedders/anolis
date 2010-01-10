@@ -70,10 +70,9 @@ class Outliner:
         # elements, or otherwise the same as for an h1 element (the highest
         # rank).
         elif element.tag == u"{http://www.w3.org/1999/xhtml}hgroup":
-            for subelement in element.iterdescendants(etree.Element):
-                if (subelement.tag.startswith(u"{http://www.w3.org/1999/xhtml}h") and
-                    subelement.tag[31:] in frozenset(map(unicode, xrange(1, 6)))):
-                    return -int(subelement.tag[31])
+            for i in xrange(1, 7):
+                if element.find(u".//{http://www.w3.org/1999/xhtml}h%i" % i) is not None:
+                    return -i
             else:
                 return -1
         else:
