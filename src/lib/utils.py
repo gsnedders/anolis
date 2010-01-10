@@ -94,9 +94,7 @@ def elementHasClass(element, class_name):
 
 
 def generateID(element, force_html4_id=False, **kwargs):
-    if element.get(u"id") is not None:
-        return element.get(u"id")
-    elif (element.get(u"title") is not None and
+    if (element.get(u"title") is not None and
           element.get(u"title").strip(spaceCharacters)):
         source = element.get(u"title")
     else:

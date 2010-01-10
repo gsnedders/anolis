@@ -83,7 +83,7 @@ class Process(object):
     def buildReferences(self, tree, url, allow_duplicate_dfns = False,
                         **kwargs):
         ids = set()
-        for element in tree.iter():
+        for element in tree.iter(tag=etree.Element):
             if element.get(u"id") is not None:
                 ids.add(element.get(u"id"))
         
@@ -101,74 +101,73 @@ class Process(object):
                         link_to = parent_element
                         break
 
-                base = id = utils.generateID(link_to, **kwargs)
-                i = 0
-                while id in ids:
-                    id = u"%s-%s" % (base, i)
-                    i += 1
-
-                link_to.set(u"id", id)
-                ids.add(id)
+                if link_to.get(u"id") is None:
+                    base = id = utils.generateID(link_to, **kwargs)
+                    i = 0
+                    while id in ids:
+                        id = u"%s-%s" % (base, i)
+                        i += 1
+    
+                    link_to.set(u"id", id)
+                    ids.add(id)
+                else:
+                    id = link_to.get(u"id")
 
                 self.dfns[term] = urlparse.urljoin(url, u"#%s" % id)
 
     def addReferences(self, tree, url, w3c_compat=False,
                       w3c_compat_xref_elements=False,
                       w3c_compat_xref_a_placement=False, **kwargs):
+        dirty = set()
         stack = []
-        currentIgnoreElements = 0
+        currentlyIgnore = None
         for element in tree.iter(tag=etree.Element):
             try:
                 while stack[-1] is not element.getparent():
                     parent = stack.pop()
-                    if (parent.tag == "{http://www.w3.org/1999/xhtml}dfn" or
-                        utils.isInteractiveContent(parent)):
-                        currentIgnoreElements -= 1
+                    if parent is currentlyIgnore:
+                        currentlyIgnore = None
             except IndexError:
                 pass
             stack.append(element)
-            if (element.tag == "{http://www.w3.org/1999/xhtml}dfn" or
-                utils.isInteractiveContent(element)):
-                currentIgnoreElements += 1
-            
-            if (not currentIgnoreElements and
+            if (currentlyIgnore is None and
+                (element.tag == "{http://www.w3.org/1999/xhtml}dfn" or
+                 utils.isInteractiveContent(element))):
+                currentlyIgnore = element
+                for el in stack:
+                    dirty.add(el)
+            elif currentlyIgnore is not None:
+                dirty.add(element)
+        
+        for element in tree.iter(tag=etree.Element):
+            if (element not in dirty and
                 element.tag in instance_elements or
                 (w3c_compat or w3c_compat_xref_elements) and
                 element.tag in w3c_instance_elements):
                 term = self.getTerm(element, w3c_compat=w3c_compat, **kwargs)
 
                 if term in self.dfns:
-                    # XXX: Do we want to create a set of dirty elements?
-                    goodChildren = True
+                    href = utils.relativeURL(url, self.dfns[term])
+                    if element.tag == u"{http://www.w3.org/1999/xhtml}span":
+                        element.tag = u"{http://www.w3.org/1999/xhtml}a"
+                        element.set(u"href", href)
+                    else:
+                        link = etree.Element(u"{http://www.w3.org/1999/xhtml}a",
+                                             {u"href": href})
+                        if w3c_compat or w3c_compat_xref_a_placement:
+                            for node in element:
+                                link.append(node)
+                            link.text = element.text
+                            element.text = None
+                            element.append(link)
+                        else:
+                            element.addprevious(link)
+                            link.append(element)
+                            link.tail = link[0].tail
+                            link[0].tail = None
                     
                     for child_element in element.iterdescendants(tag=etree.Element):
-                        if (child_element.tag == "{http://www.w3.org/1999/xhtml}dfn" or
-                            utils.isInteractiveContent(child_element)):
-                            goodChildren = False
-                            break
-
-                    if goodChildren:
-                        href = utils.relativeURL(url, self.dfns[term])
-                        if element.tag == u"{http://www.w3.org/1999/xhtml}span":
-                            element.tag = u"{http://www.w3.org/1999/xhtml}a"
-                            element.set(u"href", href)
-                        else:
-                            link = etree.Element(u"{http://www.w3.org/1999/xhtml}a",
-                                                 {u"href": href})
-                            if w3c_compat or w3c_compat_xref_a_placement:
-                                for node in element:
-                                    link.append(node)
-                                link.text = element.text
-                                element.text = None
-                                element.append(link)
-                                stack.append(link)
-                            else:
-                                element.addprevious(link)
-                                link.append(element)
-                                stack.insert(-1, link)
-                                link.tail = link[0].tail
-                                link[0].tail = None
-                        currentIgnoreElements += 1
+                        dirty.add(child_element)
     
     # Add these merely as an alias for readability's sake
     pass1 = buildReferences
