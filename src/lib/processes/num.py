@@ -53,13 +53,12 @@ class Process(object):
             # If we have a header, regardless of how deep we are
             if section.header is not None:
                 # Get the element that represents the section header's text
-                if section.header.tag == u"hgroup":
-                    i = 1
-                    while i <= 6:
-                        header_text = section.header.find(u".//h" + unicode(i))
-                        if header_text is not None:
+                if section.header.tag == u"{http://www.w3.org/1999/xhtml}hgroup":
+                    for subelement in section.header.iterdescendants(etree.Element):
+                        if (subelement.tag.startswith(u"{http://www.w3.org/1999/xhtml}h") and
+                            subelement.tag[31:] in frozenset(map(unicode, xrange(1, 6)))):
+                            header_text = subelement
                             break
-                        i += 1
                     else:
                         header_text = None
                 else:
@@ -70,7 +69,7 @@ class Process(object):
             # If we have a section heading text element, regardless of depth
             if header_text is not None:
                 # Remove any existing number
-                for element in header_text.findall(u".//span"):
+                for element in list(header_text.iter(u"{http://www.w3.org/1999/xhtml}span")):
                     if utils.elementHasClass(element, u"secno"):
                         # Copy content, to prepare for the node being
                         # removed
@@ -97,8 +96,8 @@ class Process(object):
             if header_text is not None:
                 # Add number, if @class doesn't contain no-num
                 if not utils.elementHasClass(header_text, u"no-num"):
-                    header_text[0:0] = [etree.Element(u"span", {u"class":
-                                                                u"secno"})]
+                    header_text[0:0] = [etree.Element(u"{http://www.w3.org/1999/xhtml}span",
+                                                      {u"class": u"secno"})]
                     header_text[0].tail = header_text.text
                     header_text.text = None
                     header_text[0].text = u".".join(map(unicode, self.num))
