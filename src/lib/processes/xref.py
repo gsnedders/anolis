@@ -148,8 +148,7 @@ class Process(object):
                             break
 
                     if goodChildren:
-                        #href = utils.relativeURL(url, self.dfns[term])
-                        href = self.dfns[term]
+                        href = utils.relativeURL(url, self.dfns[term])
                         if element.tag == u"{http://www.w3.org/1999/xhtml}span":
                             element.tag = u"{http://www.w3.org/1999/xhtml}a"
                             element.set(u"href", href)
