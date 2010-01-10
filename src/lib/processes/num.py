@@ -86,9 +86,9 @@ class Process(object):
                 self.num.append(0)
 
             # Increment the current section's number
-            if header_text is not None and \
-               not utils.elementHasClass(header_text, u"no-num") or \
-               header_text is None and section:
+            if (header_text is not None and
+                not utils.elementHasClass(header_text, u"no-num") or
+                header_text is None):
                 self.num[-1] += 1
 
             # If we have a header
