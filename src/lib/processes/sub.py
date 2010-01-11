@@ -72,8 +72,6 @@ logo_sub = etree.fromstring(u'<p xmlns="http://www.w3.org/1999/xhtml"><a href="h
 copyright = u"copyright"
 copyright_sub = etree.fromstring(u'<p class="copyright" xmlns="http://www.w3.org/1999/xhtml"><a href="http://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> &#xA9; %s <a href="http://www.w3.org/"><acronym title="World Wide Web Consortium">W3C</acronym></a><sup>&#xAE;</sup> (<a href="http://www.csail.mit.edu/"><acronym title="Massachusetts Institute of Technology">MIT</acronym></a>, <a href="http://www.ercim.org/"><acronym title="European Research Consortium for Informatics and Mathematics">ERCIM</acronym></a>, <a href="http://www.keio.ac.jp/">Keio</a>), All Rights Reserved. W3C <a href="http://www.w3.org/Consortium/Legal/ipr-notice#Legal_Disclaimer">liability</a>, <a href="http://www.w3.org/Consortium/Legal/ipr-notice#W3C_Trademarks">trademark</a> and <a href="http://www.w3.org/Consortium/Legal/copyright-documents">document use</a> rules apply.</p>' % time.strftime(u"%Y", time.gmtime()))
 
-basic_comment_subs = ()
-
 def Process(tree, url, w3c_compat=False, w3c_compat_substitutions=False,
             w3c_compat_crazy_substitutions=False, **kwargs):
     xml = etree.tostring(tree)
