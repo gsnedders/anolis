@@ -47,9 +47,6 @@ class Process(object):
         # Get a list of all the top level sections, and their depth (0)
         sections = [(section, 0) for section in reversed(outline)]
         
-        # The depth of the top level in the numbering, affected by num-root
-        depthRoot = 0
-        
         # Sections to add num to (set of tuples with (header text, num str)
         addNumSections = set()
 
@@ -62,8 +59,8 @@ class Process(object):
             if (utils.elementHasClass(section.element, u"num-root") or
                 section.header is not None and
                 utils.elementHasClass(section.header, u"num-root")):
-                depthRoot = depth + 1
                 self.num = initialNum
+                depth = -1
                 sections = []
                 addNumSections = set()
 
@@ -86,10 +83,10 @@ class Process(object):
                             element.getparent().remove(element)
     
                 # No children, no sibling, move back to parent's sibling
-                if depth - depthRoot + 1 < len(self.num):
-                    del self.num[depth - depthRoot + 1:]
+                if depth + 1 < len(self.num):
+                    del self.num[depth + 1:]
                 # Children
-                elif depth - depthRoot == len(self.num):
+                elif depth == len(self.num):
                     self.num.append(0)
     
                 # Increment the current section's number
