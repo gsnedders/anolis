@@ -44,6 +44,19 @@ class section(list):
 
     def __repr__(self):
         return "<section %s>" % (repr(self.header))
+    
+    @property
+    def header_text_element(self):
+        if self.header is not None:
+            # Get the element that represents the section header's text
+            if self.header.tag == u"{http://www.w3.org/1999/xhtml}hgroup":
+                for i in xrange(1, 7):
+                    header_text = self.header.find(u".//{http://www.w3.org/1999/xhtml}h%i" % i)
+                    if header_text is not None:
+                        return header_text
+            else:
+                return self.header
+        return None
 
     def append(self, child):
         list.append(self, child)

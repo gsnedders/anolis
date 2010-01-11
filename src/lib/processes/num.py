@@ -49,20 +49,8 @@ class Process(object):
             # Get the section and depth at the end of list
             section, depth = sections.pop()
 
-            # If we have a header, regardless of how deep we are
-            if section.header is not None:
-                # Get the element that represents the section header's text
-                if section.header.tag == u"{http://www.w3.org/1999/xhtml}hgroup":
-                    for i in xrange(1, 7):
-                        header_text = section.header.find(u".//{http://www.w3.org/1999/xhtml}h%i" % i)
-                        if header_text is not None:
-                            break
-                    else:
-                        header_text = None
-                else:
-                    header_text = section.header
-            else:
-                header_text = None
+            # Get the element from which the header text comes from
+            header_text = section.header_text_element
 
             # If we have a section heading text element, regardless of depth
             if header_text is not None:
