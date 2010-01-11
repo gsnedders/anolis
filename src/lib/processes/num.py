@@ -38,58 +38,80 @@ class Process(object):
         if perFileNum:
             self.num = []
         
+        # Store the initial num in case we have to back-track
+        initialNum = []
+        
         # Build the outline of the document
         outline = outliner.outliner(tree)
 
         # Get a list of all the top level sections, and their depth (0)
         sections = [(section, 0) for section in reversed(outline)]
+        
+        # The depth of the top level in the numbering, affected by num-root
+        depthRoot = 0
+        
+        # Sections to add num to (set of tuples with (header text, num str)
+        addNumSections = set()
 
         # Loop over all sections in a DFS
         while sections:
             # Get the section and depth at the end of list
             section, depth = sections.pop()
+            
+            # Check if we want to use this as the root of the numbering
+            if (utils.elementHasClass(section.element, u"num-root") or
+                section.header is not None and
+                utils.elementHasClass(section.header, u"num-root")):
+                depthRoot = depth + 1
+                self.num = initialNum
+                sections = []
+                addNumSections = set()
 
-            # Get the element from which the header text comes from
-            header_text = section.header_text_element
-
-            # If we have a section heading text element, regardless of depth
-            if header_text is not None:
-                # Remove any existing number
-                for element in list(header_text.iter(u"{http://www.w3.org/1999/xhtml}span")):
-                    if utils.elementHasClass(element, u"secno"):
-                        # Copy content, to prepare for the node being
-                        # removed
-                        utils.copyContentForRemoval(element, text=False,
-                                                    children=False)
-                        # Remove the element (we can do this as we're not
-                        # iterating over the elements, but over a list)
-                        element.getparent().remove(element)
-
-            # No children, no sibling, move back to parent's sibling
-            if depth + 1 < len(self.num):
-                del self.num[depth + 1:]
-            # Children
-            elif depth == len(self.num):
-                self.num.append(0)
-
-            # Increment the current section's number
-            if (header_text is not None and
-                not utils.elementHasClass(header_text, u"no-num") or
-                header_text is None):
-                self.num[-1] += 1
-
-            # If we have a header
-            if header_text is not None:
-                # Add number, if @class doesn't contain no-num
-                if not utils.elementHasClass(header_text, u"no-num"):
-                    header_text[0:0] = [etree.Element(u"{http://www.w3.org/1999/xhtml}span",
-                                                      {u"class": u"secno"})]
-                    header_text[0].tail = header_text.text
-                    header_text.text = None
-                    header_text[0].text = u".".join(map(unicode, self.num))
-                    header_text[0].text += u" "
+            # If this section isn't the root of the numbering, do the magic
+            else:
+                # Get the element from which the header text comes from
+                header_text = section.header_text_element
+    
+                # If we have a section heading text element
+                if header_text is not None:
+                    # Remove any existing number
+                    for element in list(header_text.iter(u"{http://www.w3.org/1999/xhtml}span")):
+                        if utils.elementHasClass(element, u"secno"):
+                            # Copy content, to prepare for the node being
+                            # removed
+                            utils.copyContentForRemoval(element, text=False,
+                                                        children=False)
+                            # Remove the element (we can do this as we're not
+                            # iterating over the elements, but over a list)
+                            element.getparent().remove(element)
+    
+                # No children, no sibling, move back to parent's sibling
+                if depth - depthRoot + 1 < len(self.num):
+                    del self.num[depth - depthRoot + 1:]
+                # Children
+                elif depth - depthRoot == len(self.num):
+                    self.num.append(0)
+    
+                # Increment the current section's number
+                if (header_text is not None and
+                    not utils.elementHasClass(header_text, u"no-num") or
+                    header_text is None):
+                    self.num[-1] += 1
+    
+                # If we have a header, add number, if @class doesn't contain no-num
+                if (header_text is not None and
+                    not utils.elementHasClass(header_text, u"no-num")):
+                    addNumSections.add((header_text, u".".join(map(unicode, self.num)),))
             
             # Add subsections in reverse order (so the next one is executed
             # next) with a higher depth value
             sections.extend([(child_section, depth + 1)
                              for child_section in reversed(section)])
+        
+        # Actually add numbers
+        for header_text, num in addNumSections:
+            header_text.insert(0, etree.Element(u"{http://www.w3.org/1999/xhtml}span",
+                                                {u"class": u"secno"}))
+            header_text[0].tail = header_text.text
+            header_text.text = None
+            header_text[0].text = u"".join([num, u" "])
