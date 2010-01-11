@@ -33,7 +33,7 @@ class Process(object):
     def __init__(self, **kwargs):
         self.num = []
 
-    def pass1(self, tree, perFileNum=True, **kwargs):
+    def pass1(self, tree, url, perFileNum=True, **kwargs):
         # Reset if we have per-file numbering
         if perFileNum:
             self.num = []
