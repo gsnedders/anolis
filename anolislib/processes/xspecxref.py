@@ -1,6 +1,6 @@
 # coding=UTF-8
 # Copyright (c) 2008 Geoffrey Sneddon
-#         2010 Ms2ger
+#               2010 Ms2ger
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -27,8 +27,6 @@ from copy import deepcopy
 
 from anolislib import utils
 
-specs = frozenset([u"html", u"webidl"])
-
 instance_elements = frozenset([u"span", u"abbr", u"code", u"var", u"i"])
 w3c_instance_elements = frozenset([u"abbr", u"acronym", u"b", u"bdo", u"big",
                    u"code", u"del", u"em", u"i", u"ins",
@@ -53,8 +51,10 @@ class xspecxref(object):
 
   def buildReferences(self, ElementTree, allow_duplicate_dfns=False,
                       **kwargs):
+    manifest = open("cross-spec-refs/specs.json", "rb")
+    specs = json.load(manifest)["specs"]
     for spec in specs:
-      file = open(spec + ".json", "rb")
+      file = open("cross-spec-refs/" + spec + ".json", "rb")
       dfn = json.load(file)
       name = dfn["name"]
       url = dfn["url"]
