@@ -96,7 +96,7 @@ class Process(object):
                     self.num[-1] += 1
     
                     # If we have a header, add number
-                    if (header_text is not None):
+                    if header_text is not None:
                         addNumSections.add((header_text, u".".join(map(unicode, self.num)),))
             
             # Add subsections in reverse order (so the next one is executed
