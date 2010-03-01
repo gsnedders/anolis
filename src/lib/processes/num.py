@@ -88,17 +88,16 @@ class Process(object):
                 # Children
                 elif depth == len(self.num):
                     self.num.append(0)
-    
-                # Increment the current section's number
-                if (header_text is not None and
-                    not utils.elementHasClass(header_text, u"no-num") or
-                    header_text is None):
+                
+                # Not no-num:
+                if (header_text is None or 
+                    not utils.elementHasClass(header_text, u"no-num")):
+                    # Increment the current section's number
                     self.num[-1] += 1
     
-                # If we have a header, add number, if @class doesn't contain no-num
-                if (header_text is not None and
-                    not utils.elementHasClass(header_text, u"no-num")):
-                    addNumSections.add((header_text, u".".join(map(unicode, self.num)),))
+                    # If we have a header, add number
+                    if (header_text is not None):
+                        addNumSections.add((header_text, u".".join(map(unicode, self.num)),))
             
             # Add subsections in reverse order (so the next one is executed
             # next) with a higher depth value
