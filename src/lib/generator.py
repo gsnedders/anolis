@@ -53,6 +53,10 @@ class File(object):
             self._tree = lxml.html.parse(input)
             for element in self._tree.iter(etree.Element):
                 element.tag = "{http://www.w3.org/1999/xhtml}%s" % element.tag
+            try:
+                self._tree = etree.fromstring(etree.tostring(self._tree))
+            except etree.XMLSyntaxError:
+                pass
         elif parser == "html5lib":
             self._tree = html5lib.parse(input, treebuilder="lxml")
         else:
