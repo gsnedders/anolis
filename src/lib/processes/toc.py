@@ -42,6 +42,7 @@ class Process(object):
 
     def buildToc(self, tree, url, w3c_compat=False,
                  w3c_compat_class_toc=False, **kwargs):
+        # Set of ids in document
         ids = set()
         for element in tree.iter(tag=etree.Element):
             if element.get(u"id") is not None:
@@ -49,6 +50,9 @@ class Process(object):
         
         # Build the outline of the document
         outline = outliner.outliner(tree)
+        
+        # Create empty TOC
+        self.toc[url] = etree.Element(u"ol", {u"class": u"toc"})
         
         # Effective root depth
         rootDepth = 0
@@ -73,8 +77,6 @@ class Process(object):
             # next) with a higher depth value
             sections.extend([(child_section, depth + 1)
                              for child_section in section])
-        
-        self.toc[url] = etree.Element(u"ol", {u"class": u"toc"})
 
         # Get a list of all the top level sections, and their depth (0)
         sections = [(section, 0) for section in reversed(outline)]
