@@ -19,6 +19,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+from weakref import WeakKeyDictionary
 from lxml import etree
 
 import utils
@@ -32,6 +33,12 @@ fixedRank = {
     u"{http://www.w3.org/1999/xhtml}h5": -5,
     u"{http://www.w3.org/1999/xhtml}h6": -6
 }
+
+
+# Cache for outlines
+# lxml.etree._Element objects can't have weakrefs, what should I do?
+# cache = WeakKeyDictionary()
+cache = {}
 
 
 class section(list):
@@ -86,6 +93,11 @@ def _rank(element):
 
 
 def outliner(tree):
+    # Return a cached outline if possible
+    if tree in cache:
+        return cache[tree]
+    
+    # Otherwise compute it
     stack = []
     outlines = {}
     current_outlinee = None
@@ -224,6 +236,7 @@ def outliner(tree):
     # If the current outlinee is null, then there was no sectioning content
     # element or sectioning root element in the DOM. There is no outline.
     try:
+        cache[tree] = outlines[current_outlinee]
         return outlines[current_outlinee]
     except KeyError:
         return None
