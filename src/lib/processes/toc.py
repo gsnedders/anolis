@@ -98,6 +98,7 @@ class Process(object):
                         else:
                             base = id = header_text.get(u"id")
                             del header_text.attribs[u"id"]
+                            ids.remove(id)
                     else:
                         base = id = "unknown-section"
                     i = 0
