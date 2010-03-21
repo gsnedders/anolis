@@ -27,7 +27,7 @@ import utils
 import outliner, sub
 
 # These are just the non-interactive elements to be removed
-remove_elements_from_toc = frozenset([u"dfn", ])
+remove_elements_from_toc = frozenset([u"{http://www.w3.org/1999/xhtml}dfn", ])
 # These are, however, all the attributes to be removed
 remove_attributes_from_toc = frozenset([u"id", ])
 
@@ -52,7 +52,8 @@ class Process(object):
         outline = outliner.outliner(tree)
         
         # Create empty TOC
-        self.toc[url] = etree.Element(u"ol", {u"class": u"toc"})
+        self.toc[url] = etree.Element(u"{http://www.w3.org/1999/xhtml}ol",
+                                      {u"class": u"toc"})
         
         # Effective root depth
         rootDepth = 0
@@ -119,23 +120,23 @@ class Process(object):
                             # If the final li has no children, or the last
                             # child isn't an ol element
                             if (len(toc_section[-1]) == 0 or
-                                toc_section[-1][-1].tag != u"ol"):
-                                toc_section[-1].append(etree.Element(u"ol"))
+                                toc_section[-1][-1].tag != u"{http://www.w3.org/1999/xhtml}ol"):
+                                toc_section[-1].append(etree.Element(u"{http://www.w3.org/1999/xhtml}ol"))
                                 if w3c_compat or w3c_compat_class_toc:
                                     toc_section[-1][-1].set(u"class", u"toc")
                         except IndexError:
                             # If the current ol has no li in it
-                            toc_section.append(etree.Element(u"li"))
-                            toc_section[0].append(etree.Element(u"ol"))
+                            toc_section.append(etree.Element(u"{http://www.w3.org/1999/xhtml}li"))
+                            toc_section[0].append(etree.Element(u"{http://www.w3.org/1999/xhtml}ol"))
                             if w3c_compat or w3c_compat_class_toc:
                                 toc_section[0][0].set(u"class", u"toc")
                         # TOC Section is now the final child (ol) of the final
                         # item (li) in the previous section
-                        assert toc_section[-1].tag == u"li"
-                        assert toc_section[-1][-1].tag == u"ol"
+                        assert toc_section[-1].tag == u"{http://www.w3.org/1999/xhtml}li"
+                        assert toc_section[-1][-1].tag == u"{http://www.w3.org/1999/xhtml}ol"
                         toc_section = toc_section[-1][-1]
                     # Add the current item to the TOC
-                    item = etree.Element(u"li")
+                    item = etree.Element(u"{http://www.w3.org/1999/xhtml}li")
                     toc_section.append(item)
                     
                     # Add to TOC, if @class doesn't contain no-toc
@@ -143,7 +144,7 @@ class Process(object):
                         link = deepcopy(header_text)
                         item.append(link)
                         # Make it link to the header
-                        link.tag = u"a"
+                        link.tag = u"{http://www.w3.org/1999/xhtml}a"
                         link.set(u"href", u"#" + id)
                         # Remove interactive content child elements
                         utils.removeInteractiveContentChildren(link)
@@ -170,7 +171,7 @@ class Process(object):
                         assert (utils.textContent(header_text) ==
                                 utils.textContent(link))
                     else:
-                        item.append(etree.Element(u"a"))
+                        item.append(etree.Element(u"{http://www.w3.org/1999/xhtml}a"))
                         item[-1].set(u"href", u"#" + id)
                         item[-1].text = "Unknown Section"
             
