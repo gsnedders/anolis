@@ -167,8 +167,8 @@ class Process(object):
                         # We don't want the old tail
                         link.tail = None
                         # Check we haven't changed the content in all of that
-                        assert utils.textContent(header_text) == \
-                               utils.textContent(link)
+                        assert (utils.textContent(header_text) ==
+                                utils.textContent(link))
                     else:
                         item.append(etree.Element(u"a"))
                         item[-1].set(u"href", u"#" + id)
