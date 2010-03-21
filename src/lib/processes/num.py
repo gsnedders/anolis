@@ -21,6 +21,7 @@
 
 from lxml import etree
 from copy import deepcopy
+from collections import deque
 
 import utils
 import outliner
@@ -38,55 +39,64 @@ class Process(object):
         if perFileNum:
             self.num = []
         
-        # Store the initial num in case we have to back-track
-        initialNum = []
-        
         # Build the outline of the document
         outline = outliner.outliner(tree)
+        
+        # Effective root depth
+        rootDepth = 0
+
+        # Get a list of all the top level sections, and their depth (0)
+        sections = deque([(section, 0) for section in outline])
+        
+        # Find effective root depth with a BFS
+        while sections:
+            # Get the section and depth at the start of list
+            section, depth = sections.popleft()
+            
+            # Get the element from which the header text comes from
+            header_text = section.header_text_element
+            
+            if (header_text is None or 
+                not utils.elementHasClass(header_text, u"no-num")):
+                rootDepth = depth
+                break
+            
+            # Add subsections in reverse order (so the next one is executed
+            # next) with a higher depth value
+            sections.extend([(child_section, depth + 1)
+                             for child_section in section])
 
         # Get a list of all the top level sections, and their depth (0)
         sections = [(section, 0) for section in reversed(outline)]
-        
-        # Sections to add num to (set of tuples with (header text, num str)
-        addNumSections = set()
 
-        # Loop over all sections in a DFS
+        # Loop over all sections in a DFS to actually number them
         while sections:
             # Get the section and depth at the end of list
             section, depth = sections.pop()
             
-            # Check if we want to use this as the root of the numbering
-            if (utils.elementHasClass(section.element, u"num-root") or
-                section.header is not None and
-                utils.elementHasClass(section.header, u"num-root")):
-                self.num = initialNum
-                depth = -1
-                sections = []
-                addNumSections = set()
-
-            # If this section isn't the root of the numbering, do the magic
-            else:
-                # Get the element from which the header text comes from
-                header_text = section.header_text_element
-    
-                # If we have a section heading text element
-                if header_text is not None:
-                    # Remove any existing number
-                    for element in list(header_text.iter(u"{http://www.w3.org/1999/xhtml}span")):
-                        if utils.elementHasClass(element, u"secno"):
-                            # Copy content, to prepare for the node being
-                            # removed
-                            utils.copyContentForRemoval(element, text=False,
-                                                        children=False)
-                            # Remove the element (we can do this as we're not
-                            # iterating over the elements, but over a list)
-                            element.getparent().remove(element)
-    
+            # Get the element from which the header text comes from
+            header_text = section.header_text_element
+                
+            # If we have a section heading text element
+            if header_text is not None:
+                # Remove any existing number
+                for element in list(header_text.iter(u"{http://www.w3.org/1999/xhtml}span")):
+                    if utils.elementHasClass(element, u"secno"):
+                        # Copy content, to prepare for the node being
+                        # removed
+                        utils.copyContentForRemoval(element, text=False,
+                                                    children=False)
+                        # Remove the element (we can do this as we're not
+                        # iterating over the elements, but over a list)
+                        element.getparent().remove(element)
+            
+            # If we're deep enough to actually want to number this section
+            if depth >= rootDepth:
                 # No children, no sibling, move back to parent's sibling
-                if depth + 1 < len(self.num):
-                    del self.num[depth + 1:]
+                if depth - rootDepth + 1 < len(self.num):
+                    del self.num[depth - rootDepth + 1:]
                 # Children
-                elif depth == len(self.num):
+                elif depth - rootDepth == len(self.num):
                     self.num.append(0)
                 
                 # Not no-num:
@@ -97,17 +107,13 @@ class Process(object):
     
                     # If we have a header, add number
                     if header_text is not None:
-                        addNumSections.add((header_text, u".".join(map(unicode, self.num)),))
+                        header_text.insert(0, etree.Element(u"{http://www.w3.org/1999/xhtml}span",
+                                                            {u"class": u"secno"}))
+                        header_text[0].tail = header_text.text
+                        header_text.text = None
+                        header_text[0].text = u".".join(map(unicode, self.num)) + u" "
             
             # Add subsections in reverse order (so the next one is executed
             # next) with a higher depth value
             sections.extend([(child_section, depth + 1)
                              for child_section in reversed(section)])
-        
-        # Actually add numbers
-        for header_text, num in addNumSections:
-            header_text.insert(0, etree.Element(u"{http://www.w3.org/1999/xhtml}span",
-                                                {u"class": u"secno"}))
-            header_text[0].tail = header_text.text
-            header_text.text = None
-            header_text[0].text = u"".join([num, u" "])
