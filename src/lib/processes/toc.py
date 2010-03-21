@@ -87,6 +87,7 @@ class Process(object):
             # Get the section and depth at the end of list
             section, depth = sections.pop()
 
+            # Get the element from which the header text comes from
             header_text = section.header_text_element
 
             # If we're deep enough to actually want to number this section
