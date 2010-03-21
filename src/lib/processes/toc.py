@@ -42,12 +42,6 @@ class Process(object):
 
     def buildToc(self, tree, url, w3c_compat=False,
                  w3c_compat_class_toc=False, **kwargs):
-        # Set of ids in document
-        ids = set()
-        for element in tree.iter(tag=etree.Element):
-            if element.get(u"id") is not None:
-                ids.add(element.get(u"id"))
-        
         # Build the outline of the document
         outline = outliner.outliner(tree)
         
@@ -92,25 +86,6 @@ class Process(object):
 
             # If we're deep enough to actually want to number this section
             if depth >= rootDepth:
-                if section.element.get(u"id") is None:
-                    if header_text is not None:
-                        if header_text.get(u"id") is None:
-                            base = id = utils.generateID(header_text, **kwargs)
-                        else:
-                            base = id = header_text.get(u"id")
-                            del header_text.attribs[u"id"]
-                            ids.remove(id)
-                    else:
-                        base = id = "unknown-section"
-                    i = 0
-                    while id in ids:
-                        id = u"%s-%s" % (base, i)
-                        i += 1
-                    section.element.set(u"id", id)
-                    ids.add(id)
-                else:
-                    id = section.element.get(u"id")
-
                 # Get the current TOC section for this depth, and add another
                 # item to it
                 if (header_text is None or 
@@ -141,7 +116,10 @@ class Process(object):
                     item = etree.Element(u"{http://www.w3.org/1999/xhtml}li")
                     toc_section.append(item)
                     
-                    # Add to TOC, if @class doesn't contain no-toc
+                    # Get the section id
+                    id = section.element.get(u"id")
+                    
+                    # Add to TOC
                     if header_text is not None:
                         link = deepcopy(header_text)
                         item.append(link)
