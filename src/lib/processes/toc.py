@@ -187,8 +187,3 @@ class Process(object):
     
     pass1 = buildToc
     pass2 = addToc
-
-
-class DifferentParentException(utils.AnolisException):
-    """begin-toc and end-toc do not have the same parent."""
-    pass
