@@ -131,8 +131,3 @@ class xspecxref(object):
       term = non_alphanumeric_spaces.sub(u"", term)
 
     return term
-
-
-class DuplicateDfnException(utils.AnolisException):
-  """Term already defined."""
-  pass
