@@ -73,7 +73,8 @@ class xspecxref(object):
         spec = element.get(u"data-anolis-spec")
         del element.attrib["data-anolis-spec"]
 
-        if (self.dfns[spec]
+        if (spec in self.dfns
+            and self.dfns[spec]
             and self.dfns[spec]["values"]
             and term in self.dfns[spec]["values"]):
           obj = self.dfns[spec]
