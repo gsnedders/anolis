@@ -72,6 +72,10 @@ class xspecxref(object):
         term = self.getTerm(element, w3c_compat=w3c_compat, **kwargs)
         spec = element.get(u"data-anolis-spec")
         del element.attrib["data-anolis-spec"]
+        if element.get(u"class") is not None:
+          element.set(u"class", element.get(u"class") + u" external")
+        else:
+          element.set(u"class", u"external")
 
         if (spec in self.dfns
             and self.dfns[spec]
