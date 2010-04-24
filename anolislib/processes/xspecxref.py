@@ -77,46 +77,48 @@ class xspecxref(object):
         else:
           element.set(u"class", u"external")
 
-        if (spec in self.dfns
-            and self.dfns[spec]
-            and self.dfns[spec]["values"]
-            and term in self.dfns[spec]["values"]):
-          obj = self.dfns[spec]
-          goodParentingAndChildren = True
+        if not spec in self.dfns or not self.dfns[spec] or \
+           not self.dfns[spec]["values"] or \
+           not term in self.dfns[spec]["values"]:
+          print spec, term
+          continue
 
-          for parent_element in \
-            element.iterancestors(tag=etree.Element):
-            if (parent_element.tag in instance_not_in_stack_with or
-              utils.isInteractiveContent(parent_element)):
+        obj = self.dfns[spec]
+        goodParentingAndChildren = True
+
+        for parent_element in \
+          element.iterancestors(tag=etree.Element):
+          if (parent_element.tag in instance_not_in_stack_with or
+            utils.isInteractiveContent(parent_element)):
+            goodParentingAndChildren = False
+            break
+        else:
+          for child_element in \
+            element.iterdescendants(tag=etree.Element):
+            if child_element.tag in instance_not_in_stack_with\
+               or utils.isInteractiveContent(child_element):
               goodParentingAndChildren = False
               break
-          else:
-            for child_element in \
-              element.iterdescendants(tag=etree.Element):
-              if child_element.tag in instance_not_in_stack_with\
-                 or utils.isInteractiveContent(child_element):
-                goodParentingAndChildren = False
-                break
 
-          if goodParentingAndChildren:
-            if element.tag == u"span":
-              element.tag = u"a"
-              element.set(u"href", obj["url"] + obj["values"][term])
+        if goodParentingAndChildren:
+          if element.tag == u"span":
+            element.tag = u"a"
+            element.set(u"href", obj["url"] + obj["values"][term])
+          else:
+            link = etree.Element(u"a",
+                       {u"href":
+                        obj["url"] + obj["values"][term]})
+            if w3c_compat or w3c_compat_xref_a_placement:
+              for node in element:
+                link.append(node)
+              link.text = element.text
+              element.text = None
+              element.append(link)
             else:
-              link = etree.Element(u"a",
-                         {u"href":
-                          obj["url"] + obj["values"][term]})
-              if w3c_compat or w3c_compat_xref_a_placement:
-                for node in element:
-                  link.append(node)
-                link.text = element.text
-                element.text = None
-                element.append(link)
-              else:
-                element.addprevious(link)
-                link.append(element)
-                link.tail = link[0].tail
-                link[0].tail = None
+              element.addprevious(link)
+              link.append(element)
+              link.tail = link[0].tail
+              link[0].tail = None
 
   def getTerm(self, element, w3c_compat=False,
               w3c_compat_xref_normalization=False, **kwargs):
