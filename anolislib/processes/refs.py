@@ -28,13 +28,15 @@ class refs(object):
 
   def __init__(self, ElementTree, **kwargs):
     self.refs = {}
+    self.usedrefs = []
+    self.addReferencesLinks(ElementTree, **kwargs)
+    self.usedrefs.sort()
     self.buildReferences(ElementTree, **kwargs)
     self.addReferencesList(ElementTree, **kwargs)
-    self.addReferencesLinks(ElementTree, **kwargs)
 
   def buildReferences(self, ElementTree, **kwargs):
     list = open("references/references.json", "rb")
-    self.refs = json.load(list)["references"]
+    self.refs = json.load(list)
 
   def addReferencesList(self, ElementTree, **kwargs):
     root = ElementTree.getroot().find(".//div[@id='anolis-references']")
@@ -42,12 +44,13 @@ class refs(object):
       return
     dl = etree.Element("dl")
     root.append(dl)
-    for ref in self.refs:
+    for ref in self.usedrefs:
+      
       dt = etree.Element("dt")
-      dt.set("id", "refs" + ref["key"])
-      dt.text = "[" + ref["key"] + "]\n"
+      dt.set("id", "refs" + ref)
+      dt.text = "[" + ref + "]\n"
       dl.append(dt)
-      dl.append(self.createReference(ref))
+      dl.append(self.createReference(self.refs[ref]))
 
   def createReference(self, ref, **kwargs):
     a = etree.Element("a")
@@ -64,6 +67,9 @@ class refs(object):
           
   def addReferencesLinks(self, ElementTree, **kwargs):
     for element in ElementTree.getroot().findall(".//span[@data-anolis-ref]"):
+      ref = element.text
       element.tag = "a"
-      element.set("href", "#refs" + element.text)
-      element.text = "[" + element.text + "]"
+      element.set("href", "#refs" + ref)
+      element.text = "[" + ref + "]"
+      if ref not in self.usedrefs:
+        self.usedrefs.append(ref) 
