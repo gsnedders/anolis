@@ -29,6 +29,7 @@ class refs(object):
   def __init__(self, ElementTree, **kwargs):
     self.refs = {}
     self.usedrefs = []
+    self.foundrefs = {}
     self.addReferencesLinks(ElementTree, **kwargs)
     self.usedrefs.sort()
     self.buildReferences(ElementTree, **kwargs)
@@ -71,5 +72,6 @@ class refs(object):
       element.tag = "a"
       element.set("href", "#refs" + ref)
       element.text = "[" + ref + "]"
-      if ref not in self.usedrefs:
+      if ref not in self.foundrefs:
         self.usedrefs.append(ref) 
+        self.foundrefs[ref] = True
