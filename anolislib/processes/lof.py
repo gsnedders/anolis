@@ -43,13 +43,13 @@ class lof(object):
       id = element.get(u"id")
 
       cap = element.find(u".//%s" % captionLocalName)
-      if cap is not None:
+      if cap is None:
         cap = etree.Element(u"%s" % captionLocalName)
         cap.text = u"(untitled)"
         element.append(cap)
 
       caption = utils.textContent(cap)
-      cap.text = u"%s %d: %s" % (name, i, caption)
+      cap.text = u"%s %d: %s" % (name, i, cap.text)
 
       figures.append((id, caption))
 
