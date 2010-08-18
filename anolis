@@ -187,6 +187,9 @@ def getOptParser():
     parser.add_option("", "--output-encoding", action="store", type=str,
                       dest="output_encoding", help="Output encoding")
 
+    parser.add_option("", "--dump-xrefs", action="store_true",
+                      dest="dump_xrefs", help=SUPPRESS_HELP)
+
     parser.set_defaults(
         processes=set(["sub", "xref", "toc"]),
         parser="html5lib",
@@ -214,7 +217,8 @@ def getOptParser():
         space_before_trailing_solidus=False,
         escape_lt_in_attrs=False,
         escape_rcdata=False,
-        output_encoding="utf-8"
+        output_encoding="utf-8",
+        dump_xrefs=False
     )
 
     return parser
