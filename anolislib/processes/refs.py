@@ -22,6 +22,7 @@
 import re
 import simplejson as json
 from lxml import etree
+from anolislib import utils
 
 class refs(object):
   """Add references section."""
@@ -30,6 +31,7 @@ class refs(object):
     self.refs = {}
     self.usedrefs = []
     self.foundrefs = {}
+    self.normativerefs = {}
     self.addReferencesLinks(ElementTree, **kwargs)
     self.usedrefs.sort()
     self.buildReferences(ElementTree, **kwargs)
@@ -46,14 +48,13 @@ class refs(object):
     dl = etree.Element("dl")
     root.append(dl)
     for ref in self.usedrefs:
-      
       dt = etree.Element("dt")
       dt.set("id", "refs" + ref)
       dt.text = "[" + ref + "]\n"
       dl.append(dt)
-      dl.append(self.createReference(self.refs[ref]))
+      dl.append(self.createReference(self.refs[ref], not ref in self.normativerefs))
 
-  def createReference(self, ref, **kwargs):
+  def createReference(self, ref, informative):
     a = etree.Element("a")
     a.text = ref["title"]
     a.set("href", ref["href"])
@@ -63,9 +64,11 @@ class refs(object):
     cite.tail = ", " + ref["authors"] + ". " + ref["publisher"] + ".\n"
 
     dd = etree.Element("dd")
+    if informative:
+      dd.text = "(Non-normative) "
     dd.append(cite)
     return dd
-          
+
   def addReferencesLinks(self, ElementTree, w3c_compat=False, **kwargs):
     for element in ElementTree.getroot().findall(".//span[@data-anolis-ref]"):
       if w3c_compat:
@@ -74,6 +77,8 @@ class refs(object):
       element.tag = "a"
       element.set("href", "#refs" + ref)
       element.text = "[" + ref + "]"
+      if not utils.elementHasClass(element, "informative"):
+        self.normativerefs[ref] = True
       if ref not in self.foundrefs:
-        self.usedrefs.append(ref) 
+        self.usedrefs.append(ref)
         self.foundrefs[ref] = True
