@@ -66,8 +66,10 @@ class refs(object):
     dd.append(cite)
     return dd
           
-  def addReferencesLinks(self, ElementTree, **kwargs):
+  def addReferencesLinks(self, ElementTree, w3c_compat=False, **kwargs):
     for element in ElementTree.getroot().findall(".//span[@data-anolis-ref]"):
+      if w3c_compat:
+        del element.attrib["data-anolis-ref"]
       ref = element.text
       element.tag = "a"
       element.set("href", "#refs" + ref)
