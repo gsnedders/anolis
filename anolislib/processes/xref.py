@@ -74,9 +74,9 @@ class xref(object):
     def dump(self, ElementTree, dump_xrefs=False, **kwargs):
         if dump_xrefs:
             d = json.dumps(self.dfns, sort_keys=True, allow_nan=False, indent=2)
-            d = d.replace(" \n", "\n")
+            d = d.replace(u" \n", u"\n")
             fp = open(u"xrefs.json", u"w")
-            fp.write(d)
+            fp.write(d + u"\n")
             fp.close()
 
     def addReferences(self, ElementTree, w3c_compat=False,
