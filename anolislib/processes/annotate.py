@@ -31,7 +31,7 @@ w3c_status_names = {"WD":"Working Draft",
 
 
 def annotate(ElementTree, **kwargs):
-    if not "annotation" in kwargs or not  kwargs["annotation"]:
+    if not "annotation" in kwargs or not kwargs["annotation"]:
         return
     else:
         annotation_location = kwargs["annotation"]
@@ -42,11 +42,14 @@ def annotate(ElementTree, **kwargs):
         annotations_data = open(annotation_location)
 
     annotations = etree.parse(annotations_data)
-    entries = {}
-    used_entries = set([])
-    for entry in annotations.xpath("//entry"):
-        entries[entry.attrib["section"]] = entry
 
+    add_whatwg_status = ("annotate_whatwg_status" in kwargs and 
+                         kwargs["annotate_whatwg_status"])
+    
+    if add_whatwg_status:
+        statuses = {}
+        for entry in annotations.xpath("//entry"):
+            statuses[entry.attrib["section"]] = entry
 
     add_w3c_issues = ("annotate_w3c_issues" in kwargs and 
                       kwargs["annotate_w3c_issues"])
@@ -64,20 +67,20 @@ def annotate(ElementTree, **kwargs):
     heading_elements = set(["h1", "h2", "h3", "h4", "h5", "h6"])
     for element in ElementTree.getroot().iterdescendants():
         if ("id" in element.attrib and 
-            element.attrib["id"] in entries  and           
+            (element.attrib["id"] in statuses or
+             element.attrib["id"] in issues) and           
             element.tag in heading_elements):    
-            entry = entries.get(element.attrib["id"], None)
+            status = statuses.get(element.attrib["id"], None)
             issue_list = issues.get(element.attrib["id"], None)
-            annotation = make_annotation(entry, issue_list, spec_status)
+            annotation = make_annotation(status, issue_list, spec_status)
             element.addnext(annotation)
-            used_entries.add(element.attrib["id"])
 
 def make_annotation(entry, issues, spec_status):
 
     container = etree.Element("p")
     container.attrib["class"] = "XXX annotation"
     
-    if entry.attrib["status"] != "UNKNOWN":
+    if entry is not None and entry.attrib["status"] != "UNKNOWN":
         status = etree.Element("b")
         status.text = "Status: "
         status_text = etree.Element("i")

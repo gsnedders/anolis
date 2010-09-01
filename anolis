@@ -107,6 +107,10 @@ def getOptParser():
     parser.add_option("", "--annotations", action="store", dest="annotation",
                       help="Path or URI of an annotations file containing status annotations that should be added to sections")
 
+    parser.add_option("", "--annotate-whatwg-status", action="store_true", 
+                      dest="annotate_whatwg_status",
+                      help="Add WHATWG status markers in annotations")
+
     parser.add_option("", "--annotate-w3c-issues", action="store_true", 
                       dest="annotate_w3c_issues",
                       help="Add links to W3C issue tracker in status annotations")
@@ -213,6 +217,7 @@ def getOptParser():
         indent_char=u" ",
         filter=None,
         annotation=None,
+        annotate_whatwg_status=False,
         annotate_w3c_issues=False,
         force_html4_id=False,
         min_depth=2,
