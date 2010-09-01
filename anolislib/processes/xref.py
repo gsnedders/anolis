@@ -20,6 +20,7 @@
 # THE SOFTWARE.
 
 import re
+import simplejson as json
 from lxml import etree
 from copy import deepcopy
 
@@ -45,6 +46,7 @@ class xref(object):
     def __init__(self, ElementTree, **kwargs):
         self.dfns = {}
         self.buildReferences(ElementTree, **kwargs)
+        self.dump(ElementTree, **kwargs)
         self.addReferences(ElementTree, **kwargs)
 
     def buildReferences(self, ElementTree, allow_duplicate_dfns=False,
@@ -68,6 +70,14 @@ class xref(object):
                 link_to.set(u"id", id)
 
                 self.dfns[term] = id
+
+    def dump(self, ElementTree, dump_xrefs=False, **kwargs):
+        if dump_xrefs:
+            d = json.dumps(self.dfns, sort_keys=True, allow_nan=False, indent=2)
+            d = d.replace(u" \n", u"\n")
+            fp = open(u"xrefs.json", u"w")
+            fp.write(d + u"\n")
+            fp.close()
 
     def addReferences(self, ElementTree, w3c_compat=False,
                       w3c_compat_xref_elements=False,

@@ -75,7 +75,7 @@ def getOptParser():
     def disable(option, opt_str, value, parser, *args, **kwargs):
         parser.values.processes.discard(value)
 
-    parser = OptionParser(usage = __doc__, version="%prog 1.1dev")
+    parser = OptionParser(usage = __doc__, version="%prog 1.1")
 
     parser.add_option("", "--enable", action="callback", callback=enable,
                       type="string", dest="processes",
@@ -209,6 +209,9 @@ def getOptParser():
     parser.add_option("", "--output-encoding", action="store", type=str,
                       dest="output_encoding", help="Output encoding")
 
+    parser.add_option("", "--dump-xrefs", action="store_true",
+                      dest="dump_xrefs", help=SUPPRESS_HELP)
+
     parser.set_defaults(
         processes=["filter", "sub", "toc", "xref", "annotate"],
         parser="html5lib",
@@ -240,7 +243,8 @@ def getOptParser():
         space_before_trailing_solidus=False,
         escape_lt_in_attrs=False,
         escape_rcdata=False,
-        output_encoding="utf-8"
+        output_encoding="utf-8",
+        dump_xrefs=False
     )
 
     return parser

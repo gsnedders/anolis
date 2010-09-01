@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # coding=UTF-8
-# Copyright (c) 2008 Geoffrey Sneddon
+# Copyright (c) 2009 Geoffrey Sneddon
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -20,22 +20,14 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-try:
-    import ez_setup
-    #ez_setup.use_setuptools()
-except ImportError:
-    pass
-
-from setuptools import setup, find_packages
-
+from distutils.core import setup
 
 setup(
     # Basic project info
     name = "anolis",
-    version = "1.1dev",
-    packages = find_packages(),
+    version = "1.1",
+    packages = ["anolislib", "anolislib/processes"],
     scripts = ["anolis"],
-    install_requires = ["html5lib>=0.10", "lxml>=2"],
     
     # Useless metadata cruft
     author = "Geoffrey Sneddon",
