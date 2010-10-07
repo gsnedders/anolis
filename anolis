@@ -212,6 +212,9 @@ def getOptParser():
     parser.add_option("", "--dump-xrefs", action="store_true",
                       dest="dump_xrefs", help=SUPPRESS_HELP)
 
+    parser.add_option("", "--use-strict", action="store_true",
+                      dest="use_strict", help=SUPPRESS_HELP)
+
     parser.set_defaults(
         processes=["filter", "sub", "toc", "xref", "annotate"],
         parser="html5lib",
@@ -244,7 +247,8 @@ def getOptParser():
         escape_lt_in_attrs=False,
         escape_rcdata=False,
         output_encoding="utf-8",
-        dump_xrefs=False
+        dump_xrefs=False,
+        use_strict=False
     )
 
     return parser

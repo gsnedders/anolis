@@ -81,7 +81,9 @@ class xref(object):
 
     def addReferences(self, ElementTree, w3c_compat=False,
                       w3c_compat_xref_elements=False,
-                      w3c_compat_xref_a_placement=False, **kwargs):
+                      w3c_compat_xref_a_placement=False,
+                      use_strict=False,
+                      **kwargs):
         for element in ElementTree.iter(tag=etree.Element):
             if element.tag in instance_elements or \
                (w3c_compat or w3c_compat_xref_elements) and \
@@ -124,6 +126,12 @@ class xref(object):
                                 link.append(element)
                                 link.tail = link[0].tail
                                 link[0].tail = None
+                elif use_strict and term and \
+                     not utils.elementHasClass(element, "secno") and \
+                     not u"data-anolis-spec" in element.attrib and \
+                     not u"data-anolis-ref" in element.attrib and \
+                     not element.getparent().tag in instance_not_in_stack_with:
+                    raise SyntaxError, "Term not defined: %s, %s." % (term, element)
 
     def getTerm(self, element, w3c_compat=False,
                 w3c_compat_xref_normalization=False, **kwargs):

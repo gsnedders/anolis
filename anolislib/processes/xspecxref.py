@@ -63,7 +63,9 @@ class xspecxref(object):
 
   def addReferences(self, ElementTree, w3c_compat=False,
                     w3c_compat_xref_elements=False,
-                    w3c_compat_xref_a_placement=False, **kwargs):
+                    w3c_compat_xref_a_placement=False,
+                    use_strict=False,
+                    **kwargs):
     for element in ElementTree.iter(tag=etree.Element):
       if ((element.tag in instance_elements
           or (w3c_compat or w3c_compat_xref_elements)
@@ -78,11 +80,11 @@ class xspecxref(object):
         else:
           element.set(u"class", u"external")
 
-        if not spec in self.dfns or not self.dfns[spec] or \
-           not self.dfns[spec]["values"] or \
-           not term in self.dfns[spec]["values"]:
-          print spec, term
-          continue
+        if use_strict and \
+           (not spec in self.dfns or not self.dfns[spec] or \
+            not self.dfns[spec]["values"] or \
+            not term in self.dfns[spec]["values"]):
+          raise SyntaxError, "Term not defined: %s in %s ." % (term, spec)
 
         obj = self.dfns[spec]
         goodParentingAndChildren = True
