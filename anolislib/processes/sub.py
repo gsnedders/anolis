@@ -32,18 +32,6 @@ latest_version = re.compile(u"latest[%s]+version" % utils.spaceCharacters,
 w3c_tr_url_status = r"http://www\.w3\.org/TR/[^/]*/(MO|WD|CR|PR|REC|PER|NOTE)-"
 w3c_tr_url_status = re.compile(w3c_tr_url_status)
 
-year = re.compile(r"\[YEAR[^\]]*\]")
-year_sub = time.strftime(u"%Y", time.gmtime())
-year_identifier = u"[YEAR"
-
-date = re.compile(r"\[DATE[^\]]*\]")
-date_sub = time.strftime(u"%d %B %Y", time.gmtime()).lstrip(u"0")
-date_identifier = u"[DATE"
-
-cdate = re.compile(r"\[CDATE[^\]]*\]")
-cdate_sub = time.strftime(u"%Y%m%d", time.gmtime())
-cdate_identifier = u"[CDATE"
-
 title = re.compile(r"\[TITLE[^\]]*\]")
 title_identifier = u"[TITLE"
 
@@ -65,10 +53,6 @@ longstatus_map = {
 
 w3c_stylesheet = re.compile(r"http://www\.w3\.org/StyleSheets/TR/W3C-[A-Z]+")
 w3c_stylesheet_identifier = u"http://www.w3.org/StyleSheets/TR/W3C-"
-
-string_subs = ((year, year_sub, year_identifier),
-               (date, date_sub, date_identifier),
-               (cdate, cdate_sub, cdate_identifier))
 
 logo = u"logo"
 logo_sub = etree.fromstring(u'<p><a href="http://www.w3.org/"><img alt="W3C" src="http://www.w3.org/Icons/w3c_home"/></a></p>')
@@ -97,13 +81,33 @@ class sub(object):
 
     def stringSubstitutions(self, ElementTree, w3c_compat=False,
                             w3c_compat_substitutions=False,
-                            w3c_compat_crazy_substitutions=False, **kwargs):
+                            w3c_compat_crazy_substitutions=False,
+                            publication_date='',
+                            **kwargs):
         # Get doc_title from the title element
         try:
             doc_title = utils.textContent(ElementTree.getroot().find(u"head")
                                                                .find(u"title"))
         except (AttributeError, TypeError):
             doc_title = u""
+
+        t = publication_date and time.strptime(publication_date, "%d %b %Y") or time.gmtime()
+
+        year = re.compile(r"\[YEAR[^\]]*\]")
+        year_sub = time.strftime(u"%Y", t)
+        year_identifier = u"[YEAR"
+
+        date = re.compile(r"\[DATE[^\]]*\]")
+        date_sub = time.strftime(u"%d %B %Y", t).lstrip(u"0")
+        date_identifier = u"[DATE"
+
+        cdate = re.compile(r"\[CDATE[^\]]*\]")
+        cdate_sub = time.strftime(u"%Y%m%d", t)
+        cdate_identifier = u"[CDATE"
+
+        string_subs = ((year, year_sub, year_identifier),
+                       (date, date_sub, date_identifier),
+                       (cdate, cdate_sub, cdate_identifier))
 
         if w3c_compat or w3c_compat_substitutions:
             # Get the right long status
@@ -115,23 +119,19 @@ class sub(object):
                                  self.w3c_status
 
         # Get all the subs we want
-        instance_string_subs = string_subs + \
-                               ((title, doc_title, title_identifier), )
+        string_subs += ((title, doc_title, title_identifier), )
 
         # And even more in compat. mode
         if w3c_compat or w3c_compat_substitutions:
-            instance_string_subs += ((status, self.w3c_status,
-                                      status_identifier),
-                                     (longstatus, doc_longstatus,
-                                      longstatus_identifier))
+            string_subs += ((status, self.w3c_status, status_identifier),
+                            (longstatus, doc_longstatus, longstatus_identifier))
 
         # And more that aren't even enabled by default in compat. mode
         if w3c_compat_crazy_substitutions:
-            instance_string_subs += ((w3c_stylesheet, doc_w3c_stylesheet,
-                                      w3c_stylesheet_identifier), )
+            string_subs += ((w3c_stylesheet, doc_w3c_stylesheet, w3c_stylesheet_identifier), )
 
         for node in ElementTree.iter():
-            for regex, sub, identifier in instance_string_subs:
+            for regex, sub, identifier in string_subs:
                 if node.text is not None and identifier in node.text:
                     node.text = regex.sub(sub, node.text)
                 if node.tail is not None and identifier in node.tail:
