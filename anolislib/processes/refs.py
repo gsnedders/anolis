@@ -27,27 +27,59 @@ from anolislib import utils
 class refs(object):
   """Add references section."""
 
-  def __init__(self, ElementTree, **kwargs):
+  def __init__(self, ElementTree, w3c_compat=False, **kwargs):
     self.refs = {}
     self.usedrefs = []
     self.foundrefs = {}
     self.normativerefs = {}
-    self.addReferencesLinks(ElementTree, **kwargs)
+    self.addReferencesLinks(ElementTree, w3c_compat=w3c_compat, **kwargs)
     self.usedrefs.sort()
     self.buildReferences(ElementTree, **kwargs)
-    self.addReferencesList(ElementTree, **kwargs)
+    if not w3c_compat:
+      self.addReferencesList(ElementTree, **kwargs)
+    else:
+      self.addTwoReferencesLists(ElementTree, **kwargs)
 
   def buildReferences(self, ElementTree, **kwargs):
     list = open("references/references.json", "rb")
     self.refs = json.load(list)
 
+
+  def addTwoReferencesLists(self, ElementTree, **kwargs):
+    informative = []
+    normative = []
+    for ref in self.usedrefs:
+      if ref in self.normativerefs:
+        normative.append(ref)
+      else:
+        informative.append(ref)
+    self.addPartialReferencesList(ElementTree, normative, "normative", **kwargs)
+    self.addPartialReferencesList(ElementTree, informative, "informative", **kwargs)
+
+  def addPartialReferencesList(self, ElementTree, l, id, **kwargs):
+    root = ElementTree.getroot().find(".//div[@id='anolis-references-%s']" % id)
+    if root is None:
+      raise SyntaxError, "A <div id=anolis-references-%s> is required." % id
+    dl = etree.Element("dl")
+    root.append(dl)
+    for ref in l:
+      if not ref in self.refs:
+        raise SyntaxError, "Reference not defined: %s." % ref
+      dt = etree.Element("dt")
+      dt.set("id", "refs" + ref)
+      dt.text = "[" + ref + "]\n"
+      dl.append(dt)
+      dl.append(self.createReference(self.refs[ref], False))
+
   def addReferencesList(self, ElementTree, **kwargs):
     root = ElementTree.getroot().find(".//div[@id='anolis-references']")
     if root is None:
-      return
+      raise SyntaxError, "A <div id=anolis-references> is required."
     dl = etree.Element("dl")
     root.append(dl)
     for ref in self.usedrefs:
+      if not ref in self.refs:
+        raise SyntaxError, "Reference not defined: %s." % ref
       dt = etree.Element("dt")
       dt.set("id", "refs" + ref)
       dt.text = "[" + ref + "]\n"
