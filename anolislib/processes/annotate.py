@@ -46,8 +46,8 @@ def annotate(ElementTree, **kwargs):
     add_whatwg_status = ("annotate_whatwg_status" in kwargs and 
                          kwargs["annotate_whatwg_status"])
     
+    statuses = {}
     if add_whatwg_status:
-        statuses = {}
         for entry in annotations.xpath("//entry"):
             statuses[entry.attrib["section"]] = entry
 
