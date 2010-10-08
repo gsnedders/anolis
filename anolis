@@ -218,6 +218,9 @@ def getOptParser():
     parser.add_option("", "--pubdate", action="store", type=str,
                       dest="publication_date", help=SUPPRESS_HELP)
 
+    parser.add_option("", "--w3c-status", action="store", type=str,
+                      dest="w3c_status", help="Status of the document")
+
     parser.set_defaults(
         processes=["filter", "sub", "toc", "xref", "annotate"],
         parser="html5lib",
@@ -252,7 +255,8 @@ def getOptParser():
         output_encoding="utf-8",
         dump_xrefs=False,
         use_strict=False,
-        publication_date=''
+        publication_date='',
+        w3c_status='ED'
     )
 
     return parser
