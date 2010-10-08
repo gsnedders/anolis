@@ -68,7 +68,10 @@ class sub(object):
 
     def __init__(self, ElementTree, w3c_compat=False,
                  w3c_compat_substitutions=False,
-                 w3c_compat_crazy_substitutions=False, **kwargs):
+                 w3c_compat_crazy_substitutions=False,
+                 publication_date='',
+                 **kwargs):
+        self.pubdate = publication_date and time.strptime(publication_date, "%d %b %Y") or time.gmtime()
         if w3c_compat or w3c_compat_substitutions or \
            w3c_compat_crazy_substitutions:
             self.w3c_status = self.getW3CStatus(ElementTree, **kwargs)
@@ -82,7 +85,6 @@ class sub(object):
     def stringSubstitutions(self, ElementTree, w3c_compat=False,
                             w3c_compat_substitutions=False,
                             w3c_compat_crazy_substitutions=False,
-                            publication_date='',
                             **kwargs):
         # Get doc_title from the title element
         try:
@@ -91,18 +93,16 @@ class sub(object):
         except (AttributeError, TypeError):
             doc_title = u""
 
-        t = publication_date and time.strptime(publication_date, "%d %b %Y") or time.gmtime()
-
         year = re.compile(r"\[YEAR[^\]]*\]")
-        year_sub = time.strftime(u"%Y", t)
+        year_sub = time.strftime(u"%Y", self.pubdate)
         year_identifier = u"[YEAR"
 
         date = re.compile(r"\[DATE[^\]]*\]")
-        date_sub = time.strftime(u"%d %B %Y", t).lstrip(u"0")
+        date_sub = time.strftime(u"%d %B %Y", self.pubdate).lstrip(u"0")
         date_identifier = u"[DATE"
 
         cdate = re.compile(r"\[CDATE[^\]]*\]")
-        cdate_sub = time.strftime(u"%Y%m%d", t)
+        cdate_sub = time.strftime(u"%Y%m%d", self.pubdate)
         cdate_identifier = u"[CDATE"
 
         string_subs = ((year, year_sub, year_identifier),
