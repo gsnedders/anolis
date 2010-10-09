@@ -41,9 +41,9 @@ class refs(object):
       self.addTwoReferencesLists(ElementTree, **kwargs)
 
   def buildReferences(self, ElementTree, **kwargs):
-    list = open("references/references.json", "rb")
+    list = open("data/references.json", "rb")
     self.refs = json.load(list)
-
+    list.close()
 
   def addTwoReferencesLists(self, ElementTree, **kwargs):
     informative = []

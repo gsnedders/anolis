@@ -51,11 +51,14 @@ class xspecxref(object):
 
   def buildReferences(self, ElementTree, allow_duplicate_dfns=False,
                       **kwargs):
-    manifest = open("cross-spec-refs/specs.json", "rb")
+    manifest = open("data/specs.json", "rb")
     specs = json.load(manifest)["specs"]
+    manifest.close()
+
     for spec in specs:
-      file = open("cross-spec-refs/" + spec + ".json", "rb")
+      file = open("data/xrefs/" + spec + ".json", "rb")
       dfn = json.load(file)
+      file.close()
       name = dfn["name"]
       url = dfn["url"]
       values = dfn["definitions"]
