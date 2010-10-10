@@ -331,49 +331,7 @@ class terms(object):
         return None
 
     def addTerms(self, ElementTree, **kwargs):
-        to_remove = set()
-        in_terms = False
-        for node in ElementTree.iter():
-            if in_terms:
-                if node.tag is etree.Comment and \
-                   node.text.strip(utils.spaceCharacters) == u"end-index-terms":
-                    if node.getparent() is not terms_parent:
-                        raise DifferentParentException(u"begin-index-terms and end-index-terms have different parents")
-                    in_terms = False
-                else:
-                    to_remove.add(node)
-            elif node.tag is etree.Comment:
-                if node.text.strip(utils.spaceCharacters) == u"begin-index-terms":
-                    terms_parent = node.getparent()
-                    in_terms = True
-                    node.tail = None
-                    node.addnext(deepcopy(self.terms))
-                    self.indentNode(node.getnext(), 0, **kwargs)
-                elif node.text.strip(utils.spaceCharacters) == u"index-terms":
-                    node.addprevious(etree.Comment(u"begin-index-terms"))
-                    self.indentNode(node.getprevious(), 0, **kwargs)
-                    node.addprevious(deepcopy(self.terms))
-                    self.indentNode(node.getprevious(), 0, **kwargs)
-                    node.addprevious(etree.Comment(u"end-index-terms"))
-                    self.indentNode(node.getprevious(), 0, **kwargs)
-                    node.getprevious().tail = node.tail
-                    to_remove.add(node)
-        for node in to_remove:
-            node.getparent().remove(node)
-
-    def indentNode(self, node, indent=0, newline_char=u"\n", indent_char=u" ",
-                   **kwargs):
-        whitespace = newline_char + indent_char * indent
-        if node.getprevious() is not None:
-            if node.getprevious().tail is None:
-                node.getprevious().tail = whitespace
-            else:
-                node.getprevious().tail += whitespace
-        else:
-            if node.getparent().text is None:
-                node.getparent().text = whitespace
-            else:
-                node.getparent().text += whitespace
+        utils.replaceComment(ElementTree, u"index-terms", self.terms, **kwargs)
 
 class DifferentParentException(utils.AnolisException):
     """begin-index-terms and end-index-terms do not have the same parent."""
