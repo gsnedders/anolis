@@ -124,18 +124,18 @@ class toc(object):
                             if len(toc_section[-1]) == 0 or \
                                toc_section[-1][-1].tag != u"ol":
                                 toc_section[-1].append(etree.Element(u"ol"))
-                                self.indentNode(toc_section[-1][-1],
-                                                (i + 1) * 2, **kwargs)
+                                utils.indentNode(toc_section[-1][-1],
+                                                 (i + 1) * 2, **kwargs)
                                 if w3c_compat or w3c_compat_class_toc:
                                     toc_section[-1][-1].set(u"class", u"toc")
                         except IndexError:
                             # If the current ol has no li in it
                             toc_section.append(etree.Element(u"li"))
-                            self.indentNode(toc_section[0], (i + 1) * 2 - 1,
-                                            **kwargs)
+                            utils.indentNode(toc_section[0], (i + 1) * 2 - 1,
+                                             **kwargs)
                             toc_section[0].append(etree.Element(u"ol"))
-                            self.indentNode(toc_section[0][0], (i + 1) * 2,
-                                            **kwargs)
+                            utils.indentNode(toc_section[0][0], (i + 1) * 2,
+                                             **kwargs)
                             if w3c_compat or w3c_compat_class_toc:
                                 toc_section[0][0].set(u"class", u"toc")
                         # TOC Section is now the final child (ol) of the final
@@ -147,7 +147,7 @@ class toc(object):
                     # Add the current item to the TOC
                     item = etree.Element(u"li")
                     toc_section.append(item)
-                    self.indentNode(item, (i + 1) * 2 - 1, **kwargs)
+                    utils.indentNode(item, (i + 1) * 2 - 1, **kwargs)
 
                 # If we have a header
                 if header_text is not None:
@@ -219,32 +219,18 @@ class toc(object):
                     in_toc = True
                     node.tail = None
                     node.addnext(deepcopy(self.toc))
-                    self.indentNode(node.getnext(), 0, **kwargs)
+                    utils.indentNode(node.getnext(), 0, **kwargs)
                 elif node.text.strip(utils.spaceCharacters) == u"toc":
                     node.addprevious(etree.Comment(u"begin-toc"))
-                    self.indentNode(node.getprevious(), 0, **kwargs)
+                    utils.indentNode(node.getprevious(), 0, **kwargs)
                     node.addprevious(deepcopy(self.toc))
-                    self.indentNode(node.getprevious(), 0, **kwargs)
+                    utils.indentNode(node.getprevious(), 0, **kwargs)
                     node.addprevious(etree.Comment(u"end-toc"))
-                    self.indentNode(node.getprevious(), 0, **kwargs)
+                    utils.indentNode(node.getprevious(), 0, **kwargs)
                     node.getprevious().tail = node.tail
                     to_remove.add(node)
         for node in to_remove:
             node.getparent().remove(node)
-
-    def indentNode(self, node, indent=0, newline_char=u"\n", indent_char=u" ",
-                   **kwargs):
-        whitespace = newline_char + indent_char * indent
-        if node.getprevious() is not None:
-            if node.getprevious().tail is None:
-                node.getprevious().tail = whitespace
-            else:
-                node.getprevious().tail += whitespace
-        else:
-            if node.getparent().text is None:
-                node.getparent().text = whitespace
-            else:
-                node.getparent().text += whitespace
 
 
 class DifferentParentException(utils.AnolisException):

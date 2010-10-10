@@ -253,6 +253,19 @@ def replaceComment(ElementTree, comment, sub, **kwargs):
     for node in to_remove:
         node.getparent().remove(node)
 
+def indentNode(node, indent=0, newline_char=u"\n", indent_char=u" ", **kwargs):
+    whitespace = newline_char + indent_char * indent
+    if node.getprevious() is not None:
+        if node.getprevious().tail is None:
+            node.getprevious().tail = whitespace
+        else:
+            node.getprevious().tail += whitespace
+    else:
+        if node.getparent().text is None:
+            node.getparent().text = whitespace
+        else:
+            node.getparent().text += whitespace
+
 global reversed
 try:
     reversed
