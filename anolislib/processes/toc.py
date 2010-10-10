@@ -202,35 +202,7 @@ class toc(object):
                              for child_section in reversed(section)])
 
     def addToc(self, ElementTree, **kwargs):
-        to_remove = set()
-        in_toc = False
-        for node in ElementTree.iter():
-            if in_toc:
-                if node.tag is etree.Comment and \
-                   node.text.strip(utils.spaceCharacters) == u"end-toc":
-                    if node.getparent() is not toc_parent:
-                        raise DifferentParentException(u"begin-toc and end-toc have different parents")
-                    in_toc = False
-                else:
-                    to_remove.add(node)
-            elif node.tag is etree.Comment:
-                if node.text.strip(utils.spaceCharacters) == u"begin-toc":
-                    toc_parent = node.getparent()
-                    in_toc = True
-                    node.tail = None
-                    node.addnext(deepcopy(self.toc))
-                    utils.indentNode(node.getnext(), 0, **kwargs)
-                elif node.text.strip(utils.spaceCharacters) == u"toc":
-                    node.addprevious(etree.Comment(u"begin-toc"))
-                    utils.indentNode(node.getprevious(), 0, **kwargs)
-                    node.addprevious(deepcopy(self.toc))
-                    utils.indentNode(node.getprevious(), 0, **kwargs)
-                    node.addprevious(etree.Comment(u"end-toc"))
-                    utils.indentNode(node.getprevious(), 0, **kwargs)
-                    node.getprevious().tail = node.tail
-                    to_remove.add(node)
-        for node in to_remove:
-            node.getparent().remove(node)
+        utils.replaceComment(ElementTree, u"toc", self.toc, **kwargs)
 
 
 class DifferentParentException(utils.AnolisException):
