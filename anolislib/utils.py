@@ -223,6 +223,35 @@ def copyContentForRemoval(node, text=True, children=True, tail=True):
             else:
                 node.getparent().text += node.tail
 
+def replaceComment(ElementTree, comment, sub, **kwargs):
+    begin_sub = u"begin-%s" % comment
+    end_sub = u"end-%s" % comment
+    in_sub = False
+    to_remove = set()
+    for node in ElementTree.iter():
+        if in_sub:
+            if node.tag is etree.Comment and \
+               node.text.strip(spaceCharacters) == end_sub:
+                if node.getparent() is not sub_parent:
+                    raise DifferentParentException(u"%s and %s have different parents" % begin_sub, end_sub)
+                in_sub = False
+            else:
+                to_remove.add(node)
+        elif node.tag is etree.Comment:
+            if node.text.strip(spaceCharacters) == begin_sub:
+                sub_parent = node.getparent()
+                in_sub = True
+                node.tail = None
+                node.addnext(deepcopy(sub))
+            elif node.text.strip(spaceCharacters) == comment:
+                node.addprevious(etree.Comment(begin_sub))
+                node.addprevious(deepcopy(sub))
+                node.addprevious(etree.Comment(end_sub))
+                node.getprevious().tail = node.tail
+                to_remove.add(node)
+
+    for node in to_remove:
+        node.getparent().remove(node)
 
 global reversed
 try:
@@ -239,4 +268,8 @@ except NameError:
 
 class AnolisException(Exception):
     """Generic anolis error."""
+    pass
+
+class DifferentParentException(AnolisException):
+    """begin-link and end-link do not have the same parent."""
     pass

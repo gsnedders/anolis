@@ -159,7 +159,7 @@ class sub(object):
                 if node.tag is etree.Comment and \
                    node.text.strip(utils.spaceCharacters) == u"end-link":
                     if node.getparent() is not link_parent:
-                        raise DifferentParentException(u"begin-link and end-link have different parents")
+                        raise utils.DifferentParentException(u"begin-link and end-link have different parents")
                     utils.removeInteractiveContentChildren(link)
                     link.set(u"href", utils.textContent(link))
                     in_link = False
@@ -178,30 +178,7 @@ class sub(object):
 
         # Basic substitutions
         for comment, sub in instance_basic_comment_subs:
-            begin_sub = u"begin-" + comment
-            end_sub = u"end-" + comment
-            in_sub = False
-            for node in ElementTree.iter():
-                if in_sub:
-                    if node.tag is etree.Comment and \
-                       node.text.strip(utils.spaceCharacters) == end_sub:
-                        if node.getparent() is not sub_parent:
-                            raise DifferentParentException(u"%s and %s have different parents" % begin_sub, end_sub)
-                        in_sub = False
-                    else:
-                        to_remove.add(node)
-                elif node.tag is etree.Comment:
-                    if node.text.strip(utils.spaceCharacters) == begin_sub:
-                        sub_parent = node.getparent()
-                        in_sub = True
-                        node.tail = None
-                        node.addnext(deepcopy(sub))
-                    elif node.text.strip(utils.spaceCharacters) == comment:
-                        node.addprevious(etree.Comment(begin_sub))
-                        node.addprevious(deepcopy(sub))
-                        node.addprevious(etree.Comment(end_sub))
-                        node.getprevious().tail = node.tail
-                        to_remove.add(node)
+            utils.replaceComment(ElementTree, comment, sub, **kwargs)
 
         # Remove nodes
         for node in to_remove:
