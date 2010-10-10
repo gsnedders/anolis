@@ -243,10 +243,14 @@ def replaceComment(ElementTree, comment, sub, **kwargs):
                 in_sub = True
                 node.tail = None
                 node.addnext(deepcopy(sub))
+                indentNode(node.getnext(), 0, **kwargs)
             elif node.text.strip(spaceCharacters) == comment:
                 node.addprevious(etree.Comment(begin_sub))
+                indentNode(node.getprevious(), 0, **kwargs)
                 node.addprevious(deepcopy(sub))
+                indentNode(node.getprevious(), 0, **kwargs)
                 node.addprevious(etree.Comment(end_sub))
+                indentNode(node.getprevious(), 0, **kwargs)
                 node.getprevious().tail = node.tail
                 to_remove.add(node)
 
