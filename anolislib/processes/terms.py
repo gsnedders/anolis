@@ -53,7 +53,7 @@ class terms(object):
             # sort the list of <dfn> terms by the lowercase value of the DOM
             # textContent of the <dfn> element (concantentation of the <dfn>
             # text nodes and that of any of its descendant elements)
-            dfnList.sort(key=lambda dfn: dfn.text_content().lower())
+            dfnList.sort(key=lambda dfn: utils.textContent(dfn).lower())
             for dfn in dfnList:
                 # we don't need the tail, so copy the <dfn> and drop the tail
                 term = deepcopy(dfn)
@@ -101,7 +101,7 @@ class terms(object):
                     expr = "count(//dfn\
                             [normalize-space(translate(.,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'))\
                             =normalize-space(translate($content,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'))])"
-                    if ElementTree.xpath(expr, content = term.text_content()) > 1:
+                    if ElementTree.xpath(expr, content = utils.textContent(term)) > 1:
                         # we have more than one <dfn> in the document whose
                         # content is a case-insensitive match for the
                         # textContent of this <dfn>; so, we attempt to
@@ -148,7 +148,7 @@ class terms(object):
                                 # same as the text content of the term, then we
                                 # don't want to repeat it, so instead we
                                 # replace it with ellipses
-                                if descendant.text_content().lower() == term.text_content().lower():
+                                if utils.textContent(descendant).lower() == utils.textContent(term).lower():
                                     tail = ""
                                     if descendant.tail is not None:
                                         tail = descendant.tail
@@ -167,7 +167,7 @@ class terms(object):
                             indexEntry.append(dfnContext)
                     # we need a first letter so that we can build navigational
                     # links for the alphabetic nav bars injected into the index
-                    termFirstLetter = term.text_content()[0].upper()
+                    termFirstLetter = utils.textContent(term)[0].upper()
                     if termFirstLetter != prevTermFirstLetter and termFirstLetter.isalpha():
                         firstLetters.append(termFirstLetter)
                         indexNavHelpers[termFirstLetter] = etree.Element(u"div",{u"class": "index-nav", u"id": "index-terms_"+termFirstLetter})
@@ -200,7 +200,8 @@ class terms(object):
                             # if this heading is not the same as one that we've
                             # already added to the index entry for this term,
                             # then process the heading
-                            if lastLinkToHeading is None or linkToHeading.text_content() != lastLinkToHeading.text_content():
+                            if lastLinkToHeading is None or \
+                               utils.textContent(linkToHeading) != utils.textContent(lastLinkToHeading):
                                 instanceItem = etree.Element(u"dd")
                                 instanceItem.text = "\n"
                                 lastLinkToHeading = linkToHeading
@@ -326,7 +327,7 @@ class terms(object):
                 # note from MikeSmith: dunno the purpose of the following; just
                 # ported it over as-is from Hixie's dfn.js because it's there
                 if isinstance(node.tag,str) and node.get("class") == "impl":
-                    node = xpath("node()[last()]")
+                    node = node.getchildren()[-1]
         return None
 
     def addTerms(self, ElementTree, **kwargs):
