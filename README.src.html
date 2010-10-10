@@ -103,7 +103,7 @@ then called as <code>foo.foo(ElementTree, **kwargs)</code>.
 <dfn><kbd>--parser</kbd></dfn> option allows either <kbd>html5lib</kbd> (the
 default) or <kbd>lxml.html</kbd> (this is quicker, but does not comply to the
 <a href="http://whatwg.org/html5">HTML 5</a> specification) to be used to parse
-the input file, and the <dfn><kbd>--serialzier</kbd></dfn> option allows the
+the input file, and the <dfn><kbd>--serializer</kbd></dfn> option allows the
 same two values, but controls the serializer used for output (note that
 lxml.html has some rather severe issues as a serializer)<!--; passing the XXX:
 need double hyphen <dfn><code>xml</code></dfn> option uses libxml2's XML parser
@@ -112,7 +112,7 @@ instead-->.
 <p>The <dfn><kbd>--output-encoding</kbd></dfn> option sets the character
 encoding used for output — this defaults to UTF-8. Treatment of characters that
 cannot be represented in the set output encoding is dependant on the serializer
-selected via the <span>--serialzier</span> option.
+selected via the <span>--serializer</span> option.
 
 <p>Anolis offers a <dfn>compatibility mode</dfn>, which aims to be compatible
 with the <a href="http://www.w3.org/Style/Group/css3-src/bin/postprocess">CSS3
