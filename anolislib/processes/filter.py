@@ -5,4 +5,4 @@ def filter(ElementTree, **kwargs):
         return
     selector = cssselect.CSSSelector(kwargs["filter"])
     for element in selector(ElementTree.getroot()):
-        element.drop_tree()
+        element.getparent().remove(element)
