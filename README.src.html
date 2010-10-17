@@ -520,6 +520,55 @@ substitutions</span>, this string must be contained in a single text node.
 
 <!-- Is that crazy enough to justify the option name? -->
 
+<h3>References</h3>
+
+<p>A "references" section can be generated automagically by enabling the
+<dfn><code>refs</code></dfn> process. There are two kinds of elements relevant
+to this process:
+<span data-anolis-xref="reference instance">reference instances</span> and
+<span data-anolis-xref="reference section">reference sections</span>.
+<span>Reference data</span> is also required.
+
+<p><dfn>Reference data</dfn> is to be given as a
+<dfn><code>references.json</code></dfn> file, in the <code>data</code> folder.
+The expected data structure is a set of name-value pairs, with a pair for each
+possible reference. The name is referred to as the
+<dfn>reference abbreviation</dfn>, and the value is to be a set with the
+following name-value pairs:
+<ul class=brief>
+  <li><dfn data-anolis-xref=reference-title><code>title</code></dfn>:
+      the title of the referenced document;
+  <li><dfn data-anolis-xref=reference-href><code>href</code></dfn>:
+      the URL of the referenced document;
+  <li><dfn data-anolis-xref=reference-authors><code>authors</code></dfn>:
+      an array of authors or editors of the referenced document;
+  <li><dfn data-anolis-xref=reference-publisher><code>publisher</code></dfn>:
+      the organisation publishing the referenced document (optional).
+</ul>
+
+<p><dfn data-anolis-xref="reference instance">Reference instances</dfn> are
+defined by <code title>span</code> elements with a
+<code title>data-anolis-ref</code> attribute. Their <span>textContent</span>
+must be the <span>reference abbreviation</span> of a reference defined in the
+<span>reference data</span>. A <span>reference instance</span> is either
+<i>informative</i> or <i>normative</i>: it is <i>informative</i> if the element
+has an <code title>informative</code> class and <i>normative</i> otherwise.
+
+<p><dfn data-anolis-xref="reference section">Reference sections</dfn> are
+<code title>div</code> elements, wherein the reference lists will be
+constructed.
+In <span>compatibility mode</span>, two distinct
+<span data-anolis-xref="reference section">reference sections</span> are used:
+one with <code title>anolis-references-normative</code> as its id, for those
+references with at least one <i>normative</i>
+<span data-anolis-xref="reference instance">instance</span>, and one with
+<code title>anolis-references-informative</code> as its id, for the others.
+When Anolis is not in <span>compatibility mode</span>, just one
+<span>reference section</span> is used, with an
+<code title>anolis-references</code> id. In this case, the references for which
+all <span data-anolis-xref="reference instance">instances</span> are
+<i>informative</i> are prefixed with "(Non-normative)&#xa0;".
+
 <h2 class="no-num">Acknowledgements</h2>
 
 <p>Thanks to Andrew Sidwell, Anne van Kesteren, Henri Sivonen, Ian Hickson,

@@ -14,7 +14,7 @@ color: #fff;
 
 </head><body><header>
     <h1>Anolis 1.2pre</h1>
-    <h2 class="no-num no-toc" id=documentation-—-10-october-2010>Documentation — 10 October 2010</h2>
+    <h2 class="no-num no-toc" id=documentation-—-17-october-2010>Documentation — 17 October 2010</h2>
 </header>
 
 <h2 class="no-num no-toc" id=contents>Contents</h2>
@@ -33,7 +33,8 @@ color: #fff;
   <ol>
    <li><a href=#cross-referencing><span class=secno>4.1 </span>Cross-referencing</a></li>
    <li><a href=#table-of-contents/section-numbering><span class=secno>4.2 </span>Table of contents/section numbering</a></li>
-   <li><a href=#substitution><span class=secno>4.3 </span>Substitution</a></li></ol></li>
+   <li><a href=#substitution><span class=secno>4.3 </span>Substitution</a></li>
+   <li><a href=#references><span class=secno>4.4 </span>References</a></li></ol></li>
  <li><a class=no-num href=#acknowledgements>Acknowledgements</a></li></ol>
 <!--end-toc-->
 
@@ -507,6 +508,55 @@ be. Like the <a data-anolis-xref="normal string substitution" href=#normal-strin
 substitutions</a>, this string must be contained in a single text node.
 
 <!-- Is that crazy enough to justify the option name? -->
+
+</p><h3 id=references><span class=secno>4.4 </span>References</h3>
+
+<p>A "references" section can be generated automagically by enabling the
+<dfn id=refs><code>refs</code></dfn> process. There are two kinds of elements relevant
+to this process:
+<a data-anolis-xref="reference instance" href=#reference-instances>reference instances</a> and
+<a data-anolis-xref="reference section" href=#reference-sections>reference sections</a>.
+<a href=#reference-data>Reference data</a> is also required.
+
+</p><p><dfn id=reference-data>Reference data</dfn> is to be given as a
+<dfn id=references.json><code>references.json</code></dfn> file, in the <code>data</code> folder.
+The expected data structure is a set of name-value pairs, with a pair for each
+possible reference. The name is referred to as the
+<dfn id=reference-abbreviation>reference abbreviation</dfn>, and the value is to be a set with the
+following name-value pairs:
+</p><ul class=brief>
+  <li><dfn data-anolis-xref=reference-title id=title><code>title</code></dfn>:
+      the title of the referenced document;
+  </li><li><dfn data-anolis-xref=reference-href id=href><code>href</code></dfn>:
+      the URL of the referenced document;
+  </li><li><dfn data-anolis-xref=reference-authors id=authors><code>authors</code></dfn>:
+      an array of authors or editors of the referenced document;
+  </li><li><dfn data-anolis-xref=reference-publisher id=publisher><code>publisher</code></dfn>:
+      the organisation publishing the referenced document (optional).
+</li></ul>
+
+<p><dfn data-anolis-xref="reference instance" id=reference-instances>Reference instances</dfn> are
+defined by <code title="">span</code> elements with a
+<code title="">data-anolis-ref</code> attribute. Their <a href=#textcontent>textContent</a>
+must be the <a href=#reference-abbreviation>reference abbreviation</a> of a reference defined in the
+<a href=#reference-data>reference data</a>. A <a href=#reference-instances>reference instance</a> is either
+<i>informative</i> or <i>normative</i>: it is <i>informative</i> if the element
+has an <code title="">informative</code> class and <i>normative</i> otherwise.
+
+</p><p><dfn data-anolis-xref="reference section" id=reference-sections>Reference sections</dfn> are
+<code title="">div</code> elements, wherein the reference lists will be
+constructed.
+In <a href=#compatibility-mode>compatibility mode</a>, two distinct
+<a data-anolis-xref="reference section" href=#reference-sections>reference sections</a> are used:
+one with <code title="">anolis-references-normative</code> as its id, for those
+references with at least one <i>normative</i>
+<a data-anolis-xref="reference instance" href=#reference-instances>instance</a>, and one with
+<code title="">anolis-references-informative</code> as its id, for the others.
+When Anolis is not in <a href=#compatibility-mode>compatibility mode</a>, just one
+<a href=#reference-sections>reference section</a> is used, with an
+<code title="">anolis-references</code> id. In this case, the references for which
+all <a data-anolis-xref="reference instance" href=#reference-instances>instances</a> are
+<i>informative</i> are prefixed with "(Non-normative) ".
 
 </p><h2 class=no-num id=acknowledgements>Acknowledgements</h2>
 
