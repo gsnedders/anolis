@@ -55,7 +55,7 @@ w3c_stylesheet = re.compile(r"http://www\.w3\.org/StyleSheets/TR/W3C-[A-Z]+")
 w3c_stylesheet_identifier = u"http://www.w3.org/StyleSheets/TR/W3C-"
 
 logo = u"logo"
-logo_sub = etree.fromstring(u'<p><a href="http://www.w3.org/"><img alt="W3C" src="http://www.w3.org/Icons/w3c_home"/></a></p>')
+logo_sub = etree.fromstring(u'<p><a href="http://www.w3.org/"><img height="48" width="72" alt="W3C" src="http://www.w3.org/Icons/w3c_home"/></a></p>')
 
 basic_comment_subs = ()
 
