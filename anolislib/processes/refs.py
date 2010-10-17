@@ -93,13 +93,21 @@ class refs(object):
 
     cite = etree.Element("cite")
     cite.append(a)
-    cite.tail = ", " + ref["authors"] + ". " + ref["publisher"] + ".\n"
+    cite.tail = ", %s. %s.\n" % (self.formatAuthors(ref["authors"]), ref["publisher"])
 
     dd = etree.Element("dd")
     if informative:
       dd.text = "(Non-normative) "
     dd.append(cite)
     return dd
+
+  def formatAuthors(self, authors):
+    if len(authors) >= 4:
+      return "%s, %s, %s et al." % tuple(authors[:3])
+    if len(authors) == 1:
+      return "%s" % (authors[0], )
+    last = authors.pop()
+    return "%s and %s" % (",".join(authors), last)
 
   def addReferencesLinks(self, ElementTree, w3c_compat=False, **kwargs):
     for element in ElementTree.getroot().findall(".//span[@data-anolis-ref]"):
