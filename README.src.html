@@ -569,6 +569,76 @@ When Anolis is not in <span>compatibility mode</span>, just one
 all <span data-anolis-xref="reference instance">instances</span> are
 <i>informative</i> are prefixed with "(Non-normative)&#xa0;".
 
+<h3>Cross-specification cross-referencing</h3>
+<p>The <dfn><code>xspecxref</code></dfn>
+<span data-anolis-xref="processes">process</span> makes it possible to reference
+<span data-anolis-xref="x-terms">terms</span> defined in other documents, with
+or without the the cooperation of its author. This
+<span data-anolis-xref="processes">process</span> works in a way very similar to
+the <code>xref</code> process.
+
+<p>The essential parts of this <span data-anolis-xref="processes">process</span>
+are <dfn data-anolis-xref="x-instances">instances</dfn> of
+<dfn data-anolis-xref="x-terms">terms</dfn>, which are defined in
+<dfn data-anolis-xref="x-documents">documents</dfn>. These
+<span data-anolis-xref="x-documents">documents</span> are referenced by their
+respective <dfn data-anolis-xref="x-shortnames">shortnames</dfn>. The elements
+used to mark up the <span data-anolis-xref="x-instances">instances</span> must
+have a <dfn><code>data-anolis-spec</code></dfn> attribute whose value is a
+<span data-anolis-xref="x-shortnames">shortnames</span>.
+
+<p>In order to generate links to the other
+<span data-anolis-xref="x-documents">document</span>, a JSON file with the
+<dfn>list of defined terms</dfn> for each
+<span data-anolis-xref="x-documents">document</span> must be supplied in the
+<dfn><code>xrefs</code></dfn> subfolder of the <code>data</code> folder, which
+must be listed in the <dfn><code>specs.json</code></dfn>. This file must contain
+a set of name-value mappings where the name is a
+<span data-anolis-xref="x-shortnames">shortname</span> and the value is the URL
+of its <span data-anolis-xref="x-documents">document</span>'s
+<span>list of defined terms</span>, relative to the <code>xrefs</code> folder.
+
+<div class=example>
+<p>For example, the <code>specs.json</code> file could look as follows:
+<pre>{
+  "webidl": "webidl.json",
+  "domcore": "dom/webdomcore.json",
+  "html": "dom/html5.json",
+  "csscascade": "css/css3cascade.json",
+  "cssbackgrounds": "css/css4backgrounds.json"
+}</pre>
+</div>
+
+<p>Each <span>list of defined terms</span> must contain a set of name-value
+pairs, with the following names:
+<ul class=brief>
+  <li><dfn data-anolis-xref="xspecxref-url"><code>url</code></dfn>:
+      the URL of the <span data-anolis-xref="x-documents">document</span>, with
+      a traling "<code title>#</code>";
+  <li><dfn data-anolis-xref="xspecxref-definitions"><code>definitions</code></dfn>:
+      a set of name-value mappings where the names are the
+      <span data-anolis-xref="x-terms">terms</span> in the
+      <span data-anolis-xref="x-documents">document</span>,
+      <span data-anolis-spec=domcore>converted to lowercase</span>, and the
+      values are the
+      <span data-anolis-spec=domcore data-anolis-xref=concept-id>ID</span>s of
+      the defining element in the
+      <span data-anolis-xref="x-documents">document</span>.
+</ul>
+
+<div class=example>
+<p>For example, the <code title>webdomcore.json</code> file could look as
+follows:
+<pre>{
+  "url" : "http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#",
+  "definitions" :
+    {
+      "converted to lowercase": "converted-to-lowercase",
+      "concept-id": "concept-id"
+    }
+}</pre>
+</div>
+
 <h2 class="no-num">Acknowledgements</h2>
 
 <p>Thanks to Andrew Sidwell, Anne van Kesteren, Henri Sivonen, Ian Hickson,
