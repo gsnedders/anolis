@@ -83,11 +83,12 @@ class xspecxref(object):
         else:
           element.set(u"class", u"external")
 
-        if use_strict and \
-           (not spec in self.dfns or not self.dfns[spec] or \
-            not self.dfns[spec]["values"] or \
-            not term in self.dfns[spec]["values"]):
-          raise SyntaxError, "Term not defined: %s in %s ." % (term, spec)
+        if not spec in self.dfns or not self.dfns[spec]:
+          raise SyntaxError, "Specification not found: %s." % (spec, )
+        if not self.dfns[spec]["values"]:
+          raise SyntaxError, "No values for specification: %s." % (spec, )
+        if not term in self.dfns[spec]["values"]:
+          raise SyntaxError, "Term not defined: %s in %s." % (term, spec)
 
         obj = self.dfns[spec]
         goodParentingAndChildren = True
