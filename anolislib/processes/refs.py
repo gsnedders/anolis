@@ -87,14 +87,25 @@ class refs(object):
       dl.append(self.createReference(self.refs[ref], not ref in self.normativerefs))
 
   def createReference(self, ref, informative):
-    a = etree.Element("a")
-    a.text = ref["title"]
-    a.set("href", ref["href"])
-
     cite = etree.Element("cite")
-    cite.append(a)
-    cite.tail = ", %s. %s.\n" % (self.formatAuthors(ref["authors"]), ref["publisher"])
+    if "href" in ref:
+      a = etree.Element("a")
+      if "title" in ref:
+        a.text = ref["title"]
+      else:
+        a.text = ref["href"]
+      a.set("href", ref["href"])
+      cite.append(a)
+    elif "title" in ref:
+      cite.text = ref["title"]
 
+    cite.tail = ""
+    if "authors" in ref:
+      cite.tail += ", %s." % self.formatAuthors(ref["authors"])
+    if "publisher" in ref:
+      cite.tail += " %s.\n" % ref["publisher"]
+
+    cite.tail += "\n"
     dd = etree.Element("dd")
     if informative:
       dd.text = "(Non-normative) "
@@ -107,7 +118,7 @@ class refs(object):
     if len(authors) == 1:
       return "%s" % (authors[0], )
     last = authors.pop()
-    return "%s and %s" % (",".join(authors), last)
+    return "%s and %s" % (", ".join(authors), last)
 
   def addReferencesLinks(self, ElementTree, w3c_compat=False, **kwargs):
     for element in ElementTree.getroot().findall(".//span[@data-anolis-ref]"):
