@@ -332,7 +332,3 @@ class terms(object):
 
     def addTerms(self, ElementTree, **kwargs):
         utils.replaceComment(ElementTree, u"index-terms", self.terms, **kwargs)
-
-class DifferentParentException(utils.AnolisException):
-    """begin-index-terms and end-index-terms do not have the same parent."""
-    pass
