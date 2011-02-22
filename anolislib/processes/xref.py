@@ -43,12 +43,15 @@ non_alphanumeric_spaces = re.compile(r"[^a-zA-Z0-9 \-]+")
 class xref(object):
     """Add cross-references."""
 
-    def __init__(self, ElementTree, dump_xrefs=False, **kwargs):
+    def __init__(self, ElementTree, dump_xrefs=False, dump_backrefs=False, **kwargs):
         self.dfns = {}
-        self.buildReferences(ElementTree, **kwargs)
+        self.instances = {}
+        self.buildReferences(ElementTree, dump_backrefs=dump_backrefs, **kwargs)
         if dump_xrefs:
-            self.dump(ElementTree, **kwargs)
-        self.addReferences(ElementTree, **kwargs)
+            self.dump(self.dfns, u"xrefs.json", **kwargs)
+        self.addReferences(ElementTree, dump_backrefs=dump_backrefs, **kwargs)
+        if dump_backrefs:
+            self.dump(self.instances, u"backrefs.json", **kwargs)
 
     def buildReferences(self, ElementTree, allow_duplicate_dfns=False,
                         **kwargs):
@@ -71,11 +74,12 @@ class xref(object):
                 link_to.set(u"id", id)
 
                 self.dfns[term] = id
+                self.instances[term] = []
 
-    def dump(self, ElementTree, **kwargs):
-        d = json.dumps(self.dfns, sort_keys=True, allow_nan=False, indent=2)
+    def dump(self, obj, f, **kwargs):
+        d = json.dumps(obj, sort_keys=True, allow_nan=False, indent=2)
         d = d.replace(u" \n", u"\n")
-        fp = open(u"xrefs.json", u"w")
+        fp = open(f, u"w")
         fp.write(d + u"\n")
         fp.close()
 
@@ -83,6 +87,7 @@ class xref(object):
                       w3c_compat_xref_elements=False,
                       w3c_compat_xref_a_placement=False,
                       use_strict=False,
+                      dump_backrefs=False,
                       **kwargs):
         for element in ElementTree.iter(tag=etree.Element):
             if element.tag in instance_elements or \
@@ -111,6 +116,7 @@ class xref(object):
                         if element.tag == u"span":
                             element.tag = u"a"
                             element.set(u"href", u"#" + self.dfns[term])
+                            link = element
                         else:
                             link = etree.Element(u"a",
                                                  {u"href":
@@ -126,6 +132,11 @@ class xref(object):
                                 link.append(element)
                                 link.tail = link[0].tail
                                 link[0].tail = None
+                        if dump_backrefs:
+                            t = utils.non_ifragment.sub(u"-", term.strip(utils.spaceCharacters)).strip(u"-")
+                            id = u"instance_" + t + u"_" + str(len(self.instances[term]))
+                            link.set(u"id", id)
+                            self.instances[term].append(id)
                 elif use_strict and term and \
                      not utils.elementHasClass(element, "secno") and \
                      not u"data-anolis-spec" in element.attrib and \
