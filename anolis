@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # coding=UTF-8
 # Copyright (c) 2008 Geoffrey Sneddon
+#           (c) 2011 Ms2ger
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -221,6 +222,9 @@ def getOptParser():
     parser.add_option("", "--w3c-status", action="store", type=str,
                       dest="w3c_status", help="Status of the document")
 
+    parser.add_option("", "--w3c-shortname", action="store", type=str,
+                      dest="w3c_shortname", help="Shortname of the document")
+
     parser.add_option("", "--dump-backrefs", action="store_true",
                       dest="dump_backrefs", help=SUPPRESS_HELP)
 
@@ -260,6 +264,7 @@ def getOptParser():
         use_strict=False,
         publication_date='',
         w3c_status='ED',
+        w3c_shortname='',
         dump_backrefs=False
     )
 

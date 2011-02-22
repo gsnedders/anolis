@@ -1,5 +1,6 @@
 # coding=UTF-8
 # Copyright (c) 2008 Geoffrey Sneddon
+#           (c) 2011 Ms2ger
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -21,6 +22,7 @@
 
 import re
 import time
+import os
 from lxml import etree
 from copy import deepcopy
 
@@ -50,6 +52,15 @@ longstatus_map = {
     u"PER": u"W3C Proposed Edited Recommendation",
     u"NOTE": u"W3C Working Group Note"
 }
+
+shortname = re.compile(r"\[SHORTNAME[^\]]*\]")
+shortname_identifier = u"[SHORTNAME"
+
+latest = re.compile(r"\[LATEST[^\]]*\]")
+latest_identifier = u"[LATEST"
+
+version = re.compile(r"\[VERSION[^\]]*\]")
+version_identifier = u"[VERSION"
 
 w3c_stylesheet = re.compile(r"http://www\.w3\.org/StyleSheets/TR/W3C-[A-Z]+")
 w3c_stylesheet_identifier = u"http://www.w3.org/StyleSheets/TR/W3C-"
@@ -81,6 +92,7 @@ class sub(object):
                             w3c_compat_substitutions=False,
                             w3c_compat_crazy_substitutions=False,
                             w3c_status='',
+                            w3c_shortname='',
                             **kwargs):
         # Get doc_title from the title element
         try:
@@ -118,8 +130,17 @@ class sub(object):
 
         # And even more in compat. mode
         if w3c_compat or w3c_compat_substitutions:
+            try:
+                shortname_sub = w3c_shortname or os.path.basename(os.getcwd())
+            except OSError:
+                shortname_sub = u""
+            latest_sub = u"http://www.w3.org/TR/%s" % (shortname_sub, )
+            version_sub = u"http://www.w3.org/TR/%s/%s-%s-%s" % (year_sub, w3c_status, shortname_sub, cdate_sub)
             string_subs += ((status, w3c_status, status_identifier),
-                            (longstatus, doc_longstatus, longstatus_identifier))
+                            (longstatus, doc_longstatus, longstatus_identifier),
+                            (shortname, shortname_sub, shortname_identifier),
+                            (latest, latest_sub, latest_identifier),
+                            (version, version_sub, version_identifier))
 
         # And more that aren't even enabled by default in compat. mode
         if w3c_compat_crazy_substitutions:
