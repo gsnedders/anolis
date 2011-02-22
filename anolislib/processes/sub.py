@@ -113,9 +113,14 @@ class sub(object):
         cdate_sub = time.strftime(u"%Y%m%d", self.pubdate)
         cdate_identifier = u"[CDATE"
 
+        udate = re.compile(r"\[UDATE[^\]]*\]")
+        udate_sub = time.strftime(u"%Y-%m-%d", self.pubdate)
+        udate_identifier = u"[UDATE"
+
         string_subs = ((year, year_sub, year_identifier),
                        (date, date_sub, date_identifier),
-                       (cdate, cdate_sub, cdate_identifier))
+                       (cdate, cdate_sub, cdate_identifier),
+                       (udate, udate_sub, udate_identifier))
 
         if w3c_compat or w3c_compat_substitutions:
             # Get the right long status
