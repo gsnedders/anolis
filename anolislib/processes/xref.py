@@ -43,10 +43,11 @@ non_alphanumeric_spaces = re.compile(r"[^a-zA-Z0-9 \-]+")
 class xref(object):
     """Add cross-references."""
 
-    def __init__(self, ElementTree, **kwargs):
+    def __init__(self, ElementTree, dump_xrefs=False, **kwargs):
         self.dfns = {}
         self.buildReferences(ElementTree, **kwargs)
-        self.dump(ElementTree, **kwargs)
+        if dump_xrefs:
+            self.dump(ElementTree, **kwargs)
         self.addReferences(ElementTree, **kwargs)
 
     def buildReferences(self, ElementTree, allow_duplicate_dfns=False,
@@ -71,13 +72,12 @@ class xref(object):
 
                 self.dfns[term] = id
 
-    def dump(self, ElementTree, dump_xrefs=False, **kwargs):
-        if dump_xrefs:
-            d = json.dumps(self.dfns, sort_keys=True, allow_nan=False, indent=2)
-            d = d.replace(u" \n", u"\n")
-            fp = open(u"xrefs.json", u"w")
-            fp.write(d + u"\n")
-            fp.close()
+    def dump(self, ElementTree, **kwargs):
+        d = json.dumps(self.dfns, sort_keys=True, allow_nan=False, indent=2)
+        d = d.replace(u" \n", u"\n")
+        fp = open(u"xrefs.json", u"w")
+        fp.write(d + u"\n")
+        fp.close()
 
     def addReferences(self, ElementTree, w3c_compat=False,
                       w3c_compat_xref_elements=False,
