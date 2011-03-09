@@ -43,12 +43,12 @@ non_alphanumeric_spaces = re.compile(r"[^a-zA-Z0-9 \-]+")
 class xref(object):
     """Add cross-references."""
 
-    def __init__(self, ElementTree, dump_xrefs=False, dump_backrefs=False, **kwargs):
+    def __init__(self, ElementTree, dump_xrefs='', dump_backrefs=False, **kwargs):
         self.dfns = {}
         self.instances = {}
         self.buildReferences(ElementTree, dump_backrefs=dump_backrefs, **kwargs)
         if dump_xrefs:
-            self.dump(self.dfns, u"xrefs.json", **kwargs)
+            self.dump(self.getDfns(dump_xrefs), dump_xrefs, **kwargs)
         self.addReferences(ElementTree, dump_backrefs=dump_backrefs, **kwargs)
         if dump_backrefs:
             self.dump(self.instances, u"backrefs.json", **kwargs)
@@ -76,10 +76,17 @@ class xref(object):
                 self.dfns[term] = id
                 self.instances[term] = []
 
+    def getDfns(self, dump_xrefs, **kwargs):
+        fp = open(dump_xrefs, u"rb")
+        data = json.load(fp)
+        fp.close()
+        data["definitions"] = self.dfns
+        return data
+
     def dump(self, obj, f, **kwargs):
         d = json.dumps(obj, sort_keys=True, allow_nan=False, indent=2)
         d = d.replace(u" \n", u"\n")
-        fp = open(f, u"w")
+        fp = open(f, u"wb")
         fp.write(d + u"\n")
         fp.close()
 
