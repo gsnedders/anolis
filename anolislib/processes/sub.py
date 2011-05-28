@@ -139,8 +139,8 @@ class sub(object):
                 shortname_sub = w3c_shortname or os.path.basename(os.getcwd())
             except OSError:
                 shortname_sub = u""
-            latest_sub = u"http://www.w3.org/TR/%s" % (shortname_sub, )
-            version_sub = u"http://www.w3.org/TR/%s/%s-%s-%s" % (year_sub, w3c_status, shortname_sub, cdate_sub)
+            latest_sub = u"http://www.w3.org/TR/%s/" % (shortname_sub, )
+            version_sub = u"http://www.w3.org/TR/%s/%s-%s-%s/" % (year_sub, w3c_status, shortname_sub, cdate_sub)
             string_subs += ((status, w3c_status, status_identifier),
                             (longstatus, doc_longstatus, longstatus_identifier),
                             (shortname, shortname_sub, shortname_identifier),
