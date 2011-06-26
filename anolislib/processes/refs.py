@@ -102,6 +102,8 @@ class refs(object):
     cite.tail = ""
     if "authors" in ref:
       cite.tail += ", %s." % self.formatAuthors(ref["authors"])
+    else:
+      cite.tail += "."
     if "publisher" in ref:
       cite.tail += " %s.\n" % ref["publisher"]
 
