@@ -14,7 +14,7 @@ color: #fff;
 
 </head><body><header>
     <h1>Anolis 1.2pre</h1>
-    <h2 class="no-num no-toc" id=documentation-—-20-november-2010>Documentation — 20 November 2010</h2>
+    <h2 class="no-num no-toc" id=documentation-—-26-june-2011>Documentation — 26 June 2011</h2>
 </header>
 
 <h2 class="no-num no-toc" id=contents>Contents</h2>
@@ -386,6 +386,35 @@ then a comment with a value of <code>end-</code> followed by
 
 </p><p>The <dfn id=w3c-status>W3C status</dfn> is given by the
 <code>--w3c-status=<var>status</var></code> argument.
+
+</p><p>If that argument isn't given, it is found, when needed by one of the
+substitutions, by iterating all text nodes in document order (i.e., attribute
+values and comments have no effect), and for each node, the following is done
+(in this order):
+
+</p><ol>
+    <li>If the node contains, case-insensitively, "latest", followed by one or
+more <a href=#whitespace>whitespace</a> characters, followed by "version", searching
+stops, and the default is used (ED).
+    </li><li>Otherwise, if the node, case-sensitively, contains
+"http://www.w3.org/TR/" followed by one of "MO", "WD", "CR", "PR", "REC",
+"PER", or "NOTE", which in turn is followed by U+002D HYPHEN-MINUS (-), then
+searching stops, and the status is whatever matched the previous list of
+options by the first match in the text node.
+</li></ol>
+
+<p>A side-effect of doing it in this order is the fact that if a node contains
+both of these possible strings is that the latter is ignored, meaning that the
+default (ED) is used.
+
+<!-- I wish the above was more sane — it took me several hours to work out
+(though the comment in the CSS3 Module Postprocessor docs saying, "If there is
+a H2 subheading under the H1 that gives the spec's status, the [STATUS]
+variable will be initialized from that, otherwise it will default to WD." did
+not help me work it out quickly, as what is done is completely utterly
+different to that) — even though the algorithm is simple enough, it is just
+far too unexpected. Sadly, though, pre-existing documents depend on this very
+exact behaviour, and thus it cannot be changed. -->
 
 </p><p>There is also a <dfn id=long-w3c-status>long W3C status</dfn>, which correlates to the
 <a href=#w3c-status>W3C status</a> under the following mapping:

@@ -77,8 +77,17 @@ class sub(object):
     def __init__(self, ElementTree, w3c_compat=False,
                  w3c_compat_substitutions=False,
                  w3c_compat_crazy_substitutions=False,
+                 w3c_status='',
                  publication_date='',
                  **kwargs):
+        if w3c_status:
+            self.w3c_status = w3c_status
+        elif w3c_compat or w3c_compat_substitutions or \
+             w3c_compat_crazy_substitutions:
+            self.w3c_status = self.getW3CStatus(ElementTree, **kwargs)
+        else:
+            self.w3c_status = ''
+
         self.pubdate = publication_date and time.strptime(publication_date, "%d %b %Y") or time.gmtime()
 
         self.stringSubstitutions(ElementTree, w3c_compat,
@@ -91,7 +100,6 @@ class sub(object):
     def stringSubstitutions(self, ElementTree, w3c_compat=False,
                             w3c_compat_substitutions=False,
                             w3c_compat_crazy_substitutions=False,
-                            w3c_status='',
                             w3c_shortname='',
                             **kwargs):
         # Get doc_title from the title element
@@ -124,11 +132,11 @@ class sub(object):
 
         if w3c_compat or w3c_compat_substitutions:
             # Get the right long status
-            doc_longstatus = longstatus_map[w3c_status]
+            doc_longstatus = longstatus_map[self.w3c_status]
 
         if w3c_compat_crazy_substitutions:
             # Get the right stylesheet
-            doc_w3c_stylesheet = u"http://www.w3.org/StyleSheets/TR/W3C-%s" % (w3c_status, )
+            doc_w3c_stylesheet = u"http://www.w3.org/StyleSheets/TR/W3C-%s" % (self.w3c_status, )
 
         # Get all the subs we want
         string_subs += ((title, doc_title, title_identifier), )
@@ -140,8 +148,8 @@ class sub(object):
             except OSError:
                 shortname_sub = u""
             latest_sub = u"http://www.w3.org/TR/%s/" % (shortname_sub, )
-            version_sub = u"http://www.w3.org/TR/%s/%s-%s-%s/" % (year_sub, w3c_status, shortname_sub, cdate_sub)
-            string_subs += ((status, w3c_status, status_identifier),
+            version_sub = u"http://www.w3.org/TR/%s/%s-%s-%s/" % (year_sub, self.w3c_status, shortname_sub, cdate_sub)
+            string_subs += ((status, self.w3c_status, status_identifier),
                             (longstatus, doc_longstatus, longstatus_identifier),
                             (shortname, shortname_sub, shortname_identifier),
                             (latest, latest_sub, latest_identifier),
@@ -209,6 +217,19 @@ class sub(object):
         # Remove nodes
         for node in to_remove:
             node.getparent().remove(node)
+
+    def getW3CStatus(self, ElementTree, **kwargs):
+        # Get all text nodes that contain case-insensitively "latest version"
+        # with any amount of whitespace inside the phrase, or contain
+        # http://www.w3.org/TR/
+        for text in ElementTree.xpath(u"//text()[contains(translate(., 'LATEST', 'latest'), 'latest') and contains(translate(., 'VERSION', 'version'), 'version') or contains(., 'http://www.w3.org/TR/')]"):
+            if latest_version.search(text):
+                return u"ED"
+            elif w3c_tr_url_status.search(text):
+                return w3c_tr_url_status.search(text).group(1)
+        # Didn't find any status, return the default (ED)
+        else:
+            return u"ED"
 
 class DifferentParentException(utils.AnolisException):
     """begin-link and end-link do not have the same parent."""
