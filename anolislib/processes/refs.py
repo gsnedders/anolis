@@ -20,8 +20,13 @@
 # THE SOFTWARE.
 
 import re
-import simplejson as json
 from lxml import etree
+
+try:
+  import json
+except ImportError:
+  import simplejson as json
+
 from anolislib import utils
 
 class refs(object):

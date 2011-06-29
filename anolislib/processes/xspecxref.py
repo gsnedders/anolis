@@ -21,9 +21,13 @@
 # THE SOFTWARE.
 
 import re
-import simplejson as json
 from lxml import etree
 from copy import deepcopy
+
+try:
+  import json
+except ImportError:
+  import simplejson as json
 
 from anolislib import utils
 
