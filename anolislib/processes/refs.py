@@ -45,6 +45,14 @@ class refs(object):
     else:
       self.addTwoReferencesLists(ElementTree, **kwargs)
 
+  def addDD(self, dl, ref, informative):
+    if isinstance(self.refs[ref], list):
+      data = self.refs[ref]
+    else:
+      data = [self.refs[ref]]
+    for r in data:
+      dl.append(self.createReference(r, informative))
+
   def buildReferences(self, ElementTree, **kwargs):
     list = open("data/references.json", "rb")
     self.refs = json.load(list)
@@ -74,7 +82,7 @@ class refs(object):
       dt.set("id", "refs" + ref)
       dt.text = "[" + ref + "]\n"
       dl.append(dt)
-      dl.append(self.createReference(self.refs[ref], False))
+      self.addDD(dl, ref, False)
 
   def addReferencesList(self, ElementTree, **kwargs):
     root = ElementTree.getroot().find(".//div[@id='anolis-references']")
@@ -89,7 +97,7 @@ class refs(object):
       dt.set("id", "refs" + ref)
       dt.text = "[" + ref + "]\n"
       dl.append(dt)
-      dl.append(self.createReference(self.refs[ref], not ref in self.normativerefs))
+      self.addDD(dl, ref, not ref in self.normativerefs)
 
   def createReference(self, ref, informative):
     cite = etree.Element("cite")
