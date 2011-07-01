@@ -42,7 +42,7 @@ w3c_instance_elements = frozenset([u"abbr", u"acronym", u"b", u"bdo", u"big",
 # interactive elements
 instance_not_in_stack_with = frozenset([u"dfn", ])
 
-non_alphanumeric_spaces = re.compile(r"[^a-zA-Z0-9 \-]+")
+non_alphanumeric_spaces = re.compile(r"[^a-zA-Z0-9 \-\_\/]+")
 
 
 class xspecxref(object):
