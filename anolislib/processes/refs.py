@@ -70,6 +70,8 @@ class refs(object):
     self.addPartialReferencesList(ElementTree, informative, "informative", **kwargs)
 
   def addPartialReferencesList(self, ElementTree, l, id, **kwargs):
+    if not len(l):
+      return
     root = ElementTree.getroot().find(".//div[@id='anolis-references-%s']" % id)
     if root is None:
       raise SyntaxError, "A <div id=anolis-references-%s> is required." % id
