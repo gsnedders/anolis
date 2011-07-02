@@ -42,9 +42,6 @@ w3c_instance_elements = frozenset([u"abbr", u"acronym", u"b", u"bdo", u"big",
 # interactive elements
 instance_not_in_stack_with = frozenset([u"dfn", ])
 
-non_alphanumeric_spaces = re.compile(r"[^a-zA-Z0-9 \-]+")
-
-
 class xspecxref(object):
   """Add cross-references."""
 
@@ -75,7 +72,7 @@ class xspecxref(object):
           or (w3c_compat or w3c_compat_xref_elements)
           and element.tag in w3c_instance_elements)
           and (element.get(u"data-anolis-spec") is not None)):
-        term = self.getTerm(element, w3c_compat=w3c_compat, **kwargs)
+        term = self.getTerm(element, **kwargs)
         spec = element.get(u"data-anolis-spec")
         if w3c_compat:
           del element.attrib["data-anolis-spec"]
@@ -139,9 +136,4 @@ class xspecxref(object):
 
     term = term.strip(utils.spaceCharacters).lower()
 
-    term = utils.spacesRegex.sub(u" ", term)
-
-    if w3c_compat or w3c_compat_xref_normalization:
-      term = non_alphanumeric_spaces.sub(u"", term)
-
-    return term
+    return utils.spacesRegex.sub(u" ", term)
