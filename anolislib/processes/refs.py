@@ -119,10 +119,14 @@ class refs(object):
       cite.tail += ", %s." % self.formatAuthors(ref["authors"])
     else:
       cite.tail += "."
-    if "publisher" in ref:
-      cite.tail += " %s.\n" % ref["publisher"]
 
-    cite.tail += "\n"
+    if "publisher" in ref:
+      cite.tail += " %s." % ref["publisher"]
+
+    if "isbn" in ref:
+      cite.tail += " ISBN %s." % ref["isbn"]
+
+    cite.tail += "\n\n"
     dd = etree.Element("dd")
     if informative:
       dd.text = "(Non-normative) "
