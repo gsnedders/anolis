@@ -40,16 +40,21 @@ class TestCase(unittest.TestCase):
 
 
 def buildTestSuite():
-    for file_name in get_files("tests", "basic", "*.src.html"):
+    for file_name in get_files("tests", "*", "*.src.html"):
 
         def testFunc(self, file_name=file_name):
             try:
                 output = StringIO.StringIO()
                 expected = StringIO.StringIO()
-                
+
+                if file_name.startswith(os.path.join("tests", "refs")):
+                    processes = ["filter", "sub", "toc", "xref", "annotate", "refs"]
+                else:
+                    processes = ["filter", "sub", "toc", "xref", "annotate"]
+
                 # Get the input
                 input = open(file_name, "rb")
-                tree = generator.fromFile(input)
+                tree = generator.fromFile(input, processes=processes)
                 input.close()
                 
                 # Get the output
