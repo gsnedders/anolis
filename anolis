@@ -189,7 +189,8 @@ def getOptParser():
                       dest="use_strict", help=SUPPRESS_HELP)
 
     parser.add_option("", "--pubdate", action="store", type=str,
-                      dest="publication_date", help=SUPPRESS_HELP)
+                      dest="publication_date", metavar="1 Sep 2022",
+                      help="Set the date this document will be published.")
 
     parser.add_option("", "--dump-backrefs", action="store_true",
                       dest="dump_backrefs", help=SUPPRESS_HELP)
