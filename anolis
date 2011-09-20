@@ -132,34 +132,6 @@ def getOptParser():
                       dest="allow_duplicate_dfns",
                       help="Allow multiple definitions of terms when cross-referencing (the last instance of the term is used when referencing it).")
 
-    parser.add_option("", "--w3c-compat", action="store_true",
-                      dest="w3c_compat",
-                      help="Behave in a (mostly) compatible way to the W3C CSS WG's Postprocessor (this implies all of the other --w3c-compat options with the exception of --w3c-compat-crazy-substitution, as that is too crazy).")
-
-    parser.add_option("", "--w3c-compat-xref-elements", action="store_true",
-                      dest="w3c_compat_xref_elements",
-                      help="Uses the same list of elements to look for cross-references in as the W3C CSS WG's Postprocessor, even when the elements shouldn't semantically be used for cross-reference terms.")
-
-    parser.add_option("", "--w3c-compat-xref-a-placement", action="store_true",
-                      dest="w3c_compat_xref_a_placement",
-                      help="When cross-referencing elements apart from span, put the a element inside the element instead of outside the element.")
-
-    parser.add_option("", "--w3c-compat-xref-normalization", action="store_true",
-                      dest="w3c_compat_xref_normalization",
-                      help="Only use ASCII letters, numbers, and spaces in comparison of cross-reference terms.")
-
-    parser.add_option("", "--w3c-compat-class-toc", action="store_true",
-                      dest="w3c_compat_class_toc",
-                      help="Add @class='toc' on every ol element in the table of contents (instead of only the root ol element).")
-
-    parser.add_option("", "--w3c-compat-substitutions", action="store_true",
-                      dest="w3c_compat_substitutions",
-                      help="Do W3C specific substitutions.")
-
-    parser.add_option("", "--w3c-compat-crazy-substitutions", action="store_true",
-                      dest="w3c_compat_crazy_substitutions",
-                      help="Do crazy W3C specific substitutions, which may cause unexpected behaviour (i.e., replacing random strings within the document with no special marker).")
-
     profile = True
     try:
         import cProfile
@@ -219,14 +191,42 @@ def getOptParser():
     parser.add_option("", "--pubdate", action="store", type=str,
                       dest="publication_date", help=SUPPRESS_HELP)
 
+    parser.add_option("", "--dump-backrefs", action="store_true",
+                      dest="dump_backrefs", help=SUPPRESS_HELP)
+
+    parser.add_option("", "--w3c-compat", action="store_true",
+                      dest="w3c_compat",
+                      help="Behave in a (mostly) compatible way to the W3C CSS WG's Postprocessor (this implies all of the other --w3c-compat options with the exception of --w3c-compat-crazy-substitution, as that is too crazy).")
+
+    parser.add_option("", "--w3c-compat-xref-elements", action="store_true",
+                      dest="w3c_compat_xref_elements",
+                      help="Uses the same list of elements to look for cross-references in as the W3C CSS WG's Postprocessor, even when the elements shouldn't semantically be used for cross-reference terms.")
+
+    parser.add_option("", "--w3c-compat-xref-a-placement", action="store_true",
+                      dest="w3c_compat_xref_a_placement",
+                      help="When cross-referencing elements apart from span, put the a element inside the element instead of outside the element.")
+
+    parser.add_option("", "--w3c-compat-xref-normalization", action="store_true",
+                      dest="w3c_compat_xref_normalization",
+                      help="Only use ASCII letters, numbers, and spaces in comparison of cross-reference terms.")
+
+    parser.add_option("", "--w3c-compat-class-toc", action="store_true",
+                      dest="w3c_compat_class_toc",
+                      help="Add @class='toc' on every ol element in the table of contents (instead of only the root ol element).")
+
+    parser.add_option("", "--w3c-compat-substitutions", action="store_true",
+                      dest="w3c_compat_substitutions",
+                      help="Do W3C specific substitutions.")
+
+    parser.add_option("", "--w3c-compat-crazy-substitutions", action="store_true",
+                      dest="w3c_compat_crazy_substitutions",
+                      help="Do crazy W3C specific substitutions, which may cause unexpected behaviour (i.e., replacing random strings within the document with no special marker).")
+
     parser.add_option("", "--w3c-status", action="store", type=str,
                       dest="w3c_status", help="Status of the document")
 
     parser.add_option("", "--w3c-shortname", action="store", type=str,
                       dest="w3c_shortname", help="Shortname of the document")
-
-    parser.add_option("", "--dump-backrefs", action="store_true",
-                      dest="dump_backrefs", help=SUPPRESS_HELP)
 
     parser.set_defaults(
         processes=["filter", "sub", "toc", "xref", "annotate"],
@@ -242,13 +242,6 @@ def getOptParser():
         min_depth=2,
         max_depth=6,
         allow_duplicate_dfns=False,
-        w3c_compat=False,
-        w3c_compat_xref_elements=False,
-        w3c_compat_xref_a_placement=False,
-        w3c_compat_xref_normalization=False,
-        w3c_compat_class_toc=False,
-        w3c_compat_substitutions=False,
-        w3c_compat_crazy_substitutions=False,
         profile=False,
         inject_meta_charset=False,
         omit_optional_tags=False,
@@ -263,9 +256,16 @@ def getOptParser():
         dump_xrefs='',
         use_strict=False,
         publication_date='',
+        dump_backrefs=False,
+        w3c_compat=False,
+        w3c_compat_xref_elements=False,
+        w3c_compat_xref_a_placement=False,
+        w3c_compat_xref_normalization=False,
+        w3c_compat_class_toc=False,
+        w3c_compat_substitutions=False,
+        w3c_compat_crazy_substitutions=False,
         w3c_status='ED',
-        w3c_shortname='',
-        dump_backrefs=False
+        w3c_shortname=''
     )
 
     return parser
