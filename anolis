@@ -195,6 +195,9 @@ def getOptParser():
     parser.add_option("", "--dump-backrefs", action="store_true",
                       dest="dump_backrefs", help=SUPPRESS_HELP)
 
+    parser.add_option("", "--enable-woolly", action="store_true",
+                      dest="enable_woolly", help=SUPPRESS_HELP)
+
     parser.add_option("", "--w3c-compat", action="store_true",
                       dest="w3c_compat",
                       help="Behave in a (mostly) compatible way to the W3C CSS WG's Postprocessor (this implies all of the other --w3c-compat options with the exception of --w3c-compat-crazy-substitution, as that is too crazy).")
@@ -258,6 +261,7 @@ def getOptParser():
         use_strict=False,
         publication_date='',
         dump_backrefs=False,
+        enable_woolly=False,
         w3c_compat=False,
         w3c_compat_xref_elements=False,
         w3c_compat_xref_a_placement=False,

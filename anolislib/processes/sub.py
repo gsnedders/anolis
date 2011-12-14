@@ -65,9 +65,6 @@ version_identifier = u"[VERSION"
 w3c_stylesheet = re.compile(r"http://www\.w3\.org/StyleSheets/TR/W3C-[A-Z]+")
 w3c_stylesheet_identifier = u"http://www.w3.org/StyleSheets/TR/W3C-"
 
-logo = u"logo"
-logo_sub = etree.fromstring(u'<p><a href="http://www.w3.org/"><img height="48" width="72" alt="W3C" src="http://www.w3.org/Icons/w3c_home"/></a></p>')
-
 basic_comment_subs = ()
 
 
@@ -171,7 +168,9 @@ class sub(object):
 
     def commentSubstitutions(self, ElementTree, w3c_compat=False,
                              w3c_compat_substitutions=False,
-                             w3c_compat_crazy_substitutions=False, **kwargs):
+                             w3c_compat_crazy_substitutions=False,
+                             enable_woolly=False,
+                             **kwargs):
         # Basic substitutions
         instance_basic_comment_subs = basic_comment_subs
 
@@ -179,6 +178,13 @@ class sub(object):
         if w3c_compat or w3c_compat_substitutions:
             copyright = u"copyright"
             copyright_sub = etree.fromstring(u'<p class="copyright"><a href="http://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> &#xA9; %s <a href="http://www.w3.org/"><abbr title="World Wide Web Consortium">W3C</abbr></a><sup>&#xAE;</sup> (<a href="http://www.csail.mit.edu/"><abbr title="Massachusetts Institute of Technology">MIT</abbr></a>, <a href="http://www.ercim.eu/"><abbr title="European Research Consortium for Informatics and Mathematics">ERCIM</abbr></a>, <a href="http://www.keio.ac.jp/">Keio</a>), All Rights Reserved. W3C <a href="http://www.w3.org/Consortium/Legal/ipr-notice#Legal_Disclaimer">liability</a>, <a href="http://www.w3.org/Consortium/Legal/ipr-notice#W3C_Trademarks">trademark</a> and <a href="http://www.w3.org/Consortium/Legal/copyright-documents">document use</a> rules apply.</p>' % time.strftime(u"%Y", self.pubdate))
+
+            logo = u"logo"
+            logo_str = u'<a href="http://www.w3.org/"><img height="48" width="72" alt="W3C" src="http://www.w3.org/Icons/w3c_home"/></a>'
+            if enable_woolly:
+                logo_str += u'<a class="logo" href="https://www.w3.org/Style/Group/" rel="in-activity"><img alt="CSS WG" src="https://www.w3.org/Style/Woolly/woolly-icon"/></a>'
+
+            logo_sub = etree.fromstring(u'<p>%s</p>' % logo_str)
 
             instance_basic_comment_subs += ((logo, logo_sub),
                                             (copyright, copyright_sub))
