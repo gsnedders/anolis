@@ -661,14 +661,24 @@ pairs, with the following names:
 <p>For example, the <code title>webdomcore.json</code> file could look as
 follows:
 <pre>{
-  "url" : "http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#",
-  "definitions" :
-    {
-      "converted to lowercase": "converted-to-lowercase",
-      "concept-id": "concept-id"
-    }
+  "url": "http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#",
+  "definitions": {
+    "converted to lowercase": "converted-to-lowercase",
+    "concept-id": "concept-id"
+  }
 }</pre>
 </div>
+
+<p>In order to create such a file, the <dfn><code>--dump-xrefs</code></dfn>
+option can be used. Calling Anolis with the
+<code>--dump-xrefs=<var title>path</var></code> argument will update the
+<span>list of defined terms</span> at <var title>path</var> with the
+<span data-anolis-xref="x-terms">terms</span> currently defined in the
+input document.
+
+<p>Before the first use, a JSON file must be provided at <var title>path</var>,
+with the <code data-anolis-xref="xspecxref-url">url</code> property already
+present.
 
 <h2 class="no-num">Acknowledgements</h2>
 

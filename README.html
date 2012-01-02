@@ -14,7 +14,7 @@ color: #fff;
 
 </head><body><header>
     <h1>Anolis 1.2pre</h1>
-    <h2 class="no-num no-toc" id=documentation-—-28-july-2011>Documentation — 28 July 2011</h2>
+    <h2 class="no-num no-toc" id=documentation-—-2-january-2012>Documentation — 2 January 2012</h2>
 </header>
 
 <h2 class="no-num no-toc" id=contents>Contents</h2>
@@ -651,16 +651,26 @@ pairs, with the following names:
 <p>For example, the <code title="">webdomcore.json</code> file could look as
 follows:
 </p><pre>{
-  "url" : "http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#",
-  "definitions" :
-    {
-      "converted to lowercase": "converted-to-lowercase",
-      "concept-id": "concept-id"
-    }
+  "url": "http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#",
+  "definitions": {
+    "converted to lowercase": "converted-to-lowercase",
+    "concept-id": "concept-id"
+  }
 }</pre>
 </div>
 
-<h2 class=no-num id=acknowledgements>Acknowledgements</h2>
+<p>In order to create such a file, the <dfn id=dump-xrefs><code>--dump-xrefs</code></dfn>
+option can be used. Calling Anolis with the
+<code>--dump-xrefs=<var title="">path</var></code> argument will update the
+<a href=#list-of-defined-terms>list of defined terms</a> at <var title="">path</var> with the
+<a data-anolis-xref=x-terms href=#terms-0>terms</a> currently defined in the
+input document.
+
+</p><p>Before the first use, a JSON file must be provided at <var title="">path</var>,
+with the <a href=#url><code data-anolis-xref=xspecxref-url>url</code></a> property already
+present.
+
+</p><h2 class=no-num id=acknowledgements>Acknowledgements</h2>
 
 <p>Thanks to Andrew Sidwell, Anne van Kesteren, Henri Sivonen, Ian Hickson,
 James Graham, Lachlan Hunt, Magnus Kristiansen, Michael(tm) Smith, and Philip
