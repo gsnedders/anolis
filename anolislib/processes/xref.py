@@ -88,7 +88,7 @@ class xref(object):
         return data
 
     def dump(self, obj, f, **kwargs):
-        d = json.dumps(obj, sort_keys=True, allow_nan=False, indent=2, separators=(',', ': ')))
+        d = json.dumps(obj, sort_keys=True, allow_nan=False, indent=2, separators=(',', ': '))
         fp = open(f, u"wb")
         fp.write(d + u"\n")
         fp.close()
