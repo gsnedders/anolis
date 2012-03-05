@@ -47,6 +47,7 @@ class xspecxref(object):
 
   def __init__(self, ElementTree, **kwargs):
     self.dfns = {}
+    self.notfound = []
     self.buildReferences(ElementTree, **kwargs)
     self.addReferences(ElementTree, **kwargs)
 
@@ -86,7 +87,8 @@ class xspecxref(object):
         if not self.dfns[spec]["values"]:
           raise SyntaxError, "No values for specification: %s." % (spec, )
         if not term in self.dfns[spec]["values"]:
-          raise SyntaxError, "Term not defined: %s in %s." % (term, spec)
+          self.notfound.append([term, spec])
+          continue
 
         obj = self.dfns[spec]
         goodParentingAndChildren = True
@@ -124,6 +126,8 @@ class xspecxref(object):
               link.append(element)
               link.tail = link[0].tail
               link[0].tail = None
+    if self.notfound:
+      raise SyntaxError, "Terms not defined: %s." % self.notfound
 
   def getTerm(self, element, w3c_compat=False,
               w3c_compat_xref_normalization=False, **kwargs):
