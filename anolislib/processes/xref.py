@@ -81,11 +81,15 @@ class xref(object):
                 self.instances[term] = []
 
     def getDfns(self, dump_xrefs, **kwargs):
-        fp = open(dump_xrefs, u"rb")
-        data = json.load(fp)
-        fp.close()
-        data["definitions"] = self.dfns
-        return data
+        try:
+            fp = open(dump_xrefs, u"rb")
+            data = json.load(fp)
+            fp.close()
+            data["definitions"] = self.dfns
+            return data
+        except IOError:
+            raise XrefsFileNotCreatedYetException("""No such file or directory: '%s'. Please create it first.
+It should contain a an object with a 'url' property (whose value ends with a '#').""" % dump_xrefs)
 
     def dump(self, obj, f, **kwargs):
         d = json.dumps(obj, sort_keys=True, allow_nan=False, indent=2, separators=(',', ': '))
@@ -175,4 +179,8 @@ class xref(object):
 
 class DuplicateDfnException(utils.AnolisException):
     """Term already defined."""
+    pass
+
+class XrefsFileNotCreatedYetException(utils.AnolisException):
+    """The argument to --dump-xrefs does not exist yet."""
     pass
