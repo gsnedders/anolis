@@ -32,15 +32,15 @@ from anolislib import utils
 class refs(object):
   """Add references section."""
 
-  def __init__(self, ElementTree, w3c_compat=False, **kwargs):
+  def __init__(self, ElementTree, split_references_section=False, **kwargs):
     self.refs = {}
     self.usedrefs = []
     self.foundrefs = {}
     self.normativerefs = {}
-    self.addReferencesLinks(ElementTree, w3c_compat=w3c_compat, **kwargs)
+    self.addReferencesLinks(ElementTree, **kwargs)
     self.usedrefs.sort()
     self.buildReferences(ElementTree, **kwargs)
-    if not w3c_compat:
+    if not split_references_section:
       self.addReferencesList(ElementTree, **kwargs)
     else:
       self.addTwoReferencesLists(ElementTree, **kwargs)
@@ -141,10 +141,9 @@ class refs(object):
     last = authors.pop()
     return "%s and %s" % (", ".join(authors), last)
 
-  def addReferencesLinks(self, ElementTree, w3c_compat=False, **kwargs):
+  def addReferencesLinks(self, ElementTree, **kwargs):
     for element in ElementTree.getroot().findall(".//span[@data-anolis-ref]"):
-      if w3c_compat:
-        del element.attrib["data-anolis-ref"]
+      del element.attrib["data-anolis-ref"]
       ref = element.text
       element.tag = "a"
       element.set("href", "#refs" + ref)

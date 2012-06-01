@@ -234,6 +234,9 @@ def getOptParser():
     parser.add_option("", "--w3c-shortname", action="store", type=str,
                       dest="w3c_shortname", help="Shortname of the document")
 
+    parser.add_option("", "--split-references-section", action="store_true",
+                      help=SUPPRESS_HELP)
+
     parser.set_defaults(
         processes=["filter", "sub", "toc", "xref", "annotate"],
         parser="html5lib",
@@ -272,7 +275,8 @@ def getOptParser():
         w3c_compat_substitutions=False,
         w3c_compat_crazy_substitutions=False,
         w3c_status='ED',
-        w3c_shortname=''
+        w3c_shortname='',
+        split_references_section=False
     )
 
     return parser
