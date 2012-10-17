@@ -40,11 +40,11 @@ def main():
     optParser = getOptParser()
     opts, args = optParser.parse_args()
 
-    # If we have two arguments read/write to files otherwise read/write 
+    # If we have two arguments read/write to files otherwise read/write
     # to stdin/stdout
     if len(args) == 2:
         try:
-            input = open(args[0], "rb")        
+            input = open(args[0], "rb")
             output = open(args[1], "wb")
         except IOError, e:
             sys.stderr.write(unicode(e) + u"\n")
@@ -54,16 +54,16 @@ def main():
         output = sys.stdout
     else:
         raise utils.AnolisException("Wrong number of arguments.")
-    
+
     try:
         # Get options
         kwargs = vars(opts)
-        
+
         # Get input and generate
 
         tree = generator.fromFile(input, **kwargs)
         input.close()
-        
+
         # Write output
         generator.toFile(tree, output, **kwargs)
         output.close()
@@ -110,11 +110,11 @@ def getOptParser():
     parser.add_option("", "--annotations", action="store", dest="annotation",
                       help="Path or URI of an annotations file containing status annotations that should be added to sections")
 
-    parser.add_option("", "--annotate-whatwg-status", action="store_true", 
+    parser.add_option("", "--annotate-whatwg-status", action="store_true",
                       dest="annotate_whatwg_status",
                       help="Add WHATWG status markers in annotations")
 
-    parser.add_option("", "--annotate-w3c-issues", action="store_true", 
+    parser.add_option("", "--annotate-w3c-issues", action="store_true",
                       dest="annotate_w3c_issues",
                       help="Add links to W3C issue tracker in status annotations")
 
@@ -134,6 +134,9 @@ def getOptParser():
                       dest="allow_duplicate_dfns",
                       help="Allow multiple definitions of terms when cross-referencing (the last instance of the term is used when referencing it).")
 
+    parser.add_option("", "--xref", action="store", dest="xref",
+                      help="Set directory for cross-references database without trailing slash. E.g. '../xref'")
+
     profile = True
     try:
         import cProfile
@@ -144,7 +147,7 @@ def getOptParser():
             import hotshot.stats
         except ImportError:
             profile = False
-    
+
     if profile:
         parser.add_option("", "--profile", action="store_true",
             dest="profile", help=SUPPRESS_HELP)
@@ -251,6 +254,7 @@ def getOptParser():
         min_depth=2,
         max_depth=6,
         allow_duplicate_dfns=False,
+        xref="data",
         profile=False,
         inject_meta_charset=False,
         omit_optional_tags=False,
