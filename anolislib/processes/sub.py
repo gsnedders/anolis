@@ -196,7 +196,7 @@ class sub(object):
         link_parent = None
         link = None
         for node in ElementTree.iter():
-            if link_parent:
+            if link_parent is not None:
                 if node.tag is etree.Comment and \
                    node.text.strip(utils.spaceCharacters) == u"end-link":
                     if node.getparent() is not link_parent:

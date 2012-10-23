@@ -229,7 +229,7 @@ def replaceComment(ElementTree, comment, sub, **kwargs):
     sub_parent = None
     to_remove = set()
     for node in ElementTree.iter():
-        if sub_parent:
+        if sub_parent is not None:
             if node.tag is etree.Comment and \
                node.text.strip(spaceCharacters) == end_sub:
                 if node.getparent() is not sub_parent:
