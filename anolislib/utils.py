@@ -226,21 +226,20 @@ def copyContentForRemoval(node, text=True, children=True, tail=True):
 def replaceComment(ElementTree, comment, sub, **kwargs):
     begin_sub = u"begin-%s" % comment
     end_sub = u"end-%s" % comment
-    in_sub = False
+    sub_parent = None
     to_remove = set()
     for node in ElementTree.iter():
-        if in_sub:
+        if sub_parent:
             if node.tag is etree.Comment and \
                node.text.strip(spaceCharacters) == end_sub:
                 if node.getparent() is not sub_parent:
                     raise DifferentParentException(u"%s and %s have different parents" % begin_sub, end_sub)
-                in_sub = False
+                sub_parent = None
             else:
                 to_remove.add(node)
         elif node.tag is etree.Comment:
             if node.text.strip(spaceCharacters) == begin_sub:
                 sub_parent = node.getparent()
-                in_sub = True
                 node.tail = None
                 node.addnext(deepcopy(sub))
                 indentNode(node.getnext(), 0, **kwargs)

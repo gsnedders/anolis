@@ -193,16 +193,17 @@ class sub(object):
         to_remove = set()
 
         # Link
-        in_link = False
+        link_parent = None
+        link = None
         for node in ElementTree.iter():
-            if in_link:
+            if link_parent:
                 if node.tag is etree.Comment and \
                    node.text.strip(utils.spaceCharacters) == u"end-link":
                     if node.getparent() is not link_parent:
                         raise utils.DifferentParentException(u"begin-link and end-link have different parents")
                     utils.removeInteractiveContentChildren(link)
                     link.set(u"href", utils.textContent(link))
-                    in_link = False
+                    link_parent = None
                 else:
                     if node.getparent() is link_parent:
                         link.append(deepcopy(node))
@@ -210,7 +211,6 @@ class sub(object):
             elif node.tag is etree.Comment and \
                  node.text.strip(utils.spaceCharacters) == u"begin-link":
                 link_parent = node.getparent()
-                in_link = True
                 link = etree.Element(u"a")
                 link.text = node.tail
                 node.tail = None
