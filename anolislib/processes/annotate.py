@@ -23,7 +23,6 @@ from lxml import etree
 import urlparse
 import urllib2
 from collections import defaultdict
-import sys
 
 statuses =   {"UNKNOWN": "Unknown",
               "TBW": "Idea; yet to be specified",

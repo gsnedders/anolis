@@ -21,7 +21,6 @@
 
 import re
 from lxml import etree
-from copy import deepcopy
 
 try:
     import json

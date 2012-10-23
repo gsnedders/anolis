@@ -25,7 +25,7 @@ import os
 import unittest
 
 import html5lib
-from html5lib import treebuilders, treewalkers
+from html5lib import treebuilders
 from lxml import etree
 
 from anolislib import generator
