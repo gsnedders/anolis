@@ -19,9 +19,13 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
+import os
+from setuptools import setup
 
-from distutils.core import setup
-
+here = os.path.abspath(os.path.dirname(__file__))
+requires = [line for line in open(os.path.join(here, 'requirements.txt'))
+            if line.strip()]
+print requires
 setup(
     # Basic project info
     name = "anolis",
@@ -40,6 +44,7 @@ setup(
                           of contents, and cross-references, and writes the
                           output to another file.""",
     download_url = "http://anolis.gsnedders.com",
+    install_requires = requires,
     classifiers = [
         "Development Status :: 5 - Production/Stable",
         "Environment :: Console",

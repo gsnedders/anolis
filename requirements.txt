@@ -1,0 +1,5 @@
+argparse>=1.2.1
+cssselect>=0.7.1
+html5lib>=0.95
+lxml>=3.0.1
+wsgiref==0.1.2
