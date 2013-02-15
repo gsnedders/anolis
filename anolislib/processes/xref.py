@@ -155,7 +155,7 @@ It should contain a an object with a 'url' property (whose value ends with a '#'
                      not u"data-anolis-spec" in element.attrib and \
                      not u"data-anolis-ref" in element.attrib and \
                      not element.getparent().tag in instance_not_in_stack_with:
-                    raise SyntaxError, "Term not defined: %s, %s." % (term, element)
+                    raise SyntaxError("Term not defined: %s, %s." % (term, element))
 
     def getTerm(self, element, w3c_compat=False,
                 w3c_compat_xref_normalization=False, **kwargs):

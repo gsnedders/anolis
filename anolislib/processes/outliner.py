@@ -69,7 +69,7 @@ class Outliner:
             else:
                 return -1
         else:
-            raise ValueError, "Only h1–h6 and hgroup elements have a rank"
+            raise ValueError("Only h1–h6 and hgroup elements have a rank")
 
     def build(self, **kwargs):
         for action, element in etree.iterwalk(self.ElementTree,

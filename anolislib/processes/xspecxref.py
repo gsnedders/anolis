@@ -80,9 +80,9 @@ class xspecxref(object):
           element.set(u"class", u"external")
 
         if not spec in self.dfns or not self.dfns[spec]:
-          raise SyntaxError, "Specification not found: %s." % (spec, )
+          raise SyntaxError("Specification not found: %s." % spec)
         if not self.dfns[spec]["values"]:
-          raise SyntaxError, "No values for specification: %s." % (spec, )
+          raise SyntaxError("No values for specification: %s." % spec)
         if not term in self.dfns[spec]["values"]:
           self.notfound.append([term, spec])
           continue
@@ -124,7 +124,7 @@ class xspecxref(object):
               link.tail = link[0].tail
               link[0].tail = None
     if self.notfound:
-      raise SyntaxError, "Terms not defined: %s." % self.notfound
+      raise SyntaxError("Terms not defined: %s." % self.notfound)
 
   def getTerm(self, element, w3c_compat=False,
               w3c_compat_xref_normalization=False, **kwargs):

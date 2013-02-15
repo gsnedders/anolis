@@ -73,12 +73,12 @@ class refs(object):
       return
     root = ElementTree.getroot().find(".//div[@id='anolis-references-%s']" % id)
     if root is None:
-      raise SyntaxError, "A <div id=anolis-references-%s> is required." % id
+      raise SyntaxError("A <div id=anolis-references-%s> is required." % id)
     dl = etree.Element("dl")
     root.append(dl)
     for ref in l:
       if not ref in self.refs:
-        raise SyntaxError, "Reference not defined: %s." % ref
+        raise SyntaxError("Reference not defined: %s." % ref)
       dt = etree.Element("dt")
       dt.set("id", "refs" + ref)
       dt.text = "[" + ref + "]\n"
@@ -88,12 +88,12 @@ class refs(object):
   def addReferencesList(self, ElementTree, **kwargs):
     root = ElementTree.getroot().find(".//div[@id='anolis-references']")
     if root is None:
-      raise SyntaxError, "A <div id=anolis-references> is required."
+      raise SyntaxError("A <div id=anolis-references> is required.")
     dl = etree.Element("dl")
     root.append(dl)
     for ref in self.usedrefs:
       if not ref in self.refs:
-        raise SyntaxError, "Reference not defined: %s." % ref
+        raise SyntaxError("Reference not defined: %s." % ref)
       dt = etree.Element("dt")
       dt.set("id", "refs" + ref)
       dt.text = "[" + ref + "]\n"
