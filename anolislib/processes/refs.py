@@ -53,7 +53,7 @@ class refs(object):
       dl.append(self.createReference(r, informative))
 
   def buildReferences(self, ElementTree, xref="data", **kwargs):
-    list = open(xref + "/references.json", "rb")
+    list = open(xref + "/references.json", "r")
     self.refs = json.load(list)
     list.close()
 

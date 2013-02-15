@@ -81,7 +81,7 @@ class xref(object):
 
     def getDfns(self, dump_xrefs, **kwargs):
         try:
-            fp = open(dump_xrefs, u"rb")
+            fp = open(dump_xrefs, "r")
             data = json.load(fp)
             fp.close()
             data["definitions"] = self.dfns
@@ -92,7 +92,7 @@ It should contain a an object with a 'url' property (whose value ends with a '#'
 
     def dump(self, obj, f, **kwargs):
         d = json.dumps(obj, sort_keys=True, allow_nan=False, indent=2, separators=(',', ': '))
-        fp = open(f, u"wb")
+        fp = open(f, "w")
         fp.write(d + u"\n")
         fp.close()
 

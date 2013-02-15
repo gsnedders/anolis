@@ -50,12 +50,12 @@ class xspecxref(object):
     self.addReferences(ElementTree, **kwargs)
 
   def buildReferences(self, ElementTree, xref, allow_duplicate_dfns=False, **kwargs):
-    manifest = open(xref + "/specs.json", "rb")
+    manifest = open(xref + "/specs.json", "r")
     specs = json.load(manifest)
     manifest.close()
 
     for (k, v) in specs.iteritems():
-      file = open(xref + "/xrefs/" + v, "rb")
+      file = open(xref + "/xrefs/" + v, "r")
       dfn = json.load(file)
       file.close()
       self.dfns[k] = { "url" : dfn["url"], "values" : dfn["definitions"] }
