@@ -26,6 +26,13 @@ from lxml import etree
 
 from html5lib.constants import spaceCharacters
 
+if sys.version_info[0] == 3:
+    str_type = str
+    unicode_type = str
+else:
+    str_type = basestring
+    unicode_type = unicode
+
 ids = {}
 
 spaceCharacters = u"".join(spaceCharacters)
@@ -151,7 +158,7 @@ def textContent(Element):
         node.getparent().remove(node)
     
     # Then just use tostring
-    return etree.tostring(Element, encoding=unicode, method='text',
+    return etree.tostring(Element, encoding=unicode_type, method='text',
                           with_tail=False)
 
 
@@ -195,7 +202,7 @@ def isInteractiveContent(element):
 
 def copyContentForRemoval(node, text=True, children=True, tail=True):
     # Preserve the text, if it is an element
-    if isinstance(node.tag, basestring) and node.text is not None and text:
+    if isinstance(node.tag, str_type) and node.text is not None and text:
         if node.getprevious() is not None:
             if node.getprevious().tail is None:
                 node.getprevious().tail = node.text
