@@ -46,7 +46,7 @@ def main():
         try:
             input = open(args[0], "rb")
             output = open(args[1], "wb")
-        except IOError, e:
+        except IOError as e:
             sys.stderr.write(unicode(e) + u"\n")
             sys.exit(1)
     elif len(args) == 0:
@@ -67,7 +67,7 @@ def main():
         # Write output
         generator.toFile(tree, output, **kwargs)
         output.close()
-    except (utils.AnolisException, IOError, etree.XMLSyntaxError), e:
+    except (utils.AnolisException, IOError, etree.XMLSyntaxError) as e:
         sys.stderr.write(unicode(e) + u"\n")
         sys.exit(1)
 

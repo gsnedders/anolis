@@ -73,7 +73,7 @@ def buildTestSuite():
 
                 # Run the test
                 self.assertEquals(output.getvalue(), expected.getvalue())
-            except IOError, err:
+            except IOError as err:
                 self.fail(err)
 
         setattr(TestCase, "test_%s" % (file_name), testFunc)
