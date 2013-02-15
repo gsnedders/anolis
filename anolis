@@ -20,15 +20,13 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
-"""usage: anolis [options] [input output]
+"""anolis [options] [input] [output]
 
-Post-process a document, adding cross-references, table of contents,
-etc. If input and output are not supplied input is read from stdin and
-output written to stdout.
+Post-process a document, adding cross-references, table of contents, etc.
 """
 
 import sys
-from optparse import OptionParser, SUPPRESS_HELP
+from argparse import ArgumentParser, SUPPRESS
 
 from lxml import etree
 
@@ -38,26 +36,31 @@ from anolislib import generator, utils
 def main():
     # Create the options parser
     optParser = getOptParser()
-    opts, args = optParser.parse_args()
+    args = optParser.parse_args()
 
-    # If we have two arguments read/write to files otherwise read/write
-    # to stdin/stdout
-    if len(args) == 2:
+    if args.input:
         try:
-            input = open(args[0], "rb")
-            output = open(args[1], "wb")
+            input = open(args.input, "rb")
         except IOError as e:
             sys.stderr.write(unicode(e) + u"\n")
             sys.exit(1)
-    elif len(args) == 0:
-        input = sys.stdin
-        output = sys.stdout
     else:
-        raise utils.AnolisException("Wrong number of arguments.")
+        input = sys.stdin
+
+    if args.output:
+        try:
+            output = open(args.output, "wb")
+        except IOError as e:
+            sys.stderr.write(unicode(e) + u"\n")
+            sys.exit(1)
+    else:
+        output = sys.stdout
 
     try:
         # Get options
-        kwargs = vars(opts)
+        kwargs = vars(args)
+        del kwargs['input']
+        del kwargs['output']
 
         # Get input and generate
 
@@ -71,71 +74,86 @@ def main():
         sys.stderr.write(unicode(e) + u"\n")
         sys.exit(1)
 
+
 def getOptParser():
-    def enable(option, opt_str, value, parser, *args, **kwargs):
-        parser.values.processes.append(value)
+    parser = ArgumentParser(usage=__doc__, version="%(prog)s 1.2pre")
 
-    def disable(option, opt_str, value, parser, *args, **kwargs):
-        parser.values.processes.remove(value)
+    parser.add_argument("input", type=str, nargs='?',
+                        help="Input file. Defaults to stdin.")
 
-    parser = OptionParser(usage = __doc__, version="%prog 1.2pre")
+    parser.add_argument("output", type=str, nargs='?',
+                        help="Output file. Defaults to stdout.")
 
-    parser.add_option("", "--enable", action="callback", callback=enable,
-                      type="string", dest="processes",
-                      help="Enable the process given as the option value")
+    parser.add_argument("--enable", type=str, dest="processes",
+                        action="append",
+                        help="Enable the process given as the option value")
 
-    parser.add_option("", "--disable", action="callback", callback=disable,
-                      type="string",
-                      help="Disable the process given as the option value")
+    parser.add_argument("--disable", type=str, action="append",
+                        help="Disable the process given as the option value")
 
-    parser.add_option("", "--parser", type="choice",
-                      choices=("html5lib", "lxml.html"),
-                      help="Choose what parser to use. Valid options: html5lib, lxml.html")
+    parser.add_argument("--parser", type=str,
+                        choices=("html5lib", "lxml.html"),
+                        help="Choose what parser to use.")
 
-    parser.add_option("", "--serializer", type="choice",
-                      choices=("html5lib", "lxml.html"),
-                      help="Choose what serializer to use. Valid options: html5lib, lxml.html")
+    parser.add_argument("--serializer", type=str,
+                        choices=("html5lib", "lxml.html"),
+                        help="Choose what serializer to use.")
 
-    parser.add_option("", "--newline-char", action="store", type="string",
-                      dest="newline_char",
-                      help="Set the newline character/string used when creating new newlines. This should match the rest of the newlines in the document.")
+    parser.add_argument("--newline-char", action="store", type=str,
+                        dest="newline_char",
+                        help="Set the newline character/string used when "
+                             "creating new newlines. This should match the "
+                             "rest of the newlines in the document.")
 
-    parser.add_option("", "--indent-char", action="store", type="string",
-                      dest="indent_char",
-                      help="Set the character/string used when creating indenting new blocks of (X)HTML. This should match the rest of the indentation in the document.")
+    parser.add_argument("--indent-char", action="store", type=str,
+                        dest="indent_char",
+                        help="Set the character/string used when creating "
+                             "indenting new blocks of (X)HTML. This should "
+                             "match the rest of the indentation in the "
+                             "document.")
 
-    parser.add_option("", "--filter", action="store", dest="filter",
-                      help="CSS selector that matches elements to be removed from the document before processing")
+    parser.add_argument("--filter", action="store", dest="filter",
+                        help="CSS selector that matches elements to be "
+                             "removed from the document before processing")
 
-    parser.add_option("", "--annotations", action="store", dest="annotation",
-                      help="Path or URI of an annotations file containing status annotations that should be added to sections")
+    parser.add_argument("--annotations", action="store", dest="annotation",
+                        help="Path or URI of an annotations file containing "
+                             "status annotations that should be added to "
+                             "sections")
 
-    parser.add_option("", "--annotate-whatwg-status", action="store_true",
-                      dest="annotate_whatwg_status",
-                      help="Add WHATWG status markers in annotations")
+    parser.add_argument("--annotate-whatwg-status", action="store_true",
+                        dest="annotate_whatwg_status",
+                        help="Add WHATWG status markers in annotations")
 
-    parser.add_option("", "--annotate-w3c-issues", action="store_true",
-                      dest="annotate_w3c_issues",
-                      help="Add links to W3C issue tracker in status annotations")
+    parser.add_argument("--annotate-w3c-issues", action="store_true",
+                        dest="annotate_w3c_issues",
+                        help="Add links to W3C issue tracker in status "
+                             "annotations")
 
-    parser.add_option("", "--force-html4-id", action="store_true",
-                      dest="force_html4_id",
-                      help="Force the ID generation algorithm to create HTML 4 compliant IDs regardless of the DOCTYPE.")
+    parser.add_argument("--force-html4-id", action="store_true",
+                        dest="force_html4_id",
+                        help="Force the ID generation algorithm to create "
+                             "HTML 4 compliant IDs regardless of the DOCTYPE.")
 
-    parser.add_option("", "--min-depth", action="store", type="int",
-                      dest="min_depth",
-                      help="Highest ranking header to number/insert into TOC.")
+    parser.add_argument("--min-depth", action="store", type=int,
+                        dest="min_depth",
+                        help="Highest ranking header to number/insert into "
+                             "TOC.")
 
-    parser.add_option("", "--max-depth", action="store", type="int",
-                      dest="max_depth",
-                      help="Lowest ranking header to number/insert into TOC.")
+    parser.add_argument("--max-depth", action="store", type=int,
+                        dest="max_depth",
+                        help="Lowest ranking header to number/insert into "
+                             "TOC.")
 
-    parser.add_option("", "--allow-duplicate-dfns", action="store_true",
-                      dest="allow_duplicate_dfns",
-                      help="Allow multiple definitions of terms when cross-referencing (the last instance of the term is used when referencing it).")
+    parser.add_argument("--allow-duplicate-dfns", action="store_true",
+                        dest="allow_duplicate_dfns",
+                        help="Allow multiple definitions of terms when "
+                             "cross-referencing (the last instance of the "
+                             "term is used when referencing it).")
 
-    parser.add_option("", "--xref", action="store", dest="xref",
-                      help="Set directory for cross-references database without trailing slash. E.g. '../xref'")
+    parser.add_argument("--xref", action="store", dest="xref",
+                        help="Set directory for cross-references database "
+                             "without trailing slash. E.g. '../xref'")
 
     profile = True
     try:
@@ -149,96 +167,112 @@ def getOptParser():
             profile = False
 
     if profile:
-        parser.add_option("", "--profile", action="store_true",
-            dest="profile", help=SUPPRESS_HELP)
+        parser.add_argument("--profile", action="store_true",
+                            dest="profile", help=SUPPRESS)
 
-    parser.add_option("", "--inject-meta-charset", action="store_true",
-                      dest="inject_meta_charset", help=SUPPRESS_HELP)
+    parser.add_argument("--inject-meta-charset", action="store_true",
+                        dest="inject_meta_charset", help=SUPPRESS)
 
-    parser.add_option("", "--strip-whitespace", action="store_true",
-                      dest="strip_whitespace", help=SUPPRESS_HELP)
+    parser.add_argument("--strip-whitespace", action="store_true",
+                        dest="strip_whitespace", help=SUPPRESS)
 
-    parser.add_option("", "--omit-optional-tags", action="store_true",
-                      dest="omit_optional_tags", help=SUPPRESS_HELP)
+    parser.add_argument("--omit-optional-tags", action="store_true",
+                        dest="omit_optional_tags", help=SUPPRESS)
 
-    parser.add_option("", "--quote-attr-values", action="store_true",
-                      dest="quote_attr_values", help=SUPPRESS_HELP)
+    parser.add_argument("--quote-attr-values", action="store_true",
+                        dest="quote_attr_values", help=SUPPRESS)
 
-    parser.add_option("", "--use-best-quote-char", action="store_true",
-                      dest="use_best_quote_char", help=SUPPRESS_HELP)
+    parser.add_argument("--use-best-quote-char", action="store_true",
+                        dest="use_best_quote_char", help=SUPPRESS)
 
-    parser.add_option("", "--no-minimize-boolean-attributes",
-                      action="store_false",
-                      dest="minimize_boolean_attributes", help=SUPPRESS_HELP)
+    parser.add_argument("--no-minimize-boolean-attributes",
+                        action="store_false",
+                        dest="minimize_boolean_attributes", help=SUPPRESS)
 
-    parser.add_option("", "--use-trailing-solidus", action="store_true",
-                      dest="use_trailing_solidus", help=SUPPRESS_HELP)
+    parser.add_argument("--use-trailing-solidus", action="store_true",
+                        dest="use_trailing_solidus", help=SUPPRESS)
 
-    parser.add_option("", "--space-before-trailing-solidus",
-                      action="store_true",
-                      dest="space_before_trailing_solidus", help=SUPPRESS_HELP)
+    parser.add_argument("--space-before-trailing-solidus",
+                        action="store_true",
+                        dest="space_before_trailing_solidus", help=SUPPRESS)
 
-    parser.add_option("", "--escape-lt-in-attrs", action="store_true",
-                      dest="escape_lt_in_attrs", help=SUPPRESS_HELP)
+    parser.add_argument("--escape-lt-in-attrs", action="store_true",
+                        dest="escape_lt_in_attrs", help=SUPPRESS)
 
-    parser.add_option("", "--escape-rcdata", action="store_true",
-                      dest="escape_rcdata", help=SUPPRESS_HELP)
+    parser.add_argument("--escape-rcdata", action="store_true",
+                        dest="escape_rcdata", help=SUPPRESS)
 
-    parser.add_option("", "--output-encoding", action="store", type=str,
-                      dest="output_encoding", help="Output encoding")
+    parser.add_argument("--output-encoding", action="store", type=str,
+                        dest="output_encoding", help="Output encoding")
 
-    parser.add_option("", "--dump-xrefs", action="store", type=str,
-                      dest="dump_xrefs", help=SUPPRESS_HELP)
+    parser.add_argument("--dump-xrefs", action="store", type=str,
+                        dest="dump_xrefs", help=SUPPRESS)
 
-    parser.add_option("", "--use-strict", action="store_true",
-                      dest="use_strict", help=SUPPRESS_HELP)
+    parser.add_argument("--use-strict", action="store_true",
+                        dest="use_strict", help=SUPPRESS)
 
-    parser.add_option("", "--pubdate", action="store", type=str,
-                      dest="publication_date", metavar="1 Sep 2022",
-                      help="Set the date this document will be published.")
+    parser.add_argument("--pubdate", action="store", type=str,
+                        dest="publication_date", metavar="1 Sep 2022",
+                        help="Set the date this document will be published.")
 
-    parser.add_option("", "--dump-backrefs", action="store_true",
-                      dest="dump_backrefs", help=SUPPRESS_HELP)
+    parser.add_argument("--dump-backrefs", action="store_true",
+                        dest="dump_backrefs", help=SUPPRESS)
 
-    parser.add_option("", "--enable-woolly", action="store_true",
-                      dest="enable_woolly", help=SUPPRESS_HELP)
+    parser.add_argument("--enable-woolly", action="store_true",
+                        dest="enable_woolly", help=SUPPRESS)
 
-    parser.add_option("", "--w3c-compat", action="store_true",
-                      dest="w3c_compat",
-                      help="Behave in a (mostly) compatible way to the W3C CSS WG's Postprocessor (this implies all of the other --w3c-compat options with the exception of --w3c-compat-crazy-substitution, as that is too crazy).")
+    parser.add_argument("--w3c-compat", action="store_true",
+                        dest="w3c_compat",
+                        help="Behave in a (mostly) compatible way to the "
+                             "W3C CSS WG's Postprocessor (this implies all of "
+                             "the other --w3c-compat options with the "
+                             "exception of --w3c-compat-crazy-substitution, "
+                             "as that is too crazy).")
 
-    parser.add_option("", "--w3c-compat-xref-elements", action="store_true",
-                      dest="w3c_compat_xref_elements",
-                      help="Uses the same list of elements to look for cross-references in as the W3C CSS WG's Postprocessor, even when the elements shouldn't semantically be used for cross-reference terms.")
+    parser.add_argument("--w3c-compat-xref-elements", action="store_true",
+                        dest="w3c_compat_xref_elements",
+                        help="Uses the same list of elements to look for "
+                             "cross-references in as the W3C CSS WG's "
+                             "Postprocessor, even when the elements shouldn't "
+                             "semantically be used for cross-reference terms.")
 
-    parser.add_option("", "--w3c-compat-xref-a-placement", action="store_true",
-                      dest="w3c_compat_xref_a_placement",
-                      help="When cross-referencing elements apart from span, put the a element inside the element instead of outside the element.")
+    parser.add_argument("--w3c-compat-xref-a-placement", action="store_true",
+                        dest="w3c_compat_xref_a_placement",
+                        help="When cross-referencing elements apart from "
+                             "span, put the a element inside the element "
+                             "instead of outside the element.")
 
-    parser.add_option("", "--w3c-compat-xref-normalization", action="store_true",
-                      dest="w3c_compat_xref_normalization",
-                      help="Only use ASCII letters, numbers, and spaces in comparison of cross-reference terms.")
+    parser.add_argument("--w3c-compat-xref-normalization", action="store_true",
+                        dest="w3c_compat_xref_normalization",
+                        help="Only use ASCII letters, numbers, and spaces in "
+                             "comparison of cross-reference terms.")
 
-    parser.add_option("", "--w3c-compat-class-toc", action="store_true",
-                      dest="w3c_compat_class_toc",
-                      help="Add @class='toc' on every ol element in the table of contents (instead of only the root ol element).")
+    parser.add_argument("--w3c-compat-class-toc", action="store_true",
+                        dest="w3c_compat_class_toc",
+                        help="Add @class='toc' on every ol element in the "
+                             "table of contents (instead of only the root ol "
+                             "element).")
 
-    parser.add_option("", "--w3c-compat-substitutions", action="store_true",
-                      dest="w3c_compat_substitutions",
-                      help="Do W3C specific substitutions.")
+    parser.add_argument("--w3c-compat-substitutions", action="store_true",
+                        dest="w3c_compat_substitutions",
+                        help="Do W3C specific substitutions.")
 
-    parser.add_option("", "--w3c-compat-crazy-substitutions", action="store_true",
-                      dest="w3c_compat_crazy_substitutions",
-                      help="Do crazy W3C specific substitutions, which may cause unexpected behaviour (i.e., replacing random strings within the document with no special marker).")
+    parser.add_argument("--w3c-compat-crazy-substitutions",
+                        action="store_true",
+                        dest="w3c_compat_crazy_substitutions",
+                        help="Do crazy W3C specific substitutions, which may "
+                             "cause unexpected behaviour (i.e., replacing "
+                             "random strings within the document with no "
+                             "special marker).")
 
-    parser.add_option("", "--w3c-status", action="store", type=str,
-                      dest="w3c_status", help="Status of the document")
+    parser.add_argument("--w3c-status", action="store", type=str,
+                        dest="w3c_status", help="Status of the document")
 
-    parser.add_option("", "--w3c-shortname", action="store", type=str,
-                      dest="w3c_shortname", help="Shortname of the document")
+    parser.add_argument("--w3c-shortname", action="store", type=str,
+                        dest="w3c_shortname", help="Shortname of the document")
 
-    parser.add_option("", "--split-references-section", action="store_true",
-                      help=SUPPRESS_HELP)
+    parser.add_argument("--split-references-section", action="store_true",
+                        help=SUPPRESS)
 
     parser.set_defaults(
         processes=["filter", "sub", "toc", "xref", "annotate"],
