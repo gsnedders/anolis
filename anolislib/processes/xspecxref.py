@@ -54,7 +54,7 @@ class xspecxref(object):
     specs = json.load(manifest)
     manifest.close()
 
-    for (k, v) in specs.iteritems():
+    for (k, v) in specs.items():
       file = open(xref + "/xrefs/" + v, "r")
       dfn = json.load(file)
       file.close()
