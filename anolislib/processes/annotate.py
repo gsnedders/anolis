@@ -20,9 +20,15 @@
 # THE SOFTWARE.
 
 from lxml import etree
-import urlparse
-import urllib2
 from collections import defaultdict
+
+import sys
+if sys.version_info[0] == 3:
+    from urllib.parse import urlsplit
+    from urllib.request import urlopen
+else:
+    from urlparse import urlsplit
+    from urllib2 import urlopen
 
 statuses =   {"UNKNOWN": "Unknown",
               "TBW": "Idea; yet to be specified",
@@ -56,8 +62,8 @@ def annotate(ElementTree, **kwargs):
     else:
         annotation_location = kwargs["annotation"]
 
-    if urlparse.urlsplit(annotation_location)[0]:
-        annotations_data = urllib2.urlopen(annotation_location)
+    if urlsplit(annotation_location)[0]:
+        annotations_data = urlopen(annotation_location)
     else:
         annotations_data = open(annotation_location)
 
