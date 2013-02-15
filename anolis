@@ -25,6 +25,8 @@
 Post-process a document, adding cross-references, table of contents, etc.
 """
 
+from __future__ import unicode_literals
+
 import sys
 from argparse import ArgumentParser, SUPPRESS
 
@@ -42,7 +44,7 @@ def main():
         try:
             input = open(args.input, "rb")
         except IOError as e:
-            sys.stderr.write(unicode(e) + u"\n")
+            sys.stderr.write(str(e) + "\n")
             sys.exit(1)
     else:
         input = sys.stdin
@@ -51,7 +53,7 @@ def main():
         try:
             output = open(args.output, "wb")
         except IOError as e:
-            sys.stderr.write(unicode(e) + u"\n")
+            sys.stderr.write(str(e) + "\n")
             sys.exit(1)
     else:
         output = sys.stdout
@@ -71,7 +73,7 @@ def main():
         generator.toFile(tree, output, **kwargs)
         output.close()
     except (utils.AnolisException, IOError, etree.XMLSyntaxError) as e:
-        sys.stderr.write(unicode(e) + u"\n")
+        sys.stderr.write(str(e) + "\n")
         sys.exit(1)
 
 
@@ -278,8 +280,8 @@ def getOptParser():
         processes=["filter", "sub", "toc", "xref", "annotate"],
         parser="html5lib",
         serializer="html5lib",
-        newline_char=u"\n",
-        indent_char=u" ",
+        newline_char="\n",
+        indent_char=" ",
         filter=None,
         annotation=None,
         annotate_whatwg_status=False,

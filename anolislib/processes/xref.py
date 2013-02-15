@@ -19,6 +19,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+from __future__ import unicode_literals
+
 import re
 from lxml import etree
 
@@ -29,16 +31,16 @@ except ImportError:
 
 from anolislib import utils
 
-instance_elements = frozenset([u"span", u"abbr", u"code", u"var", u"i"])
-w3c_instance_elements = frozenset([u"abbr", u"acronym", u"b", u"bdo", u"big",
-                                   u"code", u"del", u"em", u"i", u"ins",
-                                   u"kbd", u"label", u"legend", u"q", u"samp",
-                                   u"small", u"span", u"strong", u"sub",
-                                   u"sup", u"tt", u"var"])
+instance_elements = frozenset(["span", "abbr", "code", "var", "i"])
+w3c_instance_elements = frozenset(["abbr", "acronym", "b", "bdo", "big",
+                                   "code", "del", "em", "i", "ins",
+                                   "kbd", "label", "legend", "q", "samp",
+                                   "small", "span", "strong", "sub",
+                                   "sup", "tt", "var"])
 
 # Instances cannot be in the stack with any of these element, or with
 # interactive elements
-instance_not_in_stack_with = frozenset([u"dfn", ])
+instance_not_in_stack_with = frozenset(["dfn", ])
 
 non_alphanumeric_spaces = re.compile(r"[^a-zA-Z0-9 \-\_\/]+")
 
@@ -54,16 +56,16 @@ class xref(object):
             self.dump(self.getDfns(dump_xrefs), dump_xrefs, **kwargs)
         self.addReferences(ElementTree, dump_backrefs=dump_backrefs, **kwargs)
         if dump_backrefs:
-            self.dump(self.instances, u"backrefs.json", **kwargs)
+            self.dump(self.instances, "backrefs.json", **kwargs)
 
     def buildReferences(self, ElementTree, allow_duplicate_dfns=False,
                         **kwargs):
-        for dfn in ElementTree.iter(u"dfn"):
+        for dfn in ElementTree.iter("dfn"):
             term = self.getTerm(dfn, **kwargs)
 
             if len(term) > 0:
                 if not allow_duplicate_dfns and term in self.dfns:
-                    raise DuplicateDfnException(u'The term "%s" is defined more than once' % term)
+                    raise DuplicateDfnException('The term "%s" is defined more than once' % term)
 
                 link_to = dfn
 
@@ -74,7 +76,7 @@ class xref(object):
 
                 id = utils.generateID(link_to, **kwargs)
 
-                link_to.set(u"id", id)
+                link_to.set("id", id)
 
                 self.dfns[term] = id
                 self.instances[term] = []
@@ -93,7 +95,7 @@ It should contain a an object with a 'url' property (whose value ends with a '#'
     def dump(self, obj, f, **kwargs):
         d = json.dumps(obj, sort_keys=True, allow_nan=False, indent=2, separators=(',', ': '))
         fp = open(f, "w")
-        fp.write(d + u"\n")
+        fp.write(d + "\n")
         fp.close()
 
     def addReferences(self, ElementTree, w3c_compat=False,
@@ -126,14 +128,14 @@ It should contain a an object with a 'url' property (whose value ends with a '#'
                                 break
 
                     if goodParentingAndChildren:
-                        if element.tag == u"span":
-                            element.tag = u"a"
-                            element.set(u"href", u"#" + self.dfns[term])
+                        if element.tag == "span":
+                            element.tag = "a"
+                            element.set("href", "#" + self.dfns[term])
                             link = element
                         else:
-                            link = etree.Element(u"a",
-                                                 {u"href":
-                                                  u"#" + self.dfns[term]})
+                            link = etree.Element("a",
+                                                 {"href":
+                                                  "#" + self.dfns[term]})
                             if w3c_compat or w3c_compat_xref_a_placement:
                                 for node in element:
                                     link.append(node)
@@ -146,32 +148,32 @@ It should contain a an object with a 'url' property (whose value ends with a '#'
                                 link.tail = link[0].tail
                                 link[0].tail = None
                         if dump_backrefs:
-                            t = utils.non_ifragment.sub(u"-", term.strip(utils.spaceCharacters)).strip(u"-")
-                            id = u"instance_" + t + u"_" + str(len(self.instances[term]))
-                            link.set(u"id", id)
+                            t = utils.non_ifragment.sub("-", term.strip(utils.spaceCharacters)).strip("-")
+                            id = "instance_" + t + "_" + str(len(self.instances[term]))
+                            link.set("id", id)
                             self.instances[term].append(id)
                 elif use_strict and term and \
                      not utils.elementHasClass(element, "secno") and \
-                     not u"data-anolis-spec" in element.attrib and \
-                     not u"data-anolis-ref" in element.attrib and \
+                     not "data-anolis-spec" in element.attrib and \
+                     not "data-anolis-ref" in element.attrib and \
                      not element.getparent().tag in instance_not_in_stack_with:
                     raise SyntaxError("Term not defined: %s, %s." % (term, element))
 
     def getTerm(self, element, w3c_compat=False,
                 w3c_compat_xref_normalization=False, **kwargs):
-        if element.get(u"data-anolis-xref") is not None:
-            term = element.get(u"data-anolis-xref")
-        elif element.get(u"title") is not None:
-            term = element.get(u"title")
+        if element.get("data-anolis-xref") is not None:
+            term = element.get("data-anolis-xref")
+        elif element.get("title") is not None:
+            term = element.get("title")
         else:
             term = utils.textContent(element)
 
         term = term.strip(utils.spaceCharacters).lower()
 
-        term = utils.spacesRegex.sub(u" ", term)
+        term = utils.spacesRegex.sub(" ", term)
 
         if w3c_compat or w3c_compat_xref_normalization:
-            term = non_alphanumeric_spaces.sub(u"", term)
+            term = non_alphanumeric_spaces.sub("", term)
 
         return term
 

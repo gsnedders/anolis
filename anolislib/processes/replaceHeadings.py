@@ -19,10 +19,12 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+from __future__ import unicode_literals
+
 from anolislib import utils
 from anolislib.processes import outliner
 
-numered_headings = frozenset([u"h1", u"h2", u"h3", u"h4", u"h5", u"h6"])
+numered_headings = frozenset(["h1", "h2", "h3", "h4", "h5", "h6"])
 
 
 class replaceHeadings(object):
@@ -49,9 +51,9 @@ class replaceHeadings(object):
             if section.header is not None and section.header.tag in \
                                               numered_headings:
                 if depth <= 6:
-                    section.header.tag = u"h" + unicode(depth)
+                    section.header.tag = "h%i" % depth
                 else:
-                    raise TooDeepException(u"Too deep for numbered headers")
+                    raise TooDeepException("Too deep for numbered headers")
             
             # Add subsections in reverse order (so the next one is executed
             # next) with a higher depth value

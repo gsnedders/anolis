@@ -19,12 +19,14 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+from __future__ import unicode_literals
+
 from lxml import etree
 
 from anolislib import utils
 
 # Rank of heading elements (these are negative so h1 > h6)
-fixedRank = {u"h1": -1, u"h2": -2, u"h3": -3, u"h4": -4, u"h5": -5, u"h6": -6}
+fixedRank = {"h1": -1, "h2": -2, "h3": -3, "h4": -4, "h5": -5, "h6": -6}
 
 
 class section(list):
@@ -62,9 +64,9 @@ class Outliner:
         # h1–h6 element descendant of the hgroup element, if there are any such
         # elements, or otherwise the same as for an h1 element (the highest
         # rank).
-        elif element.tag == u"hgroup":
+        elif element.tag == "hgroup":
             for i in range(1, 6):
-                if element.find(u".//h" + unicode(i)) is not None:
+                if element.find(".//h%i" % i) is not None:
                     return -i
             else:
                 return -1

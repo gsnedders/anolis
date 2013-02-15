@@ -20,6 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+from __future__ import unicode_literals
+
 from lxml import etree
 
 try:
@@ -29,16 +31,16 @@ except ImportError:
 
 from anolislib import utils
 
-instance_elements = frozenset([u"span", u"abbr", u"code", u"var", u"i"])
-w3c_instance_elements = frozenset([u"abbr", u"acronym", u"b", u"bdo", u"big",
-                   u"code", u"del", u"em", u"i", u"ins",
-                   u"kbd", u"label", u"legend", u"q", u"samp",
-                   u"small", u"span", u"strong", u"sub",
-                   u"sup", u"tt", u"var"])
+instance_elements = frozenset(["span", "abbr", "code", "var", "i"])
+w3c_instance_elements = frozenset(["abbr", "acronym", "b", "bdo", "big",
+                   "code", "del", "em", "i", "ins",
+                   "kbd", "label", "legend", "q", "samp",
+                   "small", "span", "strong", "sub",
+                   "sup", "tt", "var"])
 
 # Instances cannot be in the stack with any of these element, or with
 # interactive elements
-instance_not_in_stack_with = frozenset([u"dfn", ])
+instance_not_in_stack_with = frozenset(["dfn", ])
 
 class xspecxref(object):
   """Add cross-references."""
@@ -69,15 +71,15 @@ class xspecxref(object):
       if ((element.tag in instance_elements
           or (w3c_compat or w3c_compat_xref_elements)
           and element.tag in w3c_instance_elements)
-          and (element.get(u"data-anolis-spec") is not None)):
+          and (element.get("data-anolis-spec") is not None)):
         term = self.getTerm(element, **kwargs)
-        spec = element.get(u"data-anolis-spec")
+        spec = element.get("data-anolis-spec")
         if w3c_compat:
           del element.attrib["data-anolis-spec"]
-        if element.get(u"class") is not None:
-          element.set(u"class", element.get(u"class") + u" external")
+        if element.get("class") is not None:
+          element.set("class", element.get("class") + " external")
         else:
-          element.set(u"class", u"external")
+          element.set("class", "external")
 
         if not spec in self.dfns or not self.dfns[spec]:
           raise SyntaxError("Specification not found: %s." % spec)
@@ -105,12 +107,12 @@ class xspecxref(object):
               break
 
         if goodParentingAndChildren:
-          if element.tag == u"span":
-            element.tag = u"a"
-            element.set(u"href", obj["url"] + obj["values"][term])
+          if element.tag == "span":
+            element.tag = "a"
+            element.set("href", obj["url"] + obj["values"][term])
           else:
-            link = etree.Element(u"a",
-                       {u"href":
+            link = etree.Element("a",
+                       {"href":
                         obj["url"] + obj["values"][term]})
             if w3c_compat or w3c_compat_xref_a_placement:
               for node in element:
@@ -128,13 +130,13 @@ class xspecxref(object):
 
   def getTerm(self, element, w3c_compat=False,
               w3c_compat_xref_normalization=False, **kwargs):
-    if element.get(u"data-anolis-xref") is not None:
-      term = element.get(u"data-anolis-xref")
-    elif element.get(u"title") is not None:
-      term = element.get(u"title")
+    if element.get("data-anolis-xref") is not None:
+      term = element.get("data-anolis-xref")
+    elif element.get("title") is not None:
+      term = element.get("title")
     else:
       term = utils.textContent(element)
 
     term = term.strip(utils.spaceCharacters).lower()
 
-    return utils.spacesRegex.sub(u" ", term)
+    return utils.spacesRegex.sub(" ", term)

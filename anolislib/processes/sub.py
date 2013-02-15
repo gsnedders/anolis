@@ -20,6 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+from __future__ import unicode_literals
+
 import re
 import time
 import os
@@ -28,42 +30,42 @@ from copy import deepcopy
 
 from anolislib import utils
 
-latest_version = re.compile(u"latest[%s]+version" % utils.spaceCharacters,
+latest_version = re.compile("latest[%s]+version" % utils.spaceCharacters,
                             re.IGNORECASE)
 
 w3c_tr_url_status = r"http://www\.w3\.org/TR/[^/]*/(MO|WD|CR|PR|REC|PER|NOTE)-"
 w3c_tr_url_status = re.compile(w3c_tr_url_status)
 
 title = re.compile(r"\[TITLE[^\]]*\]")
-title_identifier = u"[TITLE"
+title_identifier = "[TITLE"
 
 status = re.compile(r"\[STATUS[^\]]*\]")
-status_identifier = u"[STATUS"
+status_identifier = "[STATUS"
 
 longstatus = re.compile(r"\[LONGSTATUS[^\]]*\]")
-longstatus_identifier = u"[LONGSTATUS"
+longstatus_identifier = "[LONGSTATUS"
 longstatus_map = {
-    u"MO": u"W3C Member-only Draft",
-    u"ED": u"Editor's Draft",
-    u"WD": u"W3C Working Draft",
-    u"CR": u"W3C Candidate Recommendation",
-    u"PR": u"W3C Proposed Recommendation",
-    u"REC": u"W3C Recommendation",
-    u"PER": u"W3C Proposed Edited Recommendation",
-    u"NOTE": u"W3C Working Group Note"
+    "MO": "W3C Member-only Draft",
+    "ED": "Editor's Draft",
+    "WD": "W3C Working Draft",
+    "CR": "W3C Candidate Recommendation",
+    "PR": "W3C Proposed Recommendation",
+    "REC": "W3C Recommendation",
+    "PER": "W3C Proposed Edited Recommendation",
+    "NOTE": "W3C Working Group Note"
 }
 
 shortname = re.compile(r"\[SHORTNAME[^\]]*\]")
-shortname_identifier = u"[SHORTNAME"
+shortname_identifier = "[SHORTNAME"
 
 latest = re.compile(r"\[LATEST[^\]]*\]")
-latest_identifier = u"[LATEST"
+latest_identifier = "[LATEST"
 
 version = re.compile(r"\[VERSION[^\]]*\]")
-version_identifier = u"[VERSION"
+version_identifier = "[VERSION"
 
 w3c_stylesheet = re.compile(r"http://www\.w3\.org/StyleSheets/TR/W3C-[A-Z]+")
-w3c_stylesheet_identifier = u"http://www.w3.org/StyleSheets/TR/W3C-"
+w3c_stylesheet_identifier = "http://www.w3.org/StyleSheets/TR/W3C-"
 
 basic_comment_subs = ()
 
@@ -101,26 +103,26 @@ class sub(object):
                             **kwargs):
         # Get doc_title from the title element
         try:
-            doc_title = utils.textContent(ElementTree.getroot().find(u"head")
-                                                               .find(u"title"))
+            doc_title = utils.textContent(ElementTree.getroot().find("head")
+                                                               .find("title"))
         except (AttributeError, TypeError):
-            doc_title = u""
+            doc_title = ""
 
         year = re.compile(r"\[YEAR[^\]]*\]")
-        year_sub = time.strftime(u"%Y", self.pubdate)
-        year_identifier = u"[YEAR"
+        year_sub = time.strftime("%Y", self.pubdate)
+        year_identifier = "[YEAR"
 
         date = re.compile(r"\[DATE[^\]]*\]")
-        date_sub = time.strftime(u"%d %B %Y", self.pubdate).lstrip(u"0")
-        date_identifier = u"[DATE"
+        date_sub = time.strftime("%d %B %Y", self.pubdate).lstrip("0")
+        date_identifier = "[DATE"
 
         cdate = re.compile(r"\[CDATE[^\]]*\]")
-        cdate_sub = time.strftime(u"%Y%m%d", self.pubdate)
-        cdate_identifier = u"[CDATE"
+        cdate_sub = time.strftime("%Y%m%d", self.pubdate)
+        cdate_identifier = "[CDATE"
 
         udate = re.compile(r"\[UDATE[^\]]*\]")
-        udate_sub = time.strftime(u"%Y-%m-%d", self.pubdate)
-        udate_identifier = u"[UDATE"
+        udate_sub = time.strftime("%Y-%m-%d", self.pubdate)
+        udate_identifier = "[UDATE"
 
         string_subs = ((year, year_sub, year_identifier),
                        (date, date_sub, date_identifier),
@@ -133,7 +135,7 @@ class sub(object):
 
         if w3c_compat_crazy_substitutions:
             # Get the right stylesheet
-            doc_w3c_stylesheet = u"http://www.w3.org/StyleSheets/TR/W3C-%s" % (self.w3c_status, )
+            doc_w3c_stylesheet = "http://www.w3.org/StyleSheets/TR/W3C-%s" % (self.w3c_status, )
 
         # Get all the subs we want
         string_subs += ((title, doc_title, title_identifier), )
@@ -143,9 +145,9 @@ class sub(object):
             try:
                 shortname_sub = w3c_shortname or os.path.basename(os.getcwd())
             except OSError:
-                shortname_sub = u""
-            latest_sub = u"http://www.w3.org/TR/%s/" % (shortname_sub, )
-            version_sub = u"http://www.w3.org/TR/%s/%s-%s-%s/" % (year_sub, self.w3c_status, shortname_sub, cdate_sub)
+                shortname_sub = ""
+            latest_sub = "http://www.w3.org/TR/%s/" % (shortname_sub, )
+            version_sub = "http://www.w3.org/TR/%s/%s-%s-%s/" % (year_sub, self.w3c_status, shortname_sub, cdate_sub)
             string_subs += ((status, self.w3c_status, status_identifier),
                             (longstatus, doc_longstatus, longstatus_identifier),
                             (shortname, shortname_sub, shortname_identifier),
@@ -176,15 +178,15 @@ class sub(object):
 
         # Add more basic substitutions in compat. mode
         if w3c_compat or w3c_compat_substitutions:
-            copyright = u"copyright"
-            copyright_sub = etree.fromstring(u'<p class="copyright"><a href="http://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> &#xA9; %s <a href="http://www.w3.org/"><abbr title="World Wide Web Consortium">W3C</abbr></a><sup>&#xAE;</sup> (<a href="http://www.csail.mit.edu/"><abbr title="Massachusetts Institute of Technology">MIT</abbr></a>, <a href="http://www.ercim.eu/"><abbr title="European Research Consortium for Informatics and Mathematics">ERCIM</abbr></a>, <a href="http://www.keio.ac.jp/">Keio</a>, <a href="http://ev.buaa.edu.cn/">Beihang</a>), All Rights Reserved. W3C <a href="http://www.w3.org/Consortium/Legal/ipr-notice#Legal_Disclaimer">liability</a>, <a href="http://www.w3.org/Consortium/Legal/ipr-notice#W3C_Trademarks">trademark</a> and <a href="http://www.w3.org/Consortium/Legal/copyright-documents">document use</a> rules apply.</p>' % time.strftime(u"%Y", self.pubdate))
+            copyright = "copyright"
+            copyright_sub = etree.fromstring('<p class="copyright"><a href="http://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> &#xA9; %s <a href="http://www.w3.org/"><abbr title="World Wide Web Consortium">W3C</abbr></a><sup>&#xAE;</sup> (<a href="http://www.csail.mit.edu/"><abbr title="Massachusetts Institute of Technology">MIT</abbr></a>, <a href="http://www.ercim.eu/"><abbr title="European Research Consortium for Informatics and Mathematics">ERCIM</abbr></a>, <a href="http://www.keio.ac.jp/">Keio</a>, <a href="http://ev.buaa.edu.cn/">Beihang</a>), All Rights Reserved. W3C <a href="http://www.w3.org/Consortium/Legal/ipr-notice#Legal_Disclaimer">liability</a>, <a href="http://www.w3.org/Consortium/Legal/ipr-notice#W3C_Trademarks">trademark</a> and <a href="http://www.w3.org/Consortium/Legal/copyright-documents">document use</a> rules apply.</p>' % time.strftime("%Y", self.pubdate))
 
-            logo = u"logo"
-            logo_str = u'<a href="http://www.w3.org/"><img height="48" width="72" alt="W3C" src="http://www.w3.org/Icons/w3c_home"/></a>'
+            logo = "logo"
+            logo_str = '<a href="http://www.w3.org/"><img height="48" width="72" alt="W3C" src="http://www.w3.org/Icons/w3c_home"/></a>'
             if enable_woolly:
-                logo_str += u'<a class="logo" href="https://www.w3.org/Style/Group/" rel="in-activity"><img alt="CSS WG" src="https://www.w3.org/Style/Woolly/woolly-icon"/></a>'
+                logo_str += '<a class="logo" href="https://www.w3.org/Style/Group/" rel="in-activity"><img alt="CSS WG" src="https://www.w3.org/Style/Woolly/woolly-icon"/></a>'
 
-            logo_sub = etree.fromstring(u'<p>%s</p>' % logo_str)
+            logo_sub = etree.fromstring('<p>%s</p>' % logo_str)
 
             instance_basic_comment_subs += ((logo, logo_sub),
                                             (copyright, copyright_sub))
@@ -198,20 +200,20 @@ class sub(object):
         for node in ElementTree.iter():
             if link_parent is not None:
                 if node.tag is etree.Comment and \
-                   node.text.strip(utils.spaceCharacters) == u"end-link":
+                   node.text.strip(utils.spaceCharacters) == "end-link":
                     if node.getparent() is not link_parent:
-                        raise utils.DifferentParentException(u"begin-link and end-link have different parents")
+                        raise utils.DifferentParentException("begin-link and end-link have different parents")
                     utils.removeInteractiveContentChildren(link)
-                    link.set(u"href", utils.textContent(link))
+                    link.set("href", utils.textContent(link))
                     link_parent = None
                 else:
                     if node.getparent() is link_parent:
                         link.append(deepcopy(node))
                     to_remove.add(node)
             elif node.tag is etree.Comment and \
-                 node.text.strip(utils.spaceCharacters) == u"begin-link":
+                 node.text.strip(utils.spaceCharacters) == "begin-link":
                 link_parent = node.getparent()
-                link = etree.Element(u"a")
+                link = etree.Element("a")
                 link.text = node.tail
                 node.tail = None
                 node.addnext(link)
@@ -228,14 +230,14 @@ class sub(object):
         # Get all text nodes that contain case-insensitively "latest version"
         # with any amount of whitespace inside the phrase, or contain
         # http://www.w3.org/TR/
-        for text in ElementTree.xpath(u"//text()[contains(translate(., 'LATEST', 'latest'), 'latest') and contains(translate(., 'VERSION', 'version'), 'version') or contains(., 'http://www.w3.org/TR/')]"):
+        for text in ElementTree.xpath("//text()[contains(translate(., 'LATEST', 'latest'), 'latest') and contains(translate(., 'VERSION', 'version'), 'version') or contains(., 'http://www.w3.org/TR/')]"):
             if latest_version.search(text):
-                return u"ED"
+                return "ED"
             elif w3c_tr_url_status.search(text):
                 return w3c_tr_url_status.search(text).group(1)
         # Didn't find any status, return the default (ED)
         else:
-            return u"ED"
+            return "ED"
 
 class DifferentParentException(utils.AnolisException):
     """begin-link and end-link do not have the same parent."""

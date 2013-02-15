@@ -19,6 +19,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+from __future__ import unicode_literals
+
 from lxml import etree
 from copy import deepcopy
 
@@ -26,9 +28,9 @@ from anolislib import utils
 from anolislib.processes import outliner
 
 # These are just the non-interactive elements to be removed
-remove_elements_from_toc = frozenset([u"dfn", ])
+remove_elements_from_toc = frozenset(["dfn", ])
 # These are, however, all the attributes to be removed
-remove_attributes_from_toc = frozenset([u"id", ])
+remove_attributes_from_toc = frozenset(["id", ])
 
 
 class toc(object):
@@ -37,7 +39,7 @@ class toc(object):
     toc = None
 
     def __init__(self, ElementTree, **kwargs):
-        self.toc = etree.Element(u"ol", {u"class": u"toc"})
+        self.toc = etree.Element("ol", {"class": "toc"})
         self.buildToc(ElementTree, **kwargs)
         self.addToc(ElementTree, **kwargs)
 
@@ -61,10 +63,10 @@ class toc(object):
             # If we have a header, regardless of how deep we are
             if section.header is not None:
                 # Get the element that represents the section header's text
-                if section.header.tag == u"hgroup":
+                if section.header.tag == "hgroup":
                     i = 1
                     while i <= 6:
-                        header_text = section.header.find(u".//h" + unicode(i))
+                        header_text = section.header.find(".//h%i" % i)
                         if header_text is not None:
                             break
                         i += 1
@@ -78,8 +80,8 @@ class toc(object):
             # If we have a section heading text element, regardless of depth
             if header_text is not None:
                 # Remove any existing number
-                for element in header_text.findall(u".//span"):
-                    if utils.elementHasClass(element, u"secno"):
+                for element in header_text.findall(".//span"):
+                    if utils.elementHasClass(element, "secno"):
                         # Copy content, to prepare for the node being
                         # removed
                         utils.copyContentForRemoval(element, text=False,
@@ -105,14 +107,14 @@ class toc(object):
 
                 # Increment the current section's number
                 if header_text is not None and \
-                   not utils.elementHasClass(header_text, u"no-num") or \
+                   not utils.elementHasClass(header_text, "no-num") or \
                    header_text is None and section:
                     num[-1] += 1
 
                 # Get the current TOC section for this depth, and add another
                 # item to it
                 if header_text is not None and \
-                   not utils.elementHasClass(header_text, u"no-toc") or \
+                   not utils.elementHasClass(header_text, "no-toc") or \
                    header_text is None and section:
                     # Find the appropriate section of the TOC
                     i = 0
@@ -122,30 +124,30 @@ class toc(object):
                             # If the final li has no children, or the last
                             # children isn't an ol element
                             if len(toc_section[-1]) == 0 or \
-                               toc_section[-1][-1].tag != u"ol":
-                                toc_section[-1].append(etree.Element(u"ol"))
+                               toc_section[-1][-1].tag != "ol":
+                                toc_section[-1].append(etree.Element("ol"))
                                 utils.indentNode(toc_section[-1][-1],
                                                  (i + 1) * 2, **kwargs)
                                 if w3c_compat or w3c_compat_class_toc:
-                                    toc_section[-1][-1].set(u"class", u"toc")
+                                    toc_section[-1][-1].set("class", "toc")
                         except IndexError:
                             # If the current ol has no li in it
-                            toc_section.append(etree.Element(u"li"))
+                            toc_section.append(etree.Element("li"))
                             utils.indentNode(toc_section[0], (i + 1) * 2 - 1,
                                              **kwargs)
-                            toc_section[0].append(etree.Element(u"ol"))
+                            toc_section[0].append(etree.Element("ol"))
                             utils.indentNode(toc_section[0][0], (i + 1) * 2,
                                              **kwargs)
                             if w3c_compat or w3c_compat_class_toc:
-                                toc_section[0][0].set(u"class", u"toc")
+                                toc_section[0][0].set("class", "toc")
                         # TOC Section is now the final child (ol) of the final
                         # item (li) in the previous section
-                        assert toc_section[-1].tag == u"li"
-                        assert toc_section[-1][-1].tag == u"ol"
+                        assert toc_section[-1].tag == "li"
+                        assert toc_section[-1][-1].tag == "ol"
                         toc_section = toc_section[-1][-1]
                         i += 1
                     # Add the current item to the TOC
-                    item = etree.Element(u"li")
+                    item = etree.Element("li")
                     toc_section.append(item)
                     utils.indentNode(item, (i + 1) * 2 - 1, **kwargs)
 
@@ -153,32 +155,32 @@ class toc(object):
                 if header_text is not None:
                     # Add ID to header
                     id = utils.generateID(header_text, **kwargs)
-                    if header_text.get(u"id") is not None:
-                        del header_text.attrib[u"id"]
-                    section.header.set(u"id", id)
+                    if header_text.get("id") is not None:
+                        del header_text.attrib["id"]
+                    section.header.set("id", id)
 
                     # Add number, if @class doesn't contain no-num
-                    if not utils.elementHasClass(header_text, u"no-num"):
-                        header_text[0:0] = [etree.Element(u"span", {u"class":
-                                                                    u"secno"})]
+                    if not utils.elementHasClass(header_text, "no-num"):
+                        header_text[0:0] = [etree.Element("span", {"class":
+                                                                   "secno"})]
                         header_text[0].tail = header_text.text
                         header_text.text = None
-                        header_text[0].text = u".".join(map(unicode, num))
-                        header_text[0].text += u" "
+                        header_text[0].text = ".".join("%s" % n for n in num)
+                        header_text[0].text += " "
                     # Add to TOC, if @class doesn't contain no-toc
-                    if not utils.elementHasClass(header_text, u"no-toc"):
+                    if not utils.elementHasClass(header_text, "no-toc"):
                         link = deepcopy(header_text)
                         item.append(link)
                         # Make it link to the header
-                        link.tag = u"a"
-                        link.set(u"href", u"#" + id)
+                        link.tag = "a"
+                        link.set("href", "#" + id)
                         # Remove interactive content child elements
                         utils.removeInteractiveContentChildren(link)
                         # Remove other child elements
                         for element_name in remove_elements_from_toc:
                             # Iterate over all the desendants of the new link
                             # with that element name
-                            for element in link.findall(u".//" + element_name):
+                            for element in link.findall(".//" + element_name):
                                 # Copy content, to prepare for the node being
                                 # removed
                                 utils.copyContentForRemoval(element)
@@ -202,7 +204,7 @@ class toc(object):
                              for child_section in reversed(section)])
 
     def addToc(self, ElementTree, **kwargs):
-        utils.replaceComment(ElementTree, u"toc", self.toc, **kwargs)
+        utils.replaceComment(ElementTree, "toc", self.toc, **kwargs)
 
 
 class DifferentParentException(utils.AnolisException):

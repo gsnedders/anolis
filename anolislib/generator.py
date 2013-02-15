@@ -19,6 +19,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+from __future__ import unicode_literals
+
 import html5lib
 from html5lib import treebuilders, treewalkers
 from html5lib.serializer import htmlserializer
@@ -34,7 +36,7 @@ def process(tree, processes=["sub", "toc", "xref"], **kwargs):
     for process in processes:
         try:
             process_module = getattr(__import__('processes', globals(),
-                                                locals(), [process], -1),
+                                                locals(), [str(process)], -1),
                                     process)
         except AttributeError:
             process_module = __import__(process, globals(), locals(), [], -1)

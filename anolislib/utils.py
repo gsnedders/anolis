@@ -19,6 +19,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+from __future__ import unicode_literals
+
 from copy import deepcopy
 import re
 import sys
@@ -35,26 +37,26 @@ else:
 
 ids = {}
 
-spaceCharacters = u"".join(spaceCharacters)
-spacesRegex = re.compile(u"[%s]+" % spaceCharacters)
+spaceCharacters = "".join(spaceCharacters)
+spacesRegex = re.compile("[%s]+" % spaceCharacters)
 
-heading_content = frozenset([u"h1", u"h2", u"h3", u"h4", u"h5", u"h6",
-                             u"hgroup"])
-sectioning_content = frozenset([u"section", u"nav", u"article", u"aside"])
-sectioning_root = frozenset([u"body", u"blockquote", u"figure", u"td",
-                             u"datagrid"])
+heading_content = frozenset(["h1", "h2", "h3", "h4", "h5", "h6",
+                             "hgroup"])
+sectioning_content = frozenset(["section", "nav", "article", "aside"])
+sectioning_root = frozenset(["body", "blockquote", "figure", "td",
+                             "datagrid"])
 
-always_interactive_content = frozenset([u"a", u"bb", u"details", u"datagrid"])
-media_elements = frozenset([u"audio", u"video"])
+always_interactive_content = frozenset(["a", "bb", "details", "datagrid"])
+media_elements = frozenset(["audio", "video"])
 
 non_sgml_name = re.compile("[^A-Za-z0-9_:.]+")
 
 if sys.maxunicode == 0xFFFF:
     # UTF-16 Python
-    non_ifragment = re.compile(u"([\u0000-\u0020\u0022\u0023\u0025\\\u002D\u003C\u003E\u005B-\u005E\u0060\u007B-\u007D\u007F-\u0099\uD800-\uF8FF\uFDD0-\uFDDF\uFFF0-\uFFFF]|\U0001FFFE|\U0001FFFF|\U0002FFFE|\U0002FFFF|\U0003FFFE|\U0003FFFF|\U0004FFFE|\U0004FFFF|\U0005FFFE|\U0005FFFF|\U0006FFFE|\U0006FFFF|\U0007FFFE|\U0007FFFF|\U0008FFFE|\U0008FFFF|\U0009FFFE|\U0009FFFF|\U000AFFFE|\U000AFFFF|\U000BFFFE|\U000BFFFF|\U000CFFFE|\U000CFFFF|\uDB3F[\uDFFE-\uDFFF]|[\uDB40-\uDB43][\uDC00-\uDFFF]|\uDB7F[\uDFFE-\uDFFF]|[\uDB80-\uDBFF][\uDC00-\uDFFF])+")
+    non_ifragment = re.compile("([\u0000-\u0020\u0022\u0023\u0025\\\u002D\u003C\u003E\u005B-\u005E\u0060\u007B-\u007D\u007F-\u0099\uD800-\uF8FF\uFDD0-\uFDDF\uFFF0-\uFFFF]|\U0001FFFE|\U0001FFFF|\U0002FFFE|\U0002FFFF|\U0003FFFE|\U0003FFFF|\U0004FFFE|\U0004FFFF|\U0005FFFE|\U0005FFFF|\U0006FFFE|\U0006FFFF|\U0007FFFE|\U0007FFFF|\U0008FFFE|\U0008FFFF|\U0009FFFE|\U0009FFFF|\U000AFFFE|\U000AFFFF|\U000BFFFE|\U000BFFFF|\U000CFFFE|\U000CFFFF|\uDB3F[\uDFFE-\uDFFF]|[\uDB40-\uDB43][\uDC00-\uDFFF]|\uDB7F[\uDFFE-\uDFFF]|[\uDB80-\uDBFF][\uDC00-\uDFFF])+")
 else:
     # UTF-32 Python
-    non_ifragment = re.compile(u"[^A-Za-z0-9._~!$&'()*+,;=:@/\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF\U00010000-\U0001FFFD\U00020000-\U0002FFFD\U00030000-\U0003FFFD\U00040000-\U0004FFFD\U00050000-\U0005FFFD\U00060000-\U0006FFFD\U00070000-\U0007FFFD\U00080000-\U0008FFFD\U00090000-\U0009FFFD\U000A0000-\U000AFFFD\U000B0000-\U000BFFFD\U000C0000-\U000CFFFD\U000D0000-\U000DFFFD\U000E1000-\U000EFFFD]+")
+    non_ifragment = re.compile("[^A-Za-z0-9._~!$&'()*+,;=:@/\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF\U00010000-\U0001FFFD\U00020000-\U0002FFFD\U00030000-\U0003FFFD\U00040000-\U0004FFFD\U00050000-\U0005FFFD\U00060000-\U0006FFFD\U00070000-\U0007FFFD\U00080000-\U0008FFFD\U00090000-\U0009FFFD\U000A0000-\U000AFFFD\U000B0000-\U000BFFFD\U000C0000-\U000CFFFD\U000D0000-\U000DFFFD\U000E1000-\U000EFFFD]+")
 
 
 def splitOnSpaces(string):
@@ -62,56 +64,56 @@ def splitOnSpaces(string):
 
 
 def elementHasClass(Element, class_name):
-    if Element.get(u"class") and \
-       class_name in splitOnSpaces(Element.get(u"class")):
+    if Element.get("class") and \
+       class_name in splitOnSpaces(Element.get("class")):
         return True
     else:
         return False
 
 
 def generateID(Element, force_html4_id=False, **kwargs):
-    if Element.get(u"id") is not None:
-        return Element.get(u"id")
-    elif Element.get(u"title") is not None and \
-         Element.get(u"title").strip(spaceCharacters) is not u"":
-        source = Element.get(u"title")
+    if Element.get("id") is not None:
+        return Element.get("id")
+    elif Element.get("title") is not None and \
+         Element.get("title").strip(spaceCharacters) != "":
+        source = Element.get("title")
     else:
         source = textContent(Element)
 
     source = source.strip(spaceCharacters).lower()
 
-    if source == u"":
-        source = u"generatedID"
+    if source == "":
+        source = "generatedID"
     elif force_html4_id or Element.getroottree().docinfo.public_id in \
-        (u"-//W3C//DTD HTML 4.0//EN",
-         u"-//W3C//DTD HTML 4.0 Transitional//EN",
-         u"-//W3C//DTD HTML 4.0 Frameset//EN",
-         u"-//W3C//DTD HTML 4.01//EN",
-         u"-//W3C//DTD HTML 4.01 Transitional//EN",
-         u"-//W3C//DTD HTML 4.01 Frameset//EN",
-         u"ISO/IEC 15445:2000//DTD HyperText Markup Language//EN",
-         u"ISO/IEC 15445:2000//DTD HTML//EN",
-         u"-//W3C//DTD XHTML 1.0 Strict//EN",
-         u"-//W3C//DTD XHTML 1.0 Transitional//EN",
-         u"-//W3C//DTD XHTML 1.0 Frameset//EN",
-         u"-//W3C//DTD XHTML 1.1//EN"):
-        source = non_sgml_name.sub(u"-", source).strip(u"-")
+        ("-//W3C//DTD HTML 4.0//EN",
+         "-//W3C//DTD HTML 4.0 Transitional//EN",
+         "-//W3C//DTD HTML 4.0 Frameset//EN",
+         "-//W3C//DTD HTML 4.01//EN",
+         "-//W3C//DTD HTML 4.01 Transitional//EN",
+         "-//W3C//DTD HTML 4.01 Frameset//EN",
+         "ISO/IEC 15445:2000//DTD HyperText Markup Language//EN",
+         "ISO/IEC 15445:2000//DTD HTML//EN",
+         "-//W3C//DTD XHTML 1.0 Strict//EN",
+         "-//W3C//DTD XHTML 1.0 Transitional//EN",
+         "-//W3C//DTD XHTML 1.0 Frameset//EN",
+         "-//W3C//DTD XHTML 1.1//EN"):
+        source = non_sgml_name.sub("-", source).strip("-")
         try:
             if not source[0].isalpha():
-                source = u"x" + source
+                source = "x" + source
         except IndexError:
-            source = u"generatedID"
+            source = "generatedID"
     else:
-        source = non_ifragment.sub(u"-", source).strip(u"-")
-        if source == u"":
-            source = u"generatedID"
+        source = non_ifragment.sub("-", source).strip("-")
+        if source == "":
+            source = "generatedID"
 
     # Initally set the id to the source
     id = source
 
     i = 0
     while getElementById(Element.getroottree().getroot(), id) is not None:
-        id = source + u"-" + unicode(i)
+        id = "%s-%i" % (source, i)
         i += 1
 
     ids[Element.getroottree().getroot()][id] = Element
@@ -125,19 +127,19 @@ def textContent(Element):
     to_remove = set()
     
     # Replace img with its alt attribute
-    for child in Element.iter(tag=u"img"):
+    for child in Element.iter(tag="img"):
         # Add alt in its place
         if child.get("alt") is not None:
             if child.getprevious() is not None:
                 if child.getprevious().tail is None:
-                    child.getprevious().tail = child.get(u"alt")
+                    child.getprevious().tail = child.get("alt")
                 else:
-                    child.getprevious().tail += child.get(u"alt")
+                    child.getprevious().tail += child.get("alt")
             else:
                 if child.getparent().text is None:
-                    child.getparent().text = child.get(u"alt")
+                    child.getparent().text = child.get("alt")
                 else:
-                    child.getparent().text += child.get(u"alt")
+                    child.getparent().text += child.get("alt")
         # Preserve the element tail
         if child.tail is not None:
             if child.getprevious() is not None:
@@ -171,18 +173,18 @@ def getElementById(base, id):
     else:
         ids[base] = {}
         for element in base.iter(tag=etree.Element):
-            if element.get(u"id"):
-                ids[base][element.get(u"id")] = element
+            if element.get("id"):
+                ids[base][element.get("id")] = element
         return getElementById(base, id)
 
 
 def escapeXPathString(string):
-    return u"concat('', '%s')" % string.replace(u"'", u"', \"'\", '")
+    return "concat('', '%s')" % string.replace("'", "', \"'\", '")
 
 
 def removeInteractiveContentChildren(element):
     # Iter over list of decendants of element
-    for child in element.findall(u".//*"):
+    for child in element.findall(".//*"):
         if isInteractiveContent(child):
             # Copy content, to prepare for the node being removed
             copyContentForRemoval(child)
@@ -192,9 +194,9 @@ def removeInteractiveContentChildren(element):
 
 def isInteractiveContent(element):
     if element.tag in always_interactive_content \
-    or element.tag in media_elements and element.get(u"controls") is not None \
-    or element.tag == u"menu" and element.get(u"type") is not None and \
-       element.get(u"type").lower() == u"toolbar":
+    or element.tag in media_elements and element.get("controls") is not None \
+    or element.tag == "menu" and element.get("type") is not None and \
+       element.get("type").lower() == "toolbar":
         return True
     else:
         return False
@@ -231,8 +233,8 @@ def copyContentForRemoval(node, text=True, children=True, tail=True):
                 node.getparent().text += node.tail
 
 def replaceComment(ElementTree, comment, sub, **kwargs):
-    begin_sub = u"begin-%s" % comment
-    end_sub = u"end-%s" % comment
+    begin_sub = "begin-%s" % comment
+    end_sub = "end-%s" % comment
     sub_parent = None
     to_remove = set()
     for node in ElementTree.iter():
@@ -240,7 +242,7 @@ def replaceComment(ElementTree, comment, sub, **kwargs):
             if node.tag is etree.Comment and \
                node.text.strip(spaceCharacters) == end_sub:
                 if node.getparent() is not sub_parent:
-                    raise DifferentParentException(u"%s and %s have different parents" % begin_sub, end_sub)
+                    raise DifferentParentException("%s and %s have different parents" % begin_sub, end_sub)
                 sub_parent = None
             else:
                 to_remove.add(node)
@@ -263,7 +265,7 @@ def replaceComment(ElementTree, comment, sub, **kwargs):
     for node in to_remove:
         node.getparent().remove(node)
 
-def indentNode(node, indent=0, newline_char=u"\n", indent_char=u" ", **kwargs):
+def indentNode(node, indent=0, newline_char="\n", indent_char=" ", **kwargs):
     whitespace = newline_char + indent_char * indent
     if node.getprevious() is not None:
         if node.getprevious().tail is None:
