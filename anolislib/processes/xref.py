@@ -42,7 +42,7 @@ w3c_instance_elements = frozenset(["abbr", "acronym", "b", "bdo", "big",
 # interactive elements
 instance_not_in_stack_with = frozenset(["dfn", ])
 
-non_alphanumeric_spaces = re.compile(r"[^a-zA-Z0-9 \-\_\/]+")
+non_alphanumeric_spaces = re.compile(r"[^a-zA-Z0-9 \-\_\/\|]+")
 
 
 class xref(object):
@@ -61,9 +61,8 @@ class xref(object):
     def buildReferences(self, ElementTree, allow_duplicate_dfns=False,
                         **kwargs):
         for dfn in ElementTree.iter("dfn"):
-            term = self.getTerm(dfn, **kwargs)
-
-            if len(term) > 0:
+            terms = self.getTerm(dfn, **kwargs).split("|")
+            for term in set(t for t in terms if t):
                 if not allow_duplicate_dfns and term in self.dfns:
                     raise DuplicateDfnException('The term "%s" is defined more than once' % term)
 
