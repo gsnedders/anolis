@@ -41,7 +41,7 @@ class TestCase(unittest.TestCase):
 
 
 def buildTestSuite():
-    for file_name in get_files("tests", "*", "*.src.html"):
+    for file_name in get_files("tests", "*.src.html"):
 
         def testFunc(self, file_name=file_name):
             assert file_name.endswith(".src.html")
