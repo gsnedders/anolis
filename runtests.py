@@ -20,6 +20,7 @@
 # THE SOFTWARE.
 
 import glob
+import json
 import StringIO
 import os
 import unittest
@@ -45,21 +46,30 @@ def buildTestSuite():
         def testFunc(self, file_name=file_name):
             assert file_name.endswith(".src.html")
             base_path = file_name[:-len(".src.html")]
+
+            kwargs = {}
+            try:
+                options_file_name = base_path + ".options"
+                with open(options_file_name, "r") as options_file:
+                    kwargs = json.load(options_file)
+            except IOError:
+                pass
+
+            default_processes = ["filter", "sub", "toc", "xref", "annotate"]
+            new_processes = kwargs.get("processes", [])
+            assert not set(default_processes) & set(new_processes)
+            kwargs["processes"] = default_processes + new_processes
+
             try:
                 output = StringIO.StringIO()
 
-                if file_name.startswith(os.path.join("tests", "refs")):
-                    processes = ["filter", "sub", "toc", "xref", "annotate", "refs"]
-                else:
-                    processes = ["filter", "sub", "toc", "xref", "annotate"]
-
                 # Get the input
                 input = open(file_name, "rb")
-                tree = generator.fromFile(input, processes=processes)
+                tree = generator.fromFile(input, **kwargs)
                 input.close()
                 
                 # Get the output
-                generator.toFile(tree, output)
+                generator.toFile(tree, output, **kwargs)
 
                 # Get the expected result
                 expectedfp = open(base_path + ".html", "rb")
