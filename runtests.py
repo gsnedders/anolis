@@ -43,9 +43,10 @@ def buildTestSuite():
     for file_name in get_files("tests", "*", "*.src.html"):
 
         def testFunc(self, file_name=file_name):
+            assert file_name.endswith(".src.html")
+            base_path = file_name[:-len(".src.html")]
             try:
                 output = StringIO.StringIO()
-                expected = StringIO.StringIO()
 
                 if file_name.startswith(os.path.join("tests", "refs")):
                     processes = ["filter", "sub", "toc", "xref", "annotate", "refs"]
@@ -58,21 +59,15 @@ def buildTestSuite():
                 input.close()
                 
                 # Get the output
-                tree.write_c14n(output)
+                generator.toFile(tree, output)
 
                 # Get the expected result
-                expectedfp = open(file_name[:-9] + ".html", "rb")
-                builder = treebuilders.getTreeBuilder("lxml", etree)
-                try:
-                    parser = html5lib.HTMLParser(tree=builder, namespaceHTMLElements=False)
-                except TypeError:
-                    parser = html5lib.HTMLParser(tree=builder)
-                expectedTree = parser.parse(expectedfp)
+                expectedfp = open(base_path + ".html", "rb")
+                expected = expectedfp.read()
                 expectedfp.close()
-                expectedTree.write_c14n(expected)
 
                 # Run the test
-                self.assertEquals(output.getvalue(), expected.getvalue())
+                self.assertEquals(output.getvalue(), expected)
             except IOError as err:
                 self.fail(err)
 
