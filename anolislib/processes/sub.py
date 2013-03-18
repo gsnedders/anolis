@@ -182,7 +182,7 @@ class sub(object):
             copyright_sub = etree.fromstring('<p class="copyright"><a href="http://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> &#xA9; %s <a href="http://www.w3.org/"><abbr title="World Wide Web Consortium">W3C</abbr></a><sup>&#xAE;</sup> (<a href="http://www.csail.mit.edu/"><abbr title="Massachusetts Institute of Technology">MIT</abbr></a>, <a href="http://www.ercim.eu/"><abbr title="European Research Consortium for Informatics and Mathematics">ERCIM</abbr></a>, <a href="http://www.keio.ac.jp/">Keio</a>, <a href="http://ev.buaa.edu.cn/">Beihang</a>), All Rights Reserved. W3C <a href="http://www.w3.org/Consortium/Legal/ipr-notice#Legal_Disclaimer">liability</a>, <a href="http://www.w3.org/Consortium/Legal/ipr-notice#W3C_Trademarks">trademark</a> and <a href="http://www.w3.org/Consortium/Legal/copyright-documents">document use</a> rules apply.</p>' % time.strftime("%Y", self.pubdate))
 
             logo = "logo"
-            logo_str = '<a href="http://www.w3.org/"><img height="48" width="72" alt="W3C" src="http://www.w3.org/Icons/w3c_home"/></a>'
+            logo_str = '<a href="http://www.w3.org/"><img height="48" width="72" alt="W3C" src="https://www.w3.org/Icons/w3c_home"/></a>'
             if enable_woolly:
                 logo_str += '<a class="logo" href="https://www.w3.org/Style/Group/" rel="in-activity"><img alt="CSS WG" src="https://www.w3.org/Style/Woolly/woolly-icon"/></a>'
 
