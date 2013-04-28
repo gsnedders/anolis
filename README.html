@@ -1,5 +1,5 @@
 <!DOCTYPE html><html lang=en-gb-x-sneddy><head><meta charset=utf-8>
-<title>Anolis 1.2pre</title>
+<title>Anolis 1.2</title>
 <link href=style.css rel=stylesheet>
 <style>
 a:not([href]) {
@@ -13,7 +13,7 @@ color: #fff;
 </style>
 
 </head><body><header>
-    <h1>Anolis 1.2pre</h1>
+    <h1>Anolis 1.2</h1>
     <h2 class="no-num no-toc" id=documentation-—-28-april-2013>Documentation — 28 April 2013</h2>
 </header>
 
@@ -60,7 +60,7 @@ a number of substitutions are done (mainly relating to the current date).
 without issue.
 
 </p><ul>
-    <li><a href=http://python.org/>Python</a> 2.3
+    <li><a href=http://python.org/>Python</a> 2.6
     </li><li><a href=http://codespeak.net/lxml/>lxml</a> 2.0
     </li><li><a href=http://code.google.com/p/html5lib>html5lib</a> 0.10
 </li></ul>
@@ -68,21 +68,21 @@ without issue.
 <h3 id=obtaining-a-copy><span class=secno>2.2 </span>Obtaining a copy</h3>
 
 <p>Releases are occasionally made. A link to the latest release can be found
-from the <a href=http://anolis.gsnedders.com>Anolis website</a>.
+<a href=https://pypi.python.org/pypi/anolis>on PyPI</a>.
 
 </p><p>Alternatively, a copy can be obtained from <dfn id=our-mercurial-repository>our <a href=http://www.selenic.com/mercurial/>Mercurial</a> repository</dfn>: this
 is where our ongoing development occurs, and allows any revision (and therefore
 any release) to be downloaded. Our repository is located at
-<code><!--begin-link--><a href=http://hg.gsnedders.com/anolis/>http://hg.gsnedders.com/anolis/</a><!--end-link--></code>.
+<code><!--begin-link--><a href=https://bitbucket.org/ms2ger/anolis/>https://bitbucket.org/ms2ger/anolis/</a><!--end-link--></code>.
 
 </p><h3 id=installation><span class=secno>2.3 </span>Installation</h3>
 
-<p>Normally, installation is done through <a href=http://pypi.python.org/pypi/setuptools>setuptools</a>, with the
+<p>Normally, installation is done through <a href=https://pypi.python.org/pypi/distribute>distribute</a>, with the
 following command:
 
 </p><p><code>python setup.py install</code>
 
-</p><p>Please see setuptools' documentation for information on installation options
+</p><p>Please see distribute' documentation for information on installation options
 (such as installing in non-standard locations).
 
 </p><h3 id=running-the-test-suite><span class=secno>2.4 </span>Running the test suite</h3>
@@ -92,7 +92,7 @@ It can be run with the following command:
 
 </p><p><code>python runtests.py</code>
 
-</p><p>Any test failures should be reported at our <dfn id=bug-tracker><a href=http://bugs.gsnedders.com/projects/show/anolis>bug
+</p><p>Any test failures should be reported at our <dfn id=bug-tracker><a href=https://bitbucket.org/ms2ger/anolis/issues>bug
 tracker</a></dfn>.
 
 </p><h2 id=using-anolis><span class=secno>3 </span>Using Anolis</h2>
@@ -678,6 +678,8 @@ present.
 <p>Thanks to Andrew Sidwell, Anne van Kesteren, Henri Sivonen, Ian Hickson,
 James Graham, Lachlan Hunt, Magnus Kristiansen, Michael(tm) Smith, and Philip
 Taylor for their ever needed help.
+
+</p><p>Special thanks to Geoffrey Sneddon, who created this tool.
 
 </p><p>Special thanks to Bert Bos for creating the CSS3 Module Postprocessor, on
 which this is partially based, and (with <a href=#w3c-compat><code>--w3c-compat</code></a>) claims to

@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # coding=UTF-8
 # Copyright (c) 2009 Geoffrey Sneddon
+#               2013 Ms2ger
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -30,21 +31,23 @@ requires = [line for line in open(os.path.join(here, 'requirements.txt'))
 setup(
     # Basic project info
     name = "anolis",
-    version = "1.1",
+    version = "1.2",
     packages = ["anolislib", "anolislib/processes"],
     scripts = ["anolis"],
     
     # Useless metadata cruft
     author = "Geoffrey Sneddon",
     author_email = "geoffers@gmail.com",
-    url = "http://anolis.gsnedders.com",
+    maintainer = "Ms2ger",
+    maintainer_email = "Ms2ger@gmail.com",
+    url = "https://bitbucket.org/ms2ger/anolis/",
     license = "MIT",
     description = "HTML document post-processor",
     long_description = """Anolis is an HTML document post-processor that takes
                           an input HTML file, adds section numbers, a table
                           of contents, and cross-references, and writes the
                           output to another file.""",
-    download_url = "http://anolis.gsnedders.com",
+    download_url = "https://bitbucket.org/ms2ger/anolis/downloads",
     install_requires = requires,
     classifiers = [
         "Development Status :: 5 - Production/Stable",

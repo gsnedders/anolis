@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en-gb-x-sneddy">
 <meta charset="utf-8">
-<title>Anolis 1.2pre</title>
+<title>Anolis 1.2</title>
 <link rel="stylesheet" href="style.css">
 <style>
 a:not([href]) {
@@ -43,7 +43,7 @@ a number of substitutions are done (mainly relating to the current date).
 without issue.
 
 <ul>
-    <li><a href="http://python.org/">Python</a> 2.3
+    <li><a href="http://python.org/">Python</a> 2.6
     <li><a href="http://codespeak.net/lxml/">lxml</a> 2.0
     <li><a href="http://code.google.com/p/html5lib">html5lib</a> 0.10
 </ul>
@@ -51,23 +51,23 @@ without issue.
 <h3>Obtaining a copy</h3>
 
 <p>Releases are occasionally made. A link to the latest release can be found
-from the <a href="http://anolis.gsnedders.com">Anolis website</a>.
+<a href="https://pypi.python.org/pypi/anolis">on PyPI</a>.
 
 <p>Alternatively, a copy can be obtained from <dfn>our <a
 href="http://www.selenic.com/mercurial/">Mercurial</a> repository</dfn>: this
 is where our ongoing development occurs, and allows any revision (and therefore
 any release) to be downloaded. Our repository is located at
-<code><!--begin-link-->http://hg.gsnedders.com/anolis/<!--end-link--></code>.
+<code><!--begin-link-->https://bitbucket.org/ms2ger/anolis/<!--end-link--></code>.
 
 <h3>Installation</h3>
 
 <p>Normally, installation is done through <a
-href="http://pypi.python.org/pypi/setuptools">setuptools</a>, with the
+href="https://pypi.python.org/pypi/distribute">distribute</a>, with the
 following command:
 
 <p><code>python setup.py install</code>
 
-<p>Please see setuptools' documentation for information on installation options
+<p>Please see distribute' documentation for information on installation options
 (such as installing in non-standard locations).
 
 <h3>Running the test suite</h3>
@@ -79,7 +79,7 @@ It can be run with the following command:
 <p><code>python runtests.py</code>
 
 <p>Any test failures should be reported at our <dfn><a
-href="http://bugs.gsnedders.com/projects/show/anolis">bug
+href="https://bitbucket.org/ms2ger/anolis/issues">bug
 tracker</a></dfn>.
 
 <h2>Using Anolis</h2>
@@ -686,6 +686,8 @@ present.
 <p>Thanks to Andrew Sidwell, Anne van Kesteren, Henri Sivonen, Ian Hickson,
 James Graham, Lachlan Hunt, Magnus Kristiansen, Michael(tm) Smith, and Philip
 Taylor for their ever needed help.
+
+<p>Special thanks to Geoffrey Sneddon, who created this tool.
 
 <p>Special thanks to Bert Bos for creating the CSS3 Module Postprocessor, on
 which this is partially based, and (with <code>--w3c-compat</code>) claims to
