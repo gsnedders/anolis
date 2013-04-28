@@ -102,7 +102,7 @@ then called as <code>foo.foo(ElementTree, **kwargs)</code>.
 <p>Some options alter what is used to parse and serialize the document: the
 <dfn><kbd>--parser</kbd></dfn> option allows either <kbd>html5lib</kbd> (the
 default) or <kbd>lxml.html</kbd> (this is quicker, but does not comply to the
-<a href="http://whatwg.org/html5">HTML 5</a> specification) to be used to parse
+<a href="http://whatwg.org/html">HTML</a> specification) to be used to parse
 the input file, and the <dfn><kbd>--serializer</kbd></dfn> option allows the
 same two values, but controls the serializer used for output (note that
 lxml.html has some rather severe issues as a serializer)<!--; passing the XXX:
@@ -139,17 +139,8 @@ they belong.
 <p>Upon a <dfn>fatal error</dfn>, processing of the document is terminated and
 the output file is left unchanged.
 
-<p>The <dfn>textContent</dfn> property is the same as that defined in <a
-href="http://w3.org/TR/DOM-Level-3-Core/">DOM Level 3 Core</a> on the Node
-interface.
-
-<p><dfn>Whitespace</dfn> is as defined in <a
-href="http://whatwg.org/html5">HTML 5</a>: <q>U+0020 SPACE, U+0009 CHARACTER
-TABULATION (tab), U+000A LINE FEED (LF), U+000C FORM FEED (FF), and U+000D
-CARRIAGE RETURN (CR)</q>.
-
 <p><dfn>Interactive content</dfn> is as defined in <a
-href="http://whatwg.org/html5">HTML 5</a>: the <code>a</code>, <code>bb</code>,
+href="http://whatwg.org/html">HTML</a>: the <code>a</code>, <code>bb</code>,
 <code>details</code>, and <code>datagrid</code> elements; the
 <code>audio</code> and <code>video</code> elements when they have a
 <code>controls</code> attribute; the <code>menu</code> element when the
@@ -164,12 +155,15 @@ needed, it is created as follows</dfn>:
     <li>If the element already has an <code>id</code> attribute, return its
 value, and terminate this algorithm.
     <li>If the <code>title</code> attribute is present and its value is not
-empty and does not consist of <span>whitespace</span> only, let
+empty and does not consist of
+<span data-anolis-spec=encoding>ASCII whitespace</span> only, let
 <var>generated_id</var> be equal to its value; otherwise, let
-<var>generated_id</var> be equal to <span>textContent</span>.
+<var>generated_id</var> be equal to
+<span data-anolis-spec=domcore>textContent</span>.
     <li>The <var>generated_id</var> is stripped of leading/trailing
-<span>whitespace</span> and converted to lowercase (behaviour of this is
-dependent on the current locale setting of Python).
+<span data-anolis-spec=encoding>ASCII whitespace</span> and converted to
+lowercase (behaviour of this is dependent on the current locale setting of
+Python).
     <li>The first of the following list whose condition matches the current
 state of the string is done:
         <ol>
@@ -243,11 +237,12 @@ data-anolis-xref="term">terms</span>.
 <p><span data-anolis-xref="term">Terms</span> are taken from the
 <code>data-anolis-xref</code> attribute if present, failing that the
 <code>title</code> attribute if that is present, otherwise from the
-<span>textContent</span> property of the <code>dfn</code> element. By default,
-Anolis will throw a <span>fatal error</span> if a <span>term</span> is defined
-more than once: this behaviour can be turned off (causing the final
-<span>definition</span> of the <span>term</span> to be the one that is used) by
-the <dfn><code>--allow-duplicate-dfns</code></dfn> option.
+<span data-anolis-spec=domcore>textContent</span> property of the
+<code>dfn</code> element. By default, Anolis will throw a
+<span>fatal error</span> if a <span>term</span> is defined more than once: this
+behaviour can be turned off (causing the final <span>definition</span> of the
+<span>term</span> to be the one that is used) by the
+<dfn><code>--allow-duplicate-dfns</code></dfn> option.
 
 <p><span data-anolis-xref="definition">Definitions</span> are marked-up with
 the <code>dfn</code> element.
@@ -267,7 +262,7 @@ data-anolis-xref="instance">instances</span>; if it is enabled, the
 data-anolis-xref="instance">instances</span>. Those that are only there in
 <span>compatibility mode</span> are there because either they should not
 semantically be used for an <span>instance</span>, or because they are not
-present in <a href="http://whatwg.org/html5">HTML 5</a>. An
+present in <a href="http://whatwg.org/html">HTML</a>. An
 <span>instance</span> is only used if it does not have an <span>interactive
 content</span> or <code>dfn</code> element as either a parent or a child.
 
@@ -276,12 +271,13 @@ data-anolis-xref="instance">instances</span> are <dfn
 data-anolis-xref="cross-reference normalization">normalized</dfn> as follows:
 
 <ul>
-    <li>Leading and trailing <span>whitespace</span> is stripped,
+    <li>Leading and trailing
+<span data-anolis-spec=encoding>ASCII whitespace</span> is stripped,
     <li>Converted to lowercase (behaviour of this is dependent on the current
 locale setting of Python),
-    <li>All consecutive <span>whitespace</span> is replaced with a single
-U+0020 SPACE CHARACTER<!-- unless there is a <code>pre</code> element as a
-parent-->, and
+    <li>All consecutive <span data-anolis-spec=encoding>ASCII whitespace</span>
+is replaced with a single U+0020 SPACE CHARACTER<!-- unless there is a
+<code>pre</code> element as a parent-->, and
     <li>If <dfn><code>--w3c-compat-xref-normalization</code></dfn> is enabled,
 all characters apart from U+0020 SPACE CHARACTER, U+002D HYPHEN-MINUS (-),
 U+0030 DIGIT ZERO to U+0039 DIGIT NINE (0–9), U+0041 LATIN CAPITAL LETTER A
@@ -315,7 +311,7 @@ data-anolis-xref="section">sections</span>, which can each contain more <span
 data-anolis-xref="section">sections</span>, where a <dfn>section</dfn>
 represents a part of the document, and often has a <dfn
 data-anolis-xref="section heading">heading</dfn> associated with it — for more
-detailed definitions see <a href="http://whatwg.org/html5">HTML 5</a>). This
+detailed definitions see <a href="http://whatwg.org/html">HTML</a>). This
 means not only are the <code>h1</code>–<code>h6</code> elements supported, but
 also elements such as <code data-anolis-xref="">section</code> are used to
 create the <span>outline</span>. After creating the <span>outline</span>, every
@@ -381,15 +377,16 @@ single text node.
 <p>A <dfn>normal comment substitution</dfn> is one where there is a string,
 <var>sub_identifier</var>, that identifies the comment for the substitution,
 and the replacement. All nodes between a comment with a value equal to (with
-leading and trailing <span>whitespace</span> removed) <code>begin-</code>
-followed by <var>sub_identifier</var> and one with q value equal to (with
-leading and trailing <span>whitespace</span> removed) <code>end-</code>
-followed by <var>sub_identifier</var> are removed, and replaced with the
-replacement. Additionally, any comment (with leading and trailing
-<span>whitespace</span> removed) with a value equal to
-<var>sub_identifier</var> is replaced with a comment with a value of
-<code>begin-</code> followed by <var>sub_identifier</var>, the replacement, and
-then a comment with a value of <code>end-</code> followed by
+leading and trailing <span data-anolis-spec=encoding>ASCII whitespace</span>
+removed) <code>begin-</code> followed by <var>sub_identifier</var> and one with
+q value equal to (with leading and trailing
+<span data-anolis-spec=encoding>ASCII whitespace</span> removed)
+<code>end-</code> followed by <var>sub_identifier</var> are removed, and
+replaced with the replacement. Additionally, any comment (with leading and
+trailing <span data-anolis-spec=encoding>ASCII whitespace</span> removed) with
+a value equal to <var>sub_identifier</var> is replaced with a comment with a
+value of <code>begin-</code> followed by <var>sub_identifier</var>, the
+replacement, and then a comment with a value of <code>end-</code> followed by
 <var>sub_identifier</var>.
 
 <p>The <dfn>W3C status</dfn> is given by the
@@ -402,8 +399,8 @@ values and comments have no effect), and for each node, the following is done
 
 <ol>
     <li>If the node contains, case-insensitively, "latest", followed by one or
-more <span>whitespace</span> characters, followed by "version", searching
-stops, and the default is used (ED).
+more <span data-anolis-spec=encoding>ASCII whitespace</span> characters,
+followed by "version", searching stops, and the default is used (ED).
     <li>Otherwise, if the node, case-sensitively, contains
 "http://www.w3.org/TR/" followed by one of "MO", "WD", "CR", "PR", "REC",
 "PER", or "NOTE", which in turn is followed by U+002D HYPHEN-MINUS (-), then
@@ -480,21 +477,23 @@ href="http://www.iso.org/iso/iso_catalogue/catalogue_tc/catalogue_detail.htm?csn
 8601:2004</a> year.
     
     <dt><code>[<!---->TITLE]</code>
-    <dd>This is replaced with the <span>textContent</span> of the first
+    <dd>This is replaced with the
+<span data-anolis-spec=domcore>textContent</span> of the first
 <code>title</code> element which is within the first <code>head</code> of the
 document, or an empty string if such a <code>title</code> element does not
 exist.
 </dl>
 
 <p>There is one comment substitution by default. Any nodes between a comment
-with a value equal to (with leading and trailing <span>whitespace</span>
-removed) <code>begin-link</code> and one with a value equal to
-<code>end-link</code>, with <span>interactive content</span> elements removed
-(though children of those elements preserved), are effectively wrapped in an
-<code>a</code> element which has a <code>href</code> attribute equal to the
-<code>textContent</code> of all the nodes between the two comments concatenated
-in document order. The two comments must have the same parent, otherwise a
-<span>fatal error</span> occurs.
+with a value equal to (with leading and trailing
+<span data-anolis-spec=encoding>ASCII whitespace</span> removed)
+<code>begin-link</code> and one with a value equal to <code>end-link</code>,
+with <span>interactive content</span> elements removed (though children of
+those elements preserved), are effectively wrapped in an <code>a</code> element
+which has a <code>href</code> attribute equal to the
+<code data-anolis-spec=domcore>textContent</code> of all the nodes between the
+two comments concatenated in document order. The two comments must have the
+same parent, otherwise a <span>fatal error</span> occurs.
 
 <p>If <dfn><code>--w3c-compat-substitutions</code></dfn> is enabled, the
 following <span data-anolis-xref="normal string substitution">normal string
@@ -580,8 +579,9 @@ following name-value pairs:
 
 <p><dfn data-anolis-xref="reference instance">Reference instances</dfn> are
 defined by <code title>span</code> elements with a
-<code title>data-anolis-ref</code> attribute. Their <span>textContent</span>
-must be the <span>reference abbreviation</span> of a reference defined in the
+<code title>data-anolis-ref</code> attribute. Their
+<span data-anolis-spec=domcore>textContent</span> must be the
+<span>reference abbreviation</span> of a reference defined in the
 <span>reference data</span>. A <span>reference instance</span> is either
 <i>informative</i> or <i>normative</i>: it is <i>informative</i> if the element
 has an <code title>informative</code> class and <i>normative</i> otherwise.

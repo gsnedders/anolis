@@ -1,3 +1,4 @@
 {
-  "domcore": "domcore.json"
+  "domcore": "domcore.json",
+  "encoding": "encoding.json"
 }
