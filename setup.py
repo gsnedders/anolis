@@ -31,7 +31,7 @@ requires = [line for line in open(os.path.join(here, 'requirements.txt'))
 setup(
     # Basic project info
     name = "anolis",
-    version = "1.2",
+    version = "1.3pre",
     packages = ["anolislib", "anolislib/processes"],
     scripts = ["anolis"],
     

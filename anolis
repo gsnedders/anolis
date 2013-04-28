@@ -78,7 +78,7 @@ def main():
 
 
 def getOptParser():
-    parser = ArgumentParser(usage=__doc__, version="%(prog)s 1.2")
+    parser = ArgumentParser(usage=__doc__, version="%(prog)s 1.3pre")
 
     parser.add_argument("input", type=str, nargs='?',
                         help="Input file. Defaults to stdin.")
