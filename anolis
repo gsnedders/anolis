@@ -217,6 +217,9 @@ def getOptParser():
                         dest="publication_date", metavar="1 Sep 2022",
                         help="Set the date this document will be published.")
 
+    parser.add_argument("--localtime", action="store_true", dest="localtime",
+                        help="Use local time for the publication date.")
+
     parser.add_argument("--dump-backrefs", action="store_true",
                         dest="dump_backrefs", help=SUPPRESS)
 
@@ -305,6 +308,7 @@ def getOptParser():
         dump_xrefs='',
         use_strict=False,
         publication_date='',
+        localtime=False,
         dump_backrefs=False,
         enable_woolly=False,
         w3c_compat=False,

@@ -78,6 +78,7 @@ class sub(object):
                  w3c_compat_crazy_substitutions=False,
                  w3c_status='',
                  publication_date='',
+                 localtime=False,
                  **kwargs):
         if w3c_status:
             self.w3c_status = w3c_status
@@ -87,7 +88,7 @@ class sub(object):
         else:
             self.w3c_status = ''
 
-        self.pubdate = publication_date and time.strptime(publication_date, "%d %b %Y") or time.gmtime()
+        self.pubdate = publication_date and time.strptime(publication_date, "%d %b %Y") or localtime and time.localtime() or time.gmtime()
 
         self.stringSubstitutions(ElementTree, w3c_compat,
                                  w3c_compat_substitutions,
