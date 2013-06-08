@@ -26,4 +26,10 @@ def filter(ElementTree, **kwargs):
         return
     selector = cssselect.CSSSelector(kwargs["filter"])
     for element in selector(ElementTree.getroot()):
-        element.getparent().remove(element)
+        previous = element.getprevious()
+        parent = element.getparent()
+        if previous != None:
+            previous.tail = previous.tail + element.tail
+        else:
+            parent.text = parent.text + element.tail
+        parent.remove(element)
