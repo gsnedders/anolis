@@ -31,7 +31,7 @@ except ImportError:
 
 from anolislib import utils
 
-instance_elements = frozenset(["span", "abbr", "code", "var", "i"])
+instance_elements = frozenset(["span", "code"])
 w3c_instance_elements = frozenset(["abbr", "acronym", "b", "bdo", "big",
                                    "code", "del", "em", "i", "ins",
                                    "kbd", "label", "legend", "q", "samp",
