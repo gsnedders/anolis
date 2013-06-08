@@ -126,7 +126,7 @@ It should contain a an object with a 'url' property (whose value ends with a '#'
                                 goodParentingAndChildren = False
                                 break
 
-                    if goodParentingAndChildren:
+                    if goodParentingAndChildren and element.get("data-anolis-spec") is None:
                         if element.tag == "span":
                             element.tag = "a"
                             element.set("href", "#" + self.dfns[term])
