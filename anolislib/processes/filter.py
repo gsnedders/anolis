@@ -28,8 +28,15 @@ def filter(ElementTree, **kwargs):
     for element in selector(ElementTree.getroot()):
         previous = element.getprevious()
         parent = element.getparent()
-        if previous != None:
-            previous.tail = previous.tail + element.tail
-        else:
-            parent.text = parent.text + element.tail
+        if element.tail != None:
+            if previous != None:
+                if previous.tail != None:
+                    previous.tail = previous.tail + element.tail
+                else:
+                    previous.tail = element.tail
+            else:
+                if parent.text != None:
+                    parent.text = parent.text + element.tail
+                else:
+                    parent.text = element.tail
         parent.remove(element)
