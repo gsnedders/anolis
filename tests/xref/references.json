@@ -1,0 +1,14 @@
+{
+  "BAR": {
+    "href": "http://bar.spec.example.org/",
+    "title": "Bar Specification",
+    "authors": [ "John Q. Doe" ],
+    "publisher": "XMPL"
+  },
+  "FOO": {
+    "href": "http://foo.spec.example.org/",
+    "title": "Foo Standard",
+    "authors": [ "Jane W. Smith" ],
+    "publisher": "XMPL"
+  }
+}
