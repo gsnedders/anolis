@@ -31,7 +31,7 @@ from anolislib import utils
 class refs(object):
   """Add references section."""
 
-  def __init__(self, ElementTree, split_references_section=False, **kwargs):
+  def __init__(self, ElementTree, split_references_section=False, dump_refs='', **kwargs):
     self.refs = {}
     self.usedrefs = []
     self.foundrefs = {}
@@ -43,6 +43,8 @@ class refs(object):
       self.addReferencesList(ElementTree, **kwargs)
     else:
       self.addTwoReferencesLists(ElementTree, **kwargs)
+    if dump_refs:
+      self.dump(self.getTwoReferencesLists(), dump_refs, **kwargs)
 
   def addDD(self, dl, ref, informative):
     if isinstance(self.refs[ref], list):
@@ -57,7 +59,7 @@ class refs(object):
     self.refs = json.load(list)
     list.close()
 
-  def addTwoReferencesLists(self, ElementTree, **kwargs):
+  def getTwoReferencesLists(self):
     informative = []
     normative = []
     for ref in self.usedrefs:
@@ -65,8 +67,18 @@ class refs(object):
         normative.append(ref)
       else:
         informative.append(ref)
-    self.addPartialReferencesList(ElementTree, normative, "normative", **kwargs)
-    self.addPartialReferencesList(ElementTree, informative, "informative", **kwargs)
+    return { "normative": normative, "informative": informative }
+
+  def dump(self, obj, f, **kwargs):
+    d = json.dumps(obj, sort_keys=True, allow_nan=False, indent=2, separators=(',', ': '))
+    fp = open(f, "w")
+    fp.write(d + "\n")
+    fp.close()
+
+  def addTwoReferencesLists(self, ElementTree, **kwargs):
+    refs = self.getTwoReferencesLists()
+    self.addPartialReferencesList(ElementTree, refs["normative"], "normative", **kwargs)
+    self.addPartialReferencesList(ElementTree, refs["informative"], "informative", **kwargs)
 
   def addPartialReferencesList(self, ElementTree, l, id, **kwargs):
     if not len(l):

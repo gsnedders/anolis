@@ -207,6 +207,9 @@ def getOptParser():
     parser.add_argument("--output-encoding", action="store", type=str,
                         dest="output_encoding", help="Output encoding")
 
+    parser.add_argument("--dump-refs", action="store", type=str,
+                        dest="dump_refs", help=SUPPRESS)
+
     parser.add_argument("--dump-xrefs", action="store", type=str,
                         dest="dump_xrefs", help=SUPPRESS)
 
@@ -305,6 +308,7 @@ def getOptParser():
         escape_lt_in_attrs=False,
         escape_rcdata=False,
         output_encoding="utf-8",
+        dump_refs='',
         dump_xrefs='',
         use_strict=False,
         publication_date='',
