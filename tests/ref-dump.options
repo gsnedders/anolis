@@ -1,4 +1,5 @@
 {
   "processes": ["refs"],
-  "xref": "tests/xref"
+  "xref": "tests/xref",
+  "dump_refs": "tests/xref/refs/foobar.json"
 }
