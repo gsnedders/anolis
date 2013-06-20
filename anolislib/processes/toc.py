@@ -39,12 +39,18 @@ class toc(object):
     toc = None
 
     def __init__(self, ElementTree, **kwargs):
-        self.toc = etree.Element("ol", {"class": "toc"})
         self.buildToc(ElementTree, **kwargs)
         self.addToc(ElementTree, **kwargs)
 
     def buildToc(self, ElementTree, min_depth=2, max_depth=6, w3c_compat=False,
                  w3c_compat_class_toc=False, **kwargs):
+        # Element to use for the toc
+        list_tag = "ol"
+        if w3c_compat or w3c_compat_class_toc:
+            list_tag = "ul"
+        
+        self.toc = etree.Element(list_tag, {"class": "toc"})
+
         # Build the outline of the document
         outline_creator = outliner.Outliner(ElementTree, **kwargs)
         outline = outline_creator.build(**kwargs)
@@ -122,28 +128,28 @@ class toc(object):
                     while i < corrected_depth:
                         try:
                             # If the final li has no children, or the last
-                            # children isn't an ol element
+                            # children isn't a list_tag element
                             if len(toc_section[-1]) == 0 or \
-                               toc_section[-1][-1].tag != "ol":
-                                toc_section[-1].append(etree.Element("ol"))
+                               toc_section[-1][-1].tag != list_tag:
+                                toc_section[-1].append(etree.Element(list_tag))
                                 utils.indentNode(toc_section[-1][-1],
                                                  (i + 1) * 2, **kwargs)
                                 if w3c_compat or w3c_compat_class_toc:
                                     toc_section[-1][-1].set("class", "toc")
                         except IndexError:
-                            # If the current ol has no li in it
+                            # If the current list_tag has no li in it
                             toc_section.append(etree.Element("li"))
                             utils.indentNode(toc_section[0], (i + 1) * 2 - 1,
                                              **kwargs)
-                            toc_section[0].append(etree.Element("ol"))
+                            toc_section[0].append(etree.Element(list_tag))
                             utils.indentNode(toc_section[0][0], (i + 1) * 2,
                                              **kwargs)
                             if w3c_compat or w3c_compat_class_toc:
                                 toc_section[0][0].set("class", "toc")
-                        # TOC Section is now the final child (ol) of the final
+                        # TOC Section is now the final child (list_tag) of the final
                         # item (li) in the previous section
                         assert toc_section[-1].tag == "li"
-                        assert toc_section[-1][-1].tag == "ol"
+                        assert toc_section[-1][-1].tag == list_tag
                         toc_section = toc_section[-1][-1]
                         i += 1
                     # Add the current item to the TOC
