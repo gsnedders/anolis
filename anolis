@@ -213,6 +213,9 @@ def getOptParser():
     parser.add_argument("--use-strict", action="store_true",
                         dest="use_strict", help=SUPPRESS)
 
+    parser.add_argument("--xref-use-a", action="store_true",
+                        dest="xref_use_a", help=SUPPRESS)
+
     parser.add_argument("--pubdate", action="store", type=str,
                         dest="publication_date", metavar="1 Sep 2022",
                         help="Set the date this document will be published.")

@@ -32,6 +32,7 @@ except ImportError:
 from anolislib import utils
 
 instance_elements = frozenset(["span", "code"])
+instance_elements_a = frozenset(["a", "code"])
 w3c_instance_elements = frozenset(["abbr", "acronym", "b", "bdo", "big",
                                    "code", "del", "em", "i", "ins",
                                    "kbd", "label", "legend", "q", "samp",
@@ -100,11 +101,13 @@ It should contain a an object with a 'url' property (whose value ends with a '#'
     def addReferences(self, ElementTree, w3c_compat=False,
                       w3c_compat_xref_elements=False,
                       w3c_compat_xref_a_placement=False,
+                      xref_use_a=False,
                       use_strict=False,
                       dump_backrefs=False,
                       **kwargs):
         for element in ElementTree.iter(tag=etree.Element):
-            if element.tag in instance_elements or \
+            if (not xref_use_a and element.tag in instance_elements) or \
+               (xref_use_a and element.tag in instance_elements_a and element.get("href") is None) or \
                (w3c_compat or w3c_compat_xref_elements) and \
                element.tag in w3c_instance_elements:
                 term = self.getTerm(element, w3c_compat=w3c_compat, **kwargs)
@@ -127,7 +130,7 @@ It should contain a an object with a 'url' property (whose value ends with a '#'
                                 break
 
                     if goodParentingAndChildren and element.get("data-anolis-spec") is None:
-                        if element.tag == "span":
+                        if element.tag == "span" or element.tag == "a":
                             element.tag = "a"
                             element.set("href", "#" + self.dfns[term])
                             link = element
