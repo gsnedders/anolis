@@ -52,7 +52,7 @@ class xspecxref(object):
     self.buildReferences(ElementTree, **kwargs)
     self.addReferences(ElementTree, **kwargs)
 
-  def buildReferences(self, ElementTree, xref, allow_duplicate_dfns=False, **kwargs):
+  def buildReferences(self, ElementTree, xref="data", allow_duplicate_dfns=False, **kwargs):
     manifest = open(xref + "/specs.json", "r")
     specs = json.load(manifest)
     manifest.close()
