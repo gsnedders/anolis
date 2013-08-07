@@ -1,0 +1,24 @@
+<!DOCTYPE html><meta charset=utf-8><p><dfn id=foobar>foobar</dfn></p>
+<p><dfn id=lol>lol</dfn></p>
+<p><a href=#foobar><code>foobar</code></a></p>
+<p><span>lol</span> (no link)</p>
+<p><span title=lol>x</span> (no link)</p>
+<p><span data-anolis-xref=lol>x</span> (no link)</p>
+<p><a href=#lol>lol</a></p>
+<p><a href=#>lol</a> (link to #)</p>
+<p><a href=# title=lol>lol</a> (link to #)</p>
+<p><a data-anolis-xref=lol href=#>lol</a> (link to #)</p>
+<p><a href=#lol title=lol>x</a></p>
+<p><a data-anolis-xref=lol href=#lol>x</a></p>
+<p><a data-anolis-xref=lol href=#lol title=foobar>x</a></p>
+<p><a href=http://example.org/#foo><code class=external data-anolis-spec=foobar>foo</code></a></p>
+<p><span data-anolis-spec=foobar>foo</span> (no link)</p>
+<p><span data-anolis-spec=foobar title=foo>x</span> (no link)</p>
+<p><span data-anolis-spec=foobar data-anolis-xref=foo>x</span> (no link)</p>
+<p><a class=external data-anolis-spec=foobar href=http://example.org/#foo>foo</a></p>
+<p><a data-anolis-spec=foobar href=#>foo</a> (link to #)</p>
+<p><a data-anolis-spec=foobar href=# title=foo>x</a> (link to #)</p>
+<p><a data-anolis-spec=foobar data-anolis-xref=foo href=#>x</a> (link to #)</p>
+<p><a class=external data-anolis-spec=foobar href=http://example.org/#foo title=foo>x</a></p>
+<p><a class=external data-anolis-spec=foobar data-anolis-xref=foo href=http://example.org/#foo>x</a></p>
+<p><a class=external data-anolis-spec=foobar data-anolis-xref=foo href=http://example.org/#foo title=foobar>x</a></p>

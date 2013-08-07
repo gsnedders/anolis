@@ -1,0 +1,5 @@
+{
+  "processes": ["xspecxref"],
+  "xref_use_a": true,
+  "xref": "tests/xref"
+}
