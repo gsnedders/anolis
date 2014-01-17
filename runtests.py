@@ -60,6 +60,9 @@ def buildTestSuite():
             assert not set(default_processes) & set(new_processes)
             kwargs["processes"] = default_processes + new_processes
 
+            # Sort attributes alphabetically by default.
+            kwargs["alphabetical_attributes"] = True
+
             try:
                 output = StringIO.StringIO()
 
@@ -67,7 +70,7 @@ def buildTestSuite():
                 input = open(file_name, "rb")
                 tree = generator.fromFile(input, **kwargs)
                 input.close()
-                
+
                 # Get the output
                 generator.toFile(tree, output, **kwargs)
 

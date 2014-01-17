@@ -204,6 +204,9 @@ def getOptParser():
     parser.add_argument("--escape-rcdata", action="store_true",
                         dest="escape_rcdata", help=SUPPRESS)
 
+    parser.add_argument("--no-alphabetical-attributes", action="store_false",
+                        dest="alphabetical_attributes", help=SUPPRESS)
+
     parser.add_argument("--output-encoding", action="store", type=str,
                         dest="output_encoding", help="Output encoding")
 
@@ -310,6 +313,7 @@ def getOptParser():
         space_before_trailing_solidus=False,
         escape_lt_in_attrs=False,
         escape_rcdata=False,
+        alphabetical_attributes=True,
         output_encoding="utf-8",
         dump_refs='',
         dump_xrefs='',
