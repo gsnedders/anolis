@@ -165,6 +165,8 @@ It should contain a an object with a 'url' property (whose value ends with a '#'
                 w3c_compat_xref_normalization=False, **kwargs):
         if element.get("data-anolis-xref") is not None:
             term = element.get("data-anolis-xref")
+        elif element.get("data-x") is not None:
+            term = element.get("data-x")
         elif element.get("title") is not None:
             term = element.get("title")
         else:

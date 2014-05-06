@@ -135,6 +135,8 @@ class xspecxref(object):
               w3c_compat_xref_normalization=False, **kwargs):
     if element.get("data-anolis-xref") is not None:
       term = element.get("data-anolis-xref")
+    if element.get("data-x") is not None:
+      term = element.get("data-x")
     elif element.get("title") is not None:
       term = element.get("title")
     else:
